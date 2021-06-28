@@ -59,9 +59,10 @@ Use conventional commits standard
 e.g. chore: first commit
 e.g. feat(0.1.0): add authentication module
 e.g. fix(0.1.1): fix unable login bug due to uppercase
+e.g. docs: add commit guide on readme
 ```
 
-For detailed explanation on how things work, check out the [documentation](https://www.conventionalcommits.org/en/v1.0.0/#specification).
+For detailed explanation on how things work, check out the [documentation](https://www.conventionalcommits.org/en/v1.0.0/#specification) or [cheatsheet](https://cheatography.com/albelop/cheat-sheets/conventional-commits/) for quick access.
 
 ## Special Directories
 
