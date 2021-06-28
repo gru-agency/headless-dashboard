@@ -1,10 +1,27 @@
 # headless-dashboard
 
+## Development Setup
+
+1. Setup environment dependencies
+
+```bash
+# nuxtjs prefers node lts version
+$ brew install node@14
+
+# yarn as preferred package manager
+$ npm install --global yarn
+```
+
+2. Setup VSCode with Vetur plugin
+
 ## Build Setup
 
 ```bash
 # install dependencies
 $ yarn install
+
+# install production only dependencies
+$ yarn install --production
 
 # serve with hot reload at localhost:3000
 $ yarn dev
@@ -18,12 +35,29 @@ $ yarn generate
 
 # check node_modules size
 $ ls node_modules | wc -l && du -sh node_modules
-
-# install only production deps
-$ yarn install --production
 ```
 
 For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
+
+## Commit Guide
+
+Use conventional commits standard
+
+```code
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+
+---
+
+e.g. chore: first commit
+e.g. feat(0.1.0): add authentication module
+e.g. fix(0.1.1): fix unable login bug due to uppercase 
+```
+
+For detailed explanation on how things work, check out the [documentation](https://www.conventionalcommits.org/en/v1.0.0/#specification).
 
 ## Special Directories
 
@@ -46,7 +80,6 @@ More information about the usage of this directory in [the documentation](https:
 Layouts are a great help when you want to change the look and feel of your Nuxt app, whether you want to include a sidebar or have distinct layouts for mobile and desktop.
 
 More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/layouts).
-
 
 ### `pages`
 
