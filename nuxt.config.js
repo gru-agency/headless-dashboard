@@ -44,4 +44,10 @@ export default {
   build: {
     extractCSS: true,
   },
+
+  vue: {
+    config: {
+      devtools: true,
+    },
+  },
 }
