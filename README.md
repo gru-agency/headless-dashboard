@@ -18,6 +18,10 @@ $ npm install --global yarn
 - auto close tag
 - auto rename tag
 
+3. Setup Chrome browser plugins
+
+- Vue Devtools
+
 ## Build Setup
 
 ```bash
