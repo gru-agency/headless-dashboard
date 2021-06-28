@@ -12,7 +12,11 @@ $ brew install node@14
 $ npm install --global yarn
 ```
 
-2. Setup VSCode with Vetur plugin
+2. Setup VSCode with following plugins
+
+- vetur (must have)
+- auto close tag
+- auto rename tag
 
 ## Build Setup
 
@@ -54,7 +58,7 @@ Use conventional commits standard
 
 e.g. chore: first commit
 e.g. feat(0.1.0): add authentication module
-e.g. fix(0.1.1): fix unable login bug due to uppercase 
+e.g. fix(0.1.1): fix unable login bug due to uppercase
 ```
 
 For detailed explanation on how things work, check out the [documentation](https://www.conventionalcommits.org/en/v1.0.0/#specification).
