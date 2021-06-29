@@ -29,7 +29,7 @@ const utils = {
   // },
 }
 
-export default (inject) => {
+export default (_, inject) => {
   inject('app', app)
   inject('date', date)
   inject('utils', utils)
