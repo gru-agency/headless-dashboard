@@ -17,6 +17,9 @@ $ npm install --global yarn
 - vetur (must have)
 - auto close tag
 - auto rename tag
+- i18n Ally
+- json5 syntax
+- vue snippets
 
 3. Setup Chrome browser plugins
 

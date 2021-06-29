@@ -37,6 +37,8 @@ export default {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/stylelint
     '@nuxtjs/stylelint-module',
+    // https://i18n.nuxtjs.org
+    'nuxt-i18n',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -51,5 +53,27 @@ export default {
     config: {
       devtools: true,
     },
+  },
+
+  i18n: {
+    baseUrl: 'http://localhost:3000', // important for seo
+    locales: [
+      { code: 'en', iso: 'en-gb', file: 'en.json', name: 'English' },
+      // { code: 'ms', iso: 'ms-my', file: 'ms.json', name: 'Malay' },
+      // { code: 'zh', iso: 'zh-cn', file: 'zh.json', name: '简体中文' },
+    ],
+    lazy: true,
+    langDir: '~/locales/',
+    strategy: 'prefix',
+    defaultLocale: 'en',
+    detectBrowserLanguage: {
+      alwaysRedirect: true,
+      fallbackLocale: 'en',
+      onlyOnRoot: true,
+      useCookie: true,
+    },
+    seo: false, // performance concern, enable lazily
+    vuex: false,
+    vueI18n: { fallbackLocale: 'en' },
   },
 }
