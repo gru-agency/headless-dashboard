@@ -38,7 +38,7 @@ export default {
     // https://go.nuxtjs.dev/stylelint
     '@nuxtjs/stylelint-module',
     // https://i18n.nuxtjs.org
-    'nuxt-i18n',
+    // 'nuxt-i18n',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -58,9 +58,9 @@ export default {
   i18n: {
     baseUrl: 'http://localhost:3000', // important for seo
     locales: [
-      { code: 'en', iso: 'en-gb', file: 'en.json', name: 'English' },
-      // { code: 'ms', iso: 'ms-my', file: 'ms.json', name: 'Malay' },
-      // { code: 'zh', iso: 'zh-cn', file: 'zh.json', name: '简体中文' },
+      { code: 'en', iso: 'en-gb', file: 'en.json5', name: 'English' },
+      // { code: 'ms', iso: 'ms-my', file: 'ms.json5', name: 'Malay' },
+      // { code: 'zh', iso: 'zh-cn', file: 'zh.json5', name: '简体中文' },
     ],
     lazy: true,
     langDir: '~/locales/',
