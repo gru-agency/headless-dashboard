@@ -1,3 +1,5 @@
+import * as path from 'path'
+
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -38,7 +40,7 @@ export default {
     // https://go.nuxtjs.dev/stylelint
     '@nuxtjs/stylelint-module',
     // https://i18n.nuxtjs.org
-    // 'nuxt-i18n',
+    'nuxt-i18n',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -47,6 +49,18 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extractCSS: true,
+
+    extend(config, { isClient }) {
+      if (isClient) {
+        // pre-compile json5 for vue-i18n
+        config.module.rules.push({
+          test: /\.(json5?|ya?ml)$/,
+          type: 'javascript/auto',
+          loader: '@intlify/vue-i18n-loader',
+          include: [path.resolve(__dirname, 'locales')],
+        })
+      }
+    },
   },
 
   router: {
