@@ -1,5 +1,5 @@
 <template>
-  <Tutorial />
+  <div>reset</div>
 </template>
 
 <script lang="ts">

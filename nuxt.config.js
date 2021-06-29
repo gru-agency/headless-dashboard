@@ -49,6 +49,18 @@ export default {
     extractCSS: true,
   },
 
+  router: {
+    extendRoutes(routes, _resolve) {
+      for (const route of routes) {
+        const authPath = '/auth'
+        if (route.path.includes(authPath)) {
+          route.path = route.path.substring(authPath.length, route.path.length)
+        }
+      }
+      return routes
+    },
+  },
+
   vue: {
     config: {
       devtools: true,
