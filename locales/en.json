@@ -1,0 +1,45 @@
+{
+  "general": {
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "new": "New",
+    "refresh": "Refresh",
+    "save": "Save",
+    "saveAndMore": "Save and more"
+  },
+
+  "modules": {
+    "products": {},
+    "users": {}
+  },
+
+  "seo": {},
+
+  "dateTime": {
+    "en-GB": {
+      "short": {
+        "year": "numeric",
+        "month": "short",
+        "day": "numeric"
+      },
+      "long": {
+        "year": "numeric",
+        "month": "long",
+        "day": "numeric",
+        "weekday": "long",
+        "hour": "numeric",
+        "minute": "numeric"
+      }
+    }
+  },
+
+  "currency": {
+    "en-GB": {
+      "currency": {
+        "style": "currency",
+        "currency": "USD",
+        "currencyDisplay": "symbol"
+      }
+    }
+  }
+}

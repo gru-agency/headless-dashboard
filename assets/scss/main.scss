@@ -1,0 +1,9 @@
+// Custom Bootstrap variable overrides go first
+@import 'lib/boostrap/custom.scss';
+
+// Then include the following
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap-vue/src/index.scss';
+
+// And lastly define any of your own custom scss
+// @import 'app/index.scss';
