@@ -19,11 +19,10 @@
   </b-button>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
+<script>
 import { BIcon, BIconPlus, BIconPencilFill } from 'bootstrap-vue'
 
-export default Vue.extend({
+export default {
   name: 'ActionButton',
 
   components: {
@@ -61,21 +60,21 @@ export default Vue.extend({
   },
 
   computed: {
-    findPredefined(): any {
-      return this.predefined.find((el): Object => el.name === this.name)
+    findPredefined() {
+      return this.predefined.find((el) => el.name === this.name)
     },
 
-    getText(): any {
+    getText() {
       return this.text || this.findPredefined?.text || this.name
     },
 
-    getIcon(): any {
+    getIcon() {
       return this.icon || this.findPredefined?.icon
     },
 
-    hasIcon(): boolean {
+    hasIcon() {
       return this.icon || this.findPredefined?.icon
     },
   },
-})
+}
 </script>

@@ -16,14 +16,14 @@
   </b-container>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
+<script>
+export default {
+  name: 'Playground',
 
-export default Vue.extend({
   methods: {
-    echo(msg: string) {
+    echo(msg) {
       alert(msg || 'hello')
     },
   },
-})
+}
 </script>
