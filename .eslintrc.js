@@ -5,7 +5,14 @@ module.exports = {
     node: true,
   },
   extends: ['@nuxtjs', 'plugin:nuxt/recommended', 'prettier'],
+  parserOptions: {
+    parser: '@babel/eslint-parser',
+    requireConfigFile: false,
+  },
   plugins: [],
-  rules: {},
+  rules: {
+    // 'no-unused-vars': 'warn',
+    // 'object-shorthand': 'warn',
+  },
   settings: {},
 }
