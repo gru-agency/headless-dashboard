@@ -9,13 +9,12 @@
     "generate": "nuxt generate",
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
     "lint:style": "stylelint \"**/*.{vue,css}\" --ignore-path .gitignore",
-    "lint:json": "eslint --ext \".json,.json5\" --ignore-path .gitignore .",
-    "lint": "yarn lint:js && yarn lint:style && yarn lint:json",
+    "lint": "yarn lint:js && yarn lint:style",
     "prepare": "husky install",
     "analyze": "nuxt build --analyze"
   },
   "lint-staged": {
-    "*.{js,json,json5,vue}": "eslint",
+    "*.{js,vue}": "eslint",
     "*.{css,vue}": "stylelint"
   },
   "dependencies": {
@@ -26,13 +25,12 @@
     "@babel/eslint-parser": "^7.14.7",
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
-    "@intlify/eslint-plugin-vue-i18n": "^0.11.1",
-    "@intlify/vue-i18n-loader": "^2.1.0",
     "@nuxt/types": "^2.15.7",
     "@nuxt/typescript-build": "^2.1.0",
     "@nuxtjs/eslint-config-typescript": "^6.0.1",
     "@nuxtjs/eslint-module": "^3.0.2",
     "@nuxtjs/stylelint-module": "^4.0.0",
+    "bootstrap-vue": "^2.21.2",
     "eslint": "^7.29.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-nuxt": "^2.0.0",
@@ -41,6 +39,8 @@
     "lint-staged": "^10.5.4",
     "nuxt-i18n": "^6.27.2",
     "prettier": "^2.3.2",
+    "sass": "1.32.x",
+    "sass-loader": "10",
     "stylelint": "^13.13.1",
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-standard": "^22.0.0"

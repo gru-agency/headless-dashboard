@@ -1,5 +1,3 @@
-import * as path from 'path'
-
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -23,14 +21,14 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [],
+  css: ['~/assets/scss/main.scss'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [{ src: '~/plugins/utils.js', mode: 'client' }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: {
-    dirs: ['~/components', '~/components/lib'],
+    dirs: ['~/components', '~/components/app', '~/components/lib/bootstrap'],
   },
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -41,6 +39,8 @@ export default {
     '@nuxtjs/stylelint-module',
     // https://i18n.nuxtjs.org
     'nuxt-i18n',
+    // https://bootstrap-vue.org/
+    'bootstrap-vue/nuxt',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -49,18 +49,6 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extractCSS: true,
-
-    extend(config, { isClient }) {
-      if (isClient) {
-        // pre-compile json5 for vue-i18n
-        config.module.rules.push({
-          test: /\.(json5?|ya?ml)$/,
-          type: 'javascript/auto',
-          loader: '@intlify/vue-i18n-loader',
-          include: [path.resolve(__dirname, 'locales')],
-        })
-      }
-    },
   },
 
   router: {
@@ -81,10 +69,16 @@ export default {
     },
   },
 
+  bootstrapVue: {
+    css: false,
+    bvCss: false,
+    icons: false,
+  },
+
   i18n: {
     baseUrl: 'http://localhost:3000', // important for seo
     locales: [
-      { code: 'en', iso: 'en-gb', file: 'en.json5', name: 'English' },
+      { code: 'en', iso: 'en-gb', file: 'en.json', name: 'English' },
       // { code: 'ms', iso: 'ms-my', file: 'ms.json5', name: 'Malay' },
       // { code: 'zh', iso: 'zh-cn', file: 'zh.json5', name: '简体中文' },
     ],
