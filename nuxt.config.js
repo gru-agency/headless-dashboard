@@ -1,3 +1,5 @@
+import * as path from 'path'
+
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -24,10 +26,12 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [{ src: '~/plugins/utils.js', mode: 'client' }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
+  components: {
+    dirs: ['~/components', '~/components/lib'],
+  },
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
@@ -35,6 +39,8 @@ export default {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/stylelint
     '@nuxtjs/stylelint-module',
+    // https://i18n.nuxtjs.org
+    'nuxt-i18n',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -43,11 +49,57 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extractCSS: true,
+
+    extend(config, { isClient }) {
+      if (isClient) {
+        // pre-compile json5 for vue-i18n
+        config.module.rules.push({
+          test: /\.(json5?|ya?ml)$/,
+          type: 'javascript/auto',
+          loader: '@intlify/vue-i18n-loader',
+          include: [path.resolve(__dirname, 'locales')],
+        })
+      }
+    },
+  },
+
+  router: {
+    extendRoutes(routes, _resolve) {
+      for (const route of routes) {
+        const authPath = '/auth'
+        if (route.path.includes(authPath)) {
+          route.path = route.path.substring(authPath.length, route.path.length)
+        }
+      }
+      return routes
+    },
   },
 
   vue: {
     config: {
       devtools: true,
     },
+  },
+
+  i18n: {
+    baseUrl: 'http://localhost:3000', // important for seo
+    locales: [
+      { code: 'en', iso: 'en-gb', file: 'en.json5', name: 'English' },
+      // { code: 'ms', iso: 'ms-my', file: 'ms.json5', name: 'Malay' },
+      // { code: 'zh', iso: 'zh-cn', file: 'zh.json5', name: '简体中文' },
+    ],
+    lazy: true,
+    langDir: '~/locales/',
+    strategy: 'prefix',
+    defaultLocale: 'en',
+    detectBrowserLanguage: {
+      alwaysRedirect: true,
+      fallbackLocale: 'en',
+      onlyOnRoot: true,
+      useCookie: true,
+    },
+    seo: false, // performance concern, enable lazily
+    vuex: false,
+    vueI18n: { fallbackLocale: 'en' },
   },
 }

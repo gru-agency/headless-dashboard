@@ -1,5 +1,5 @@
 <template>
-  <Tutorial />
+  <div>playground</div>
 </template>
 
 <script lang="ts">

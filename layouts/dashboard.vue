@@ -1,5 +1,5 @@
 <template>
-  <Tutorial />
+  <nuxt></nuxt>
 </template>
 
 <script lang="ts">
