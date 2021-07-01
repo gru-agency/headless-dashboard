@@ -56,6 +56,14 @@
           <b-collapse id="collapsible"> <span> peek-a-boo </span> </b-collapse>
         </b-card>
       </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card title="TextField">
+          <text-field></text-field>
+          <text-field :text="text"></text-field>
+          <text-field :date="date"></text-field>
+          <text-field :money="123456789" currency="myr"></text-field>
+        </b-card>
+      </b-col>
     </b-row>
   </b-container>
 </template>
@@ -63,6 +71,14 @@
 <script>
 export default {
   name: 'Playground',
+
+  data() {
+    return {
+      // TextField
+      text: 'normal text field',
+      date: new Date().getTime(),
+    }
+  },
 
   methods: {
     echo(msg) {
