@@ -47,7 +47,7 @@ export default {
     iconStyle: { type: String, default: undefined },
     iconShiftV: { type: String, default: undefined },
     iconShiftH: { type: String, default: undefined },
-    iconSize: { type: Number, default: 1 },
+    iconSize: { type: [Number, String], default: 1 },
   },
 
   computed: {
@@ -63,7 +63,7 @@ export default {
   methods: {
     sendEvents() {
       this.$emit('click')
-      this.$nuxt.$emit('e3LinkClick')
+      this.$nuxt.$emit('bvLinkClick')
     },
   },
 }
