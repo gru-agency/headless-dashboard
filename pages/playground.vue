@@ -78,7 +78,9 @@
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card title="Reserved"> </b-card>
+        <b-card title="MoneyField">
+          <money-field></money-field>
+        </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
         <b-card title="BoxHeader - List">
