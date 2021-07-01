@@ -2,7 +2,7 @@
   <b-form-input
     :value="date ? formatDate() : money ? formatCurrency() : text || def.none"
     plaintext
-    class="p-0"
+    class="p-0 text-field"
   ></b-form-input>
 </template>
 
@@ -33,3 +33,9 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.text-field:focus-visible {
+  outline: 0;
+}
+</style>
