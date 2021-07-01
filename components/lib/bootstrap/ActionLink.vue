@@ -4,7 +4,7 @@
     :class="getVariant"
     :disabled="disabled"
     :append="linkAppend"
-    :prefetch="link ? true : false"
+    :prefetch="linkToParent || link ? true : false"
     @click.prevent="sendEvents"
   >
     <b-icon
