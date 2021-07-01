@@ -8,7 +8,7 @@
       :shift-v="iconShiftV"
       :shift-h="iconShiftH"
       :font-scale="iconSize"
-      :variant="iconVariant"
+      :variant="iconVariant || 'secondary'"
       class="mx-1"
     ></b-icon>
 
