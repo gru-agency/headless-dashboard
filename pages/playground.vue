@@ -72,6 +72,15 @@
           <div class="mt-2"><image-field :images="images"></image-field></div>
         </b-card>
       </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card title="TagField">
+          <tag-field name="bv-optional"></tag-field>
+          <tag-field name="bv-required"></tag-field>
+          <tag-field text="custom" variant="primary"></tag-field>
+          <tag-field text="custom" variant="info"></tag-field>
+          <tag-field text="custom" variant="dark"></tag-field>
+        </b-card>
+      </b-col>
     </b-row>
   </b-container>
 </template>
