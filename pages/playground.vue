@@ -5,7 +5,7 @@
         <b-card title="Action Button">
           <action-button name="bv-new" variant="primary" @click="echo"></action-button>
           <action-button name="bv-edit" disabled></action-button>
-          <action-button name="bv-save" to="/save" @click="echo"></action-button>
+          <action-button name="bv-save" link="save" link-append></action-button>
           <action-button name="bv-cancel" variant="dark" @click="echo"></action-button>
           <action-button name="bv-refresh" size="sm" @click="echo"></action-button>
           <action-button name="bv-savemore" size="sm" @click="echo"></action-button>
