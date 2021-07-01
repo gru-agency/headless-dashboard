@@ -16,8 +16,14 @@
         <b-card title="Action Link">
           <action-link text="Custom link" link="custom" class="mr-2" @click="echo"></action-link>
           <action-link text="Parent link" icon="arrow-left" link-to-parent></action-link>
-          <action-link icon="x" icon-shift-v="-2" icon-size="1.5" link-to-parent></action-link>
           <action-link text="Colored link" variant="danger" class="ml-2"></action-link>
+          <action-link icon="x" icon-shift-v="-2" icon-size="1.5" link-to-parent></action-link>
+        </b-card>
+      </b-col>
+      <b-col>
+        <b-card title="Action Toggler">
+          <action-toggler target="collapsible" text="More" icon-placement="right"></action-toggler>
+          <b-collapse id="collapsible"> <span> peek-a-boo </span> </b-collapse>
         </b-card>
       </b-col>
     </b-row>

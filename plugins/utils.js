@@ -1,3 +1,16 @@
+const ui = {
+  getTextVariant: (variant) => {
+    if (variant === 'primary') return ' text-primary '
+    else if (variant === 'secondary') return ' text-secondary '
+    else if (variant === 'light') return ' text-light '
+    else if (variant === 'dark') return ' text-dark '
+    else if (variant === 'info') return ' text-info '
+    else if (variant === 'danger') return ' text-danger '
+    else if (variant === 'warning') return ' text-warning '
+    else return undefined
+  },
+}
+
 const app = {
   brandName: 'Shoplex',
   // countries: () => {
@@ -33,6 +46,7 @@ const utils = {
 }
 
 export default (_, inject) => {
+  inject('ui', ui)
   inject('app', app)
   inject('date', date)
   inject('utils', utils)
