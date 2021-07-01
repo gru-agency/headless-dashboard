@@ -2,14 +2,9 @@
   <b-container>
     <b-row class="py-3">
       <b-col cols="4" class="mt-4">
-        <b-card title="ActionButton">
-          <action-button name="bv-new" variant="primary" @click="echo"></action-button>
-          <action-button name="bv-edit" disabled></action-button>
-          <action-button name="bv-save" link="save" link-append></action-button>
-          <action-button name="bv-cancel" @click="echo"></action-button>
-          <action-button name="bv-refresh" variant="dark" size="md" @click="echo"></action-button>
-          <action-button name="bv-savemore" variant="info" size="md" @click="echo"></action-button>
-          <action-button text="Custom" variant="danger" size="lg" @click="echo"></action-button>
+        <b-card title="ActionToggler">
+          <action-toggler target="collapsible" text="More" icon-placement="right"></action-toggler>
+          <b-collapse id="collapsible"> <span> peek-a-boo </span> </b-collapse>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
@@ -51,9 +46,14 @@
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card title="ActionToggler">
-          <action-toggler target="collapsible" text="More" icon-placement="right"></action-toggler>
-          <b-collapse id="collapsible"> <span> peek-a-boo </span> </b-collapse>
+        <b-card title="ActionButton">
+          <action-button name="bv-new" variant="primary" @click="echo"></action-button>
+          <action-button name="bv-edit" disabled></action-button>
+          <action-button name="bv-save" link="save" link-append></action-button>
+          <action-button name="bv-cancel" @click="echo"></action-button>
+          <action-button name="bv-refresh" variant="dark" size="md" @click="echo"></action-button>
+          <action-button name="bv-savemore" variant="info" size="md" @click="echo"></action-button>
+          <action-button text="Custom" variant="danger" size="lg" @click="echo"></action-button>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
@@ -62,6 +62,14 @@
           <text-field :text="text"></text-field>
           <text-field :date="date"></text-field>
           <text-field :money="123456789" currency="myr"></text-field>
+        </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card title="ImageField">
+          <div class="mt-2"><image-field :icon="icon"></image-field></div>
+          <div class="mt-2"><image-field :image="images[0]"></image-field></div>
+          <div class="mt-2"><image-field :images="images" max="3"></image-field></div>
+          <div class="mt-2"><image-field :images="images"></image-field></div>
         </b-card>
       </b-col>
     </b-row>
@@ -77,6 +85,16 @@ export default {
       // TextField
       text: 'normal text field',
       date: new Date().getTime(),
+
+      // image field
+      icon: 'box-seam',
+      images: [
+        'http://placekitten.com/72/72',
+        'http://placekitten.com/73/73',
+        'http://placekitten.com/74/74',
+        'http://placekitten.com/75/75',
+        'http://placekitten.com/76/76',
+      ],
     }
   },
 
