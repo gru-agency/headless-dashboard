@@ -4,6 +4,7 @@
     :size="size"
     :variant="variant"
     :disabled="disabled"
+    :append="linkAppend"
     :prefetch="link ? true : false"
     @click.prevent="$emit('click')"
   >
@@ -38,6 +39,7 @@ export default {
     size: { type: String, default: 'sm' },
     variant: { type: String, default: 'light' },
     disabled: { type: Boolean, default: false },
+    linkAppend: { type: Boolean, default: false },
     // not recommended to use since icon is import explicitly
     icon: { type: String, default: undefined },
     iconClass: { type: String, default: undefined },
