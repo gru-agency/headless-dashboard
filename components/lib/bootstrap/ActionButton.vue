@@ -35,7 +35,7 @@ export default {
     name: { type: String, default: undefined },
     text: { type: String, default: undefined },
     link: { type: String, default: undefined },
-    size: { type: String, default: 'md' },
+    size: { type: String, default: 'sm' },
     variant: { type: String, default: 'light' },
     disabled: { type: Boolean, default: false },
     // not recommended to use since icon is import explicitly
