@@ -1,8 +1,8 @@
 <template>
   <b-container>
-    <b-row>
-      <b-col>
-        <b-card title="Action Button">
+    <b-row class="py-3">
+      <b-col cols="4" class="mt-4">
+        <b-card title="ActionButton">
           <action-button name="bv-new" variant="primary" @click="echo"></action-button>
           <action-button name="bv-edit" disabled></action-button>
           <action-button name="bv-save" link="save" link-append></action-button>
@@ -12,33 +12,46 @@
           <action-button text="Custom" variant="danger" size="lg" @click="echo"></action-button>
         </b-card>
       </b-col>
-      <b-col>
-        <b-card title="Action Link">
+      <b-col cols="4" class="mt-4">
+        <b-card title="ActionLink">
           <action-link text="Custom link" link="custom" class="mr-2" @click="echo"></action-link>
           <action-link text="Parent link" icon="arrow-left" link-to-parent></action-link>
           <action-link text="Colored link" variant="danger" class="ml-2"></action-link>
           <action-link icon="x" icon-shift-v="-2" icon-size="1.5" link-to-parent></action-link>
         </b-card>
       </b-col>
-      <b-col>
-        <b-card title="Action Menu">
-          <action-menu edit-link="/edit" @delete="echo">
-            <!-- <b-dd-header id="dropdown-header-label"> Dropdown header </b-dd-header>
-            <b-dd-item>ad</b-dd-item>
-
-            <b-dd-group header="123"> <b-dd-item>asdadads</b-dd-item></b-dd-group> -->
-          </action-menu>
-
-          <!-- editText: { type: String, default: undefined },
-    editLink: { type: String, default: undefined },
-    editVariant: { type: String, default: undefined },
-    editHide: { type: Boolean, default: false },
-    editDisabled: { type: Boolean, default: false },
-    editLinkAppend: { type: Boolean, default: false }, -->
+      <b-col cols="4" class="mt-4">
+        <b-card title="ActionMenu">
+          <action-menu edit-link="/edit" @delete="echo"> </action-menu>
         </b-card>
       </b-col>
-      <b-col>
-        <b-card title="Action Toggler">
+      <b-col cols="4" class="mt-4">
+        <b-card title="StateBox - Refresh">
+          <state-box
+            error
+            title="Error!"
+            body="Opss... something happens"
+            @click="echo"
+          ></state-box>
+        </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card title="StateBox - Empty">
+          <state-box
+            empty
+            title="No content"
+            body="There is nothing in this box."
+            @click="echo"
+          ></state-box>
+        </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card title="StateBox - Loading">
+          <state-box loading></state-box>
+        </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card title="ActionToggler">
           <action-toggler target="collapsible" text="More" icon-placement="right"></action-toggler>
           <b-collapse id="collapsible"> <span> peek-a-boo </span> </b-collapse>
         </b-card>
