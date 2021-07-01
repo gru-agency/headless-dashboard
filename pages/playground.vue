@@ -21,6 +21,23 @@
         </b-card>
       </b-col>
       <b-col>
+        <b-card title="Action Menu">
+          <action-menu edit-link="/edit" @delete="echo">
+            <!-- <b-dd-header id="dropdown-header-label"> Dropdown header </b-dd-header>
+            <b-dd-item>ad</b-dd-item>
+
+            <b-dd-group header="123"> <b-dd-item>asdadads</b-dd-item></b-dd-group> -->
+          </action-menu>
+
+          <!-- editText: { type: String, default: undefined },
+    editLink: { type: String, default: undefined },
+    editVariant: { type: String, default: undefined },
+    editHide: { type: Boolean, default: false },
+    editDisabled: { type: Boolean, default: false },
+    editLinkAppend: { type: Boolean, default: false }, -->
+        </b-card>
+      </b-col>
+      <b-col>
         <b-card title="Action Toggler">
           <action-toggler target="collapsible" text="More" icon-placement="right"></action-toggler>
           <b-collapse id="collapsible"> <span> peek-a-boo </span> </b-collapse>
