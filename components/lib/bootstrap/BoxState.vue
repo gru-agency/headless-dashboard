@@ -35,7 +35,7 @@
 import { BIcon, BIconArrowRepeat, BIconExclamationOctagon } from 'bootstrap-vue'
 
 export default {
-  name: 'StateBox',
+  name: 'BoxState',
 
   components: {
     BIcon,

@@ -26,28 +26,28 @@
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card title="StateBox - Refresh">
-          <state-box
+        <b-card title="BoxState - Refresh">
+          <box-state
             error
             title="Error!"
             body="Opss... something happens"
             @click="echo"
-          ></state-box>
+          ></box-state>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card title="StateBox - Empty">
-          <state-box
+        <b-card title="BoxState - Empty">
+          <box-state
             empty
             title="No content"
             body="There is nothing in this box."
             @click="echo"
-          ></state-box>
+          ></box-state>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card title="StateBox - Loading">
-          <state-box loading></state-box>
+        <b-card title="BoxState - Loading">
+          <box-state loading></box-state>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
