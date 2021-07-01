@@ -81,6 +81,12 @@
           <tag-field text="custom" variant="dark"></tag-field>
         </b-card>
       </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card title="TipsField">
+          <tips-field> {{ text }} </tips-field>
+          <tips-field placement="top" trigger="hover"> {{ text }} </tips-field>
+        </b-card>
+      </b-col>
     </b-row>
   </b-container>
 </template>
