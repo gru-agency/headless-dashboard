@@ -22,22 +22,12 @@
       </b-col>
       <b-col cols="4" class="mt-4">
         <b-card title="BoxState - Refresh">
-          <box-state
-            error
-            title="Error!"
-            body="Opss... something happens"
-            @click="echo"
-          ></box-state>
+          <box-state error title="Error!" body="Opss.. something happens" @click="echo"></box-state>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
         <b-card title="BoxState - Empty">
-          <box-state
-            empty
-            title="No content"
-            body="There is nothing in this box."
-            @click="echo"
-          ></box-state>
+          <box-state empty title="No content" body="Nothing's here." @click="echo"></box-state>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
@@ -85,6 +75,36 @@
         <b-card title="TipsField">
           <tips-field> {{ text }} </tips-field>
           <tips-field placement="top" trigger="hover"> {{ text }} </tips-field>
+        </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card title="Reserved"> </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card title="BoxHeader - List">
+          <box-header title-text="Products" no-border new-btn @new="echo"> </box-header>
+        </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card title="BoxHeader - View">
+          <box-header
+            title-text="Products"
+            no-border
+            edit-btn
+            btn-link="/edit"
+            parent-link
+            parent-link-text="Products"
+          >
+          </box-header>
+        </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card title="BoxHeader - Custom">
+          <box-header title-text="Custom" subtitle-text="Hello">
+            <template #right>
+              <action-menu edit-link="/edit" @delete="echo"> </action-menu>
+            </template>
+          </box-header>
         </b-card>
       </b-col>
     </b-row>
