@@ -1,5 +1,5 @@
 <template>
-  <b-link v-b-toggle :href="getTarget" :class="getVariant" class="stretched-link">
+  <b-link v-b-toggle :href="getTarget" :class="getVariant" class="stretched-link" @click.prevent>
     <slot>
       <span> {{ text }} </span>
     </slot>
