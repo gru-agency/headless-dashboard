@@ -11,11 +11,11 @@
     <b-icon
       v-if="hasIcon"
       :icon="getIcon"
-      :class="iconClass"
+      :class="iconClass || name === 'bv-edit' ? 'mr-1' : undefined"
       :style="iconStyle"
-      :shift-v="iconShiftV"
+      :shift-v="iconShiftV || name === 'bv-edit' ? '2' : undefined"
       :shift-h="iconShiftH"
-      :font-scale="iconSize"
+      :font-scale="iconSize || name === 'bv-edit' ? '0.95' : undefined"
     ></b-icon>
     <slot> {{ getText }} </slot>
   </b-button>
