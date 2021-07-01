@@ -19,6 +19,9 @@ const utils = {
   printj: (msg) => {
     window.console.log(JSON.stringify(msg))
   },
+  getParentRoute: (path) => {
+    return path.substr(0, path.lastIndexOf('/'))
+  },
 
   // random: () => {
   //   return Math.random().toString(36).slice(2)
