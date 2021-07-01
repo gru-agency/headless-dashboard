@@ -1,5 +1,5 @@
 <template>
-  <b-link v-b-toggle :href="getTarget" :class="getTextVariant" class="stretched-link">
+  <b-link v-b-toggle :href="getTarget" :class="getVariant" class="stretched-link">
     <slot>
       <span> {{ text }} </span>
     </slot>
@@ -45,7 +45,7 @@ export default {
       return this.target ? '#'.concat(this.target) : '#'
     },
 
-    getTextVariant() {
+    getVariant() {
       return this.$ui.getTextVariant(this.variant)
     },
 

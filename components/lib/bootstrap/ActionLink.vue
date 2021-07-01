@@ -52,14 +52,7 @@ export default {
 
   computed: {
     getVariant() {
-      if (this.variant === 'primary') return ' text-primary '
-      else if (this.variant === 'secondary') return ' text-secondary '
-      else if (this.variant === 'light') return ' text-light '
-      else if (this.variant === 'dark') return ' text-dark '
-      else if (this.variant === 'info') return ' text-info '
-      else if (this.variant === 'danger') return ' text-danger '
-      else if (this.variant === 'warning') return ' text-warning '
-      else return ''
+      return this.$ui.getTextVariant(this.variant)
     },
 
     getParentRoute() {
