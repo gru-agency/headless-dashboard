@@ -41,6 +41,8 @@ export default {
     'nuxt-i18n',
     // https://bootstrap-vue.org/
     'bootstrap-vue/nuxt',
+    // https://tailwindcss.com/docs/guides/nuxtjs
+    '@nuxtjs/tailwindcss',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
