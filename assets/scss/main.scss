@@ -8,8 +8,6 @@
 // And lastly define any of your own custom scss
 // @import 'app/bs-custom.scss';
 
-// @use "sass:map";
-
 // custom variables
 $navbar-height: 64px;
 
@@ -28,8 +26,7 @@ $navbar-height: 64px;
   position: absolute;
   top: $navbar-height;
 
-  // @media (min-width: map.get($grid-breakpoints, 'lg')) {
-  @media (min-width: 1024px) {
+  @media (min-width: map-get($grid-breakpoints, 'lg')) {
     width: 18rem;
     position: static;
   }
