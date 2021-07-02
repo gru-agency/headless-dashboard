@@ -1,14 +1,15 @@
 // Override Bootstrap's variables
 // https://github.com/twbs/bootstrap/blob/v4.6.0/scss/_variables.scss
 
+// variables
 $enable-shadows: true;
 $enable-gradients: false;
 $enable-validation-icons: false;
 
-// Colors
+// colors
 $primary: #6610f2;
 
-// Grids
+// grids
 $grid-breakpoints: (
   xs: 0,
   sm: 640px,
@@ -18,11 +19,11 @@ $grid-breakpoints: (
   2xl: 1536px,
 );
 
-// Containers
+// containers
 $container-max-widths: (
-  sm: 604px,
-  md: 720px,
-  lg: 964px,
-  xl: 1208px,
-  2xl: 1452px,
+  sm: 639px,
+  md: 767px,
+  lg: 1023px,
+  xl: 1279px,
+  2xl: 1535px,
 );
