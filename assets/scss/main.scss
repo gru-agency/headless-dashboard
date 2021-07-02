@@ -6,4 +6,45 @@
 @import '~bootstrap-vue/src/index.scss';
 
 // And lastly define any of your own custom scss
-// @import 'app/index.scss';
+// @import 'app/bs-custom.scss';
+
+// custom variables
+$navbar-height: 64px;
+
+// navbar
+.navbar-h {
+  height: $navbar-height;
+}
+
+.navbar-collapse {
+  flex: none;
+}
+
+// sidebar
+.cb-sidebar {
+  width: 100%;
+  position: absolute;
+  top: $navbar-height;
+
+  @media (min-width: map-get($grid-breakpoints, 'lg')) {
+    width: 18rem;
+    position: static;
+  }
+}
+
+// custom utilities
+.of-y-auto {
+  overflow-y: auto;
+}
+
+.z-dropdown {
+  z-index: 1000;
+}
+
+.z-popover {
+  z-index: 1060;
+}
+
+.z-tooltip {
+  z-index: 1070;
+}

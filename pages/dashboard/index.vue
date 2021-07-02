@@ -1,9 +1,11 @@
 <template>
-  <div>home</div>
+  <box-header title-text="Products" no-border new-btn> </box-header>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
+<script>
+export default {
+  name: 'Home',
 
-export default Vue.extend({})
+  layout: 'dashboard',
+}
 </script>
