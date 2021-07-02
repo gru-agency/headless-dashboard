@@ -49,6 +49,7 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extractCSS: true,
+    transpile: ['vue-currency-input'],
   },
 
   router: {
@@ -94,6 +95,34 @@ export default {
     },
     seo: false, // performance concern, enable lazily
     vuex: false,
-    vueI18n: { fallbackLocale: 'en' },
+    vueI18n: {
+      fallbackLocale: 'en',
+      dateTimeFormats: {
+        en: {
+          short: {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          },
+          long: {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            weekday: 'long',
+            hour: 'numeric',
+            minute: 'numeric',
+          },
+        },
+      },
+      numberFormats: {
+        en: {
+          currency: {
+            style: 'currency',
+            currency: 'MYR',
+            currencyDisplay: 'narrowSymbol',
+          },
+        },
+      },
+    },
   },
 }

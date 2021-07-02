@@ -1,9 +1,12 @@
 {
   "general": {
     "cancel": "Cancel",
+    "delete": "Delete",
     "edit": "Edit",
     "new": "New",
+    "optional": "Optional",
     "refresh": "Refresh",
+    "required": "Required",
     "save": "Save",
     "saveAndMore": "Save and more"
   },
@@ -13,33 +16,5 @@
     "users": {}
   },
 
-  "seo": {},
-
-  "dateTime": {
-    "en-GB": {
-      "short": {
-        "year": "numeric",
-        "month": "short",
-        "day": "numeric"
-      },
-      "long": {
-        "year": "numeric",
-        "month": "long",
-        "day": "numeric",
-        "weekday": "long",
-        "hour": "numeric",
-        "minute": "numeric"
-      }
-    }
-  },
-
-  "currency": {
-    "en-GB": {
-      "currency": {
-        "style": "currency",
-        "currency": "USD",
-        "currencyDisplay": "symbol"
-      }
-    }
-  }
+  "seo": {}
 }
