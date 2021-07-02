@@ -41,8 +41,6 @@ export default {
     'nuxt-i18n',
     // https://bootstrap-vue.org/
     'bootstrap-vue/nuxt',
-    // https://tailwindcss.com/docs/guides/nuxtjs
-    '@nuxtjs/tailwindcss',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -50,7 +48,7 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    extractCSS: true,
+    extractCSS: false,
     transpile: ['vue-currency-input'],
   },
 
