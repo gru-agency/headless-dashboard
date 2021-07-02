@@ -2,13 +2,13 @@
   <b-container>
     <b-row class="py-3">
       <b-col cols="4" class="mt-4">
-        <b-card title="ActionToggler">
+        <b-card header="ActionToggler">
           <action-toggler target="collapsible" text="More" icon-placement="right"></action-toggler>
           <b-collapse id="collapsible"> <span> peek-a-boo </span> </b-collapse>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card title="ActionLink">
+        <b-card header="ActionLink">
           <action-link text="Custom link" link="custom" class="mr-2" @click="echo"></action-link>
           <action-link text="Parent link" icon="arrow-left" link-to-parent></action-link>
           <action-link text="Colored link" variant="danger" class="ml-2"></action-link>
@@ -16,27 +16,27 @@
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card title="ActionMenu">
+        <b-card header="ActionMenu">
           <action-menu edit-link="/edit" @delete="echo"> </action-menu>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card title="BoxState - Refresh">
+        <b-card header="BoxState - Refresh">
           <box-state error title="Error!" body="Opss.. something happens" @click="echo"></box-state>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card title="BoxState - Empty">
+        <b-card header="BoxState - Empty">
           <box-state empty title="No content" body="Nothing's here." @click="echo"></box-state>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card title="BoxState - Loading">
+        <b-card header="BoxState - Loading">
           <box-state loading></box-state>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card title="ActionButton">
+        <b-card header="ActionButton">
           <action-button name="bv-new" variant="primary" @click="echo"></action-button>
           <action-button name="bv-edit" disabled></action-button>
           <action-button name="bv-save" link="save" link-append></action-button>
@@ -47,7 +47,7 @@
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card title="TextField">
+        <b-card header="TextField">
           <text-field></text-field>
           <text-field :text="text"></text-field>
           <text-field :date="date"></text-field>
@@ -55,7 +55,7 @@
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card title="ImageField">
+        <b-card header="ImageField">
           <div class="mt-2"><image-field :icon="icon"></image-field></div>
           <div class="mt-2"><image-field :image="images[0]"></image-field></div>
           <div class="mt-2"><image-field :images="images" max="3"></image-field></div>
@@ -63,7 +63,7 @@
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card title="TagField">
+        <b-card header="TagField">
           <tag-field name="bv-optional"></tag-field>
           <tag-field name="bv-required"></tag-field>
           <tag-field text="custom" variant="primary"></tag-field>
@@ -72,23 +72,23 @@
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card title="TipsField">
+        <b-card header="TipsField">
           <tips-field> {{ text }} </tips-field>
           <tips-field placement="top" trigger="hover"> {{ text }} </tips-field>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card title="MoneyField">
+        <b-card header="MoneyField">
           <money-field></money-field>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card title="BoxHeader - List">
+        <b-card header="BoxHeader - List">
           <box-header title-text="Products" no-border new-btn @new="echo"> </box-header>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card title="BoxHeader - View">
+        <b-card header="BoxHeader - View w. nav">
           <box-header
             title-text="Products"
             no-border
@@ -101,7 +101,7 @@
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card title="BoxHeader - Custom">
+        <b-card header="BoxHeader - Custom">
           <box-header title-text="Custom" subtitle-text="Hello">
             <template #right>
               <action-menu edit-link="/edit" @delete="echo"> </action-menu>
