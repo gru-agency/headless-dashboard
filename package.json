@@ -49,6 +49,7 @@
     "stylelint": "^13.13.1",
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-standard": "^22.0.0",
+    "vee-validate": "^3.4.10",
     "vue-currency-input": "^2.0.0",
     "webpack": "^4.46.0"
   }
