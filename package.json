@@ -1,6 +1,6 @@
 {
   "name": "headless-dashboard",
-  "version": "1.22.10",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "nuxt",
