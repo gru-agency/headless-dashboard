@@ -1,6 +1,15 @@
 {
   "general": {
-    "cancel": "取消"
+    "cancel": "取消",
+    "delete": "Delete",
+    "edit": "Edit",
+    "home": "Home",
+    "new": "New",
+    "optional": "Optional",
+    "refresh": "Refresh",
+    "required": "Required",
+    "save": "Save",
+    "saveAndMore": "Save and more"
   },
 
   "modules": {},

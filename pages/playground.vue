@@ -28,24 +28,32 @@
           <action-button name="bv-cancel" @click="echo"></action-button>
           <action-button name="bv-refresh" variant="dark" size="md" @click="echo"></action-button>
           <action-button name="bv-savemore" variant="info" size="md" @click="echo"></action-button>
-          <action-button text="Custom" variant="danger" size="lg" @click="echo"></action-button>
+          <action-button text="custom" variant="danger" size="lg" @click="echo"></action-button>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card header="Reserve"> </b-card>
+        <b-card header="vee-validate">
+          <validation-observer ref="form">
+            <b-form-group label="Required">
+              <validation-provider v-slot="vp" name="Email" rules="required|email" immediate>
+                <b-form-input v-model="email" :state="validationState(vp)"></b-form-input>
+                <b-form-invalid-feedback> {{ vp.errors[0] }} </b-form-invalid-feedback>
+              </validation-provider>
+            </b-form-group>
+          </validation-observer>
+        </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
         <b-card header="i18n">
           <p>
-            <nuxt-link
+            <action-button
               v-for="locale in $i18n.locales"
               :key="locale.code"
-              class="btn btn-primary mr-2"
-              :to="switchLocalePath(locale.code)"
-              @click.stop.prevent
-            >
-              {{ locale.name }}
-            </nuxt-link>
+              :text="locale.name"
+              variant="info"
+              class="mr-2"
+              @click="changeLocale(locale.code)"
+            ></action-button>
           </p>
           <div>Translate: {{ $t('general.cancel') }}</div>
           <div>Date: {{ $d(date, 'long') }}</div>
@@ -161,12 +169,24 @@ export default {
         'http://placekitten.com/75/75',
         'http://placekitten.com/76/76',
       ],
+
+      // form input
+      email: null,
     }
   },
 
   methods: {
     echo(msg) {
       alert(msg || 'hello')
+    },
+
+    changeLocale(locale) {
+      this.$switchLocale(locale)
+      this.$router.push(this.switchLocalePath(locale))
+    },
+
+    validationState({ dirty, validated, valid = null }) {
+      return dirty || validated ? valid : null
     },
   },
 }
