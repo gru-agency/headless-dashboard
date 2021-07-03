@@ -47,6 +47,8 @@ export default {
     'nuxt-i18n',
     // https://bootstrap-vue.org/
     'bootstrap-vue/nuxt',
+    // https://firebase.nuxtjs.org/
+    '@nuxtjs/firebase',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -106,5 +108,29 @@ export default {
       dateTimeFormats,
       numberFormats,
     },
+  },
+
+  firebase: {
+    config: {
+      apiKey: 'AIzaSyBYAGLl-aHRpwHmfZ5KbVD0NUuT8WQ0Gzk',
+      authDomain: 'ecommerce-30.firebaseapp.com',
+      projectId: 'ecommerce-30',
+      storageBucket: 'ecommerce-30.appspot.com',
+      messagingSenderId: '64244192584',
+      appId: '1:64244192584:web:e2585d4c643d405cb50f7d',
+      measurementId: 'G-EZLVFKFMWD',
+    },
+    services: {
+      auth: true,
+      firestore: true,
+      functions: false,
+      storage: false,
+      database: false,
+      messaging: false,
+      performance: false,
+      analytics: false,
+      remoteConfig: false,
+    },
+    terminateDatabasesAfterGenerate: false,
   },
 }

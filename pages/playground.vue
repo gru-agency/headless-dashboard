@@ -85,7 +85,13 @@
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card header="Reserve"> </b-card>
+        <b-card header="Firestore">
+          <div>
+            <action-button text="Add" class="mr-2" @click="writeToFirestore"></action-button>
+            <action-button text="Read" class="mr-2" @click="readFromFirestore"></action-button>
+          </div>
+          <div class="mt-2">Firestore: {{ message || 'None' }}</div>
+        </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
         <b-card header="TextField">
@@ -172,6 +178,9 @@ export default {
 
       // form input
       email: null,
+
+      // firestore
+      message: null,
     }
   },
 
@@ -187,6 +196,27 @@ export default {
 
     validationState({ dirty, validated, valid = null }) {
       return dirty || validated ? valid : null
+    },
+
+    async writeToFirestore() {
+      const ref = this.$fire.firestore.collection('t_playground').doc('sandbox')
+      try {
+        await ref.set({
+          message: new Date(),
+        })
+      } catch (e) {
+        window.console.log(e)
+      }
+    },
+
+    async readFromFirestore() {
+      const ref = this.$fire.firestore.collection('t_playground').doc('sandbox')
+      try {
+        const doc = await ref.get()
+        this.message = doc.data().message.toDate()
+      } catch (e) {
+        window.console.log(e)
+      }
     },
   },
 }
