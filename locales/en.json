@@ -20,5 +20,9 @@
     "users": {}
   },
 
+  "pluralization": {
+    "tableResults": "No result | {n} result | {n} results"
+  },
+
   "seo": {}
 }

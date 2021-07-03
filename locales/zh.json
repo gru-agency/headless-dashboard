@@ -1,0 +1,13 @@
+{
+  "general": {
+    "cancel": "取消"
+  },
+
+  "modules": {},
+
+  "pluralization": {
+    "tableResults": "没有结果 | {n} 个结果 | {n} 个结果"
+  },
+
+  "seo": {}
+}

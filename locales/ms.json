@@ -1,0 +1,13 @@
+{
+  "general": {
+    "cancel": "Batal"
+  },
+
+  "modules": {},
+
+  "pluralization": {
+    "tableResults": "Tiada rekod | {n} rekod | {n} rekod"
+  },
+
+  "seo": {}
+}

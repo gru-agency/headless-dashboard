@@ -82,9 +82,9 @@ export default {
   i18n: {
     baseUrl: 'http://localhost:3000', // important for seo
     locales: [
-      { code: 'en', iso: 'en-gb', file: 'en.json', name: 'English' },
-      // { code: 'ms', iso: 'ms-my', file: 'ms.json5', name: 'Malay' },
-      // { code: 'zh', iso: 'zh-cn', file: 'zh.json5', name: '简体中文' },
+      { code: 'en', iso: 'en-GB', file: 'en.json', name: 'English' },
+      { code: 'ms', iso: 'ms-MY', file: 'ms.json', name: 'Malay' },
+      { code: 'zh', iso: 'zh-CN', file: 'zh.json', name: '简体中文' },
     ],
     lazy: true,
     langDir: '~/locales/',
@@ -116,9 +116,53 @@ export default {
             minute: 'numeric',
           },
         },
+        ms: {
+          short: {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          },
+          long: {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            weekday: 'long',
+            hour: 'numeric',
+            minute: 'numeric',
+          },
+        },
+        zh: {
+          short: {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          },
+          long: {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            weekday: 'long',
+            hour: 'numeric',
+            minute: 'numeric',
+          },
+        },
       },
       numberFormats: {
         en: {
+          currency: {
+            style: 'currency',
+            currency: 'MYR',
+            currencyDisplay: 'narrowSymbol',
+          },
+        },
+        ms: {
+          currency: {
+            style: 'currency',
+            currency: 'MYR',
+            currencyDisplay: 'narrowSymbol',
+          },
+        },
+        zh: {
           currency: {
             style: 'currency',
             currency: 'MYR',
