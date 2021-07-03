@@ -1,5 +1,5 @@
 <template>
-  <b-nav vertical>
+  <b-nav vertical tag="nav">
     <b-nav-text class="navbar-h d-flex align-items-center h4 font-weight-bold px-4">
       {{ $app.brandName.toLowerCase() }}
     </b-nav-text>
