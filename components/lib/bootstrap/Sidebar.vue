@@ -4,7 +4,7 @@
     :class="{ 'border-right': rightBorder }"
     is-nav
     tag="aside"
-    class="cb-sidebar d-lg-block z-dropdown of-y-auto"
+    class="cb-sidebar d-lg-block z-dropdown of-y-auto bg-light"
   >
     <div class="pb-5">
       <slot></slot>
