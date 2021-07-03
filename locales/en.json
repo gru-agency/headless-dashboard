@@ -3,6 +3,7 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "edit": "Edit",
+    "home": "Home",
     "new": "New",
     "optional": "Optional",
     "refresh": "Refresh",
@@ -12,7 +13,10 @@
   },
 
   "modules": {
-    "products": {},
+    "orders": { "title": "Orders" },
+    "products": { "title": "Products" },
+    "prices": { "title": "Prices" },
+    "settings": { "title": "Settings" },
     "users": {}
   },
 

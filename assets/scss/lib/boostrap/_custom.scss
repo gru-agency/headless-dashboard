@@ -8,6 +8,7 @@ $enable-validation-icons: false;
 
 // colors
 $primary: #6610f2;
+$secondary: #6c757d;
 
 // grids
 $grid-breakpoints: (
@@ -27,3 +28,32 @@ $container-max-widths: (
   xl: 1279px,
   2xl: 1535px,
 );
+
+// typography
+$headings-margin-bottom: 0;
+
+// navs
+$nav-tabs-link-active-color: $primary;
+$nav-tabs-link-active-border-color: $primary;
+
+// links
+$link-color: $secondary;
+$link-hover-decoration: none;
+
+// forms
+$form-group-margin-bottom: 1.5rem;
+
+// badges
+$badge-font-weight: 500;
+
+// card
+$card-cap-bg: #fff;
+
+// popover
+$popover-header-padding-y: 0.75rem;
+$popover-header-padding-x: 1rem;
+$popover-body-padding-y: $popover-header-padding-y;
+$popover-body-padding-x: $popover-header-padding-x;
+
+// table
+$table-th-font-weight: 500;
