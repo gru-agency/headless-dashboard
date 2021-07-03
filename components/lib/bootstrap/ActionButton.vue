@@ -47,7 +47,7 @@ export default {
     iconStyle: { type: String, default: undefined },
     iconShiftV: { type: String, default: undefined },
     iconShiftH: { type: String, default: undefined },
-    iconSize: { type: Number, default: 1 },
+    iconSize: { type: [Number, String], default: 1 },
   },
 
   data() {

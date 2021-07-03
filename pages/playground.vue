@@ -21,21 +21,6 @@
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card header="BoxState - Refresh">
-          <box-state error title="Error!" body="Opss.. something happens" @click="echo"></box-state>
-        </b-card>
-      </b-col>
-      <b-col cols="4" class="mt-4">
-        <b-card header="BoxState - Empty">
-          <box-state empty title="No content" body="Nothing's here." @click="echo"></box-state>
-        </b-card>
-      </b-col>
-      <b-col cols="4" class="mt-4">
-        <b-card header="BoxState - Loading">
-          <box-state loading></box-state>
-        </b-card>
-      </b-col>
-      <b-col cols="4" class="mt-4">
         <b-card header="ActionButton">
           <action-button name="bv-new" variant="primary" @click="echo"></action-button>
           <action-button name="bv-edit" disabled></action-button>
@@ -43,23 +28,40 @@
           <action-button name="bv-cancel" @click="echo"></action-button>
           <action-button name="bv-refresh" variant="dark" size="md" @click="echo"></action-button>
           <action-button name="bv-savemore" variant="info" size="md" @click="echo"></action-button>
-          <action-button text="Custom" variant="danger" size="lg" @click="echo"></action-button>
+          <action-button text="custom" variant="danger" size="lg" @click="echo"></action-button>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card header="TextField">
-          <text-field></text-field>
-          <text-field :text="text"></text-field>
-          <text-field :date="date"></text-field>
-          <text-field :money="123456789" currency="myr"></text-field>
+        <b-card header="vee-validate">
+          <validation-observer ref="form">
+            <b-form-group label="Required">
+              <validation-provider v-slot="vp" name="Email" rules="required|email" immediate>
+                <b-form-input v-model="email" :state="validationState(vp)"></b-form-input>
+                <b-form-invalid-feedback> {{ vp.errors[0] }} </b-form-invalid-feedback>
+              </validation-provider>
+            </b-form-group>
+          </validation-observer>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card header="ImageField">
-          <div class="mt-2"><image-field :icon="icon"></image-field></div>
-          <div class="mt-2"><image-field :image="images[0]"></image-field></div>
-          <div class="mt-2"><image-field :images="images" max="3"></image-field></div>
-          <div class="mt-2"><image-field :images="images"></image-field></div>
+        <b-card header="i18n">
+          <p>
+            <action-button
+              v-for="locale in $i18n.locales"
+              :key="locale.code"
+              :text="locale.name"
+              variant="info"
+              class="mr-2"
+              @click="changeLocale(locale.code)"
+            ></action-button>
+          </p>
+          <div>Translate: {{ $t('general.cancel') }}</div>
+          <div>Date: {{ $d(date, 'long') }}</div>
+          <div>Currency: {{ $n(money, 'currency') }}</div>
+          <div>
+            Pluralization: {{ $tc('pluralization.tableResults', 0) }},
+            {{ $tc('pluralization.tableResults', 1) }}, {{ $tc('pluralization.tableResults', 10) }}
+          </div>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
@@ -80,6 +82,31 @@
       <b-col cols="4" class="mt-4">
         <b-card header="MoneyField">
           <money-field></money-field>
+        </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card header="Firestore">
+          <div>
+            <action-button text="Add" class="mr-2" @click="writeToFirestore"></action-button>
+            <action-button text="Read" class="mr-2" @click="readFromFirestore"></action-button>
+          </div>
+          <div class="mt-2">Firestore: {{ message || 'None' }}</div>
+        </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card header="TextField">
+          <text-field></text-field>
+          <text-field :text="text"></text-field>
+          <text-field :date="date"></text-field>
+          <text-field :money="money" currency="myr"></text-field>
+        </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card header="ImageField">
+          <div class="mt-2"><image-field :icon="icon"></image-field></div>
+          <div class="mt-2"><image-field :image="images[0]"></image-field></div>
+          <div class="mt-2"><image-field :images="images" max="3"></image-field></div>
+          <div class="mt-2"><image-field :images="images"></image-field></div>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
@@ -109,6 +136,21 @@
           </box-header>
         </b-card>
       </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card header="BoxState - Refresh">
+          <box-state error title="Error!" body="Opss.. something happens" @click="echo"></box-state>
+        </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card header="BoxState - Empty">
+          <box-state empty title="No content" body="Nothing's here." @click="echo"></box-state>
+        </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card header="BoxState - Loading">
+          <box-state loading></box-state>
+        </b-card>
+      </b-col>
     </b-row>
   </b-container>
 </template>
@@ -122,6 +164,7 @@ export default {
       // TextField
       text: 'normal text field',
       date: new Date().getTime(),
+      money: 123456789,
 
       // image field
       icon: 'box-seam',
@@ -132,12 +175,48 @@ export default {
         'http://placekitten.com/75/75',
         'http://placekitten.com/76/76',
       ],
+
+      // form input
+      email: null,
+
+      // firestore
+      message: null,
     }
   },
 
   methods: {
     echo(msg) {
       alert(msg || 'hello')
+    },
+
+    changeLocale(locale) {
+      this.$switchLocale(locale)
+      this.$router.push(this.switchLocalePath(locale))
+    },
+
+    validationState({ dirty, validated, valid = null }) {
+      return dirty || validated ? valid : null
+    },
+
+    async writeToFirestore() {
+      const ref = this.$fire.firestore.collection('t_playground').doc('sandbox')
+      try {
+        await ref.set({
+          message: new Date(),
+        })
+      } catch (e) {
+        window.console.log(e)
+      }
+    },
+
+    async readFromFirestore() {
+      const ref = this.$fire.firestore.collection('t_playground').doc('sandbox')
+      try {
+        const doc = await ref.get()
+        this.message = doc.data().message.toDate()
+      } catch (e) {
+        window.console.log(e)
+      }
     },
   },
 }

@@ -29,6 +29,7 @@
     "@commitlint/config-conventional": "^12.1.4",
     "@nuxtjs/eslint-config": "^6.0.1",
     "@nuxtjs/eslint-module": "^3.0.2",
+    "@nuxtjs/firebase": "^7.6.1",
     "@nuxtjs/stylelint-module": "^4.0.0",
     "@vue/composition-api": "^1.0.0-rc.12",
     "bootstrap": "^4.6.0",
@@ -38,6 +39,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-nuxt": "^2.0.0",
     "eslint-plugin-vue": "^7.12.1",
+    "firebase": "^8.7.0",
     "husky": "^7.0.0",
     "jquery": "^3.6.0",
     "lint-staged": "^11.0.0",
@@ -51,6 +53,7 @@
     "stylelint-config-standard": "^22.0.0",
     "vee-validate": "^3.4.10",
     "vue-currency-input": "^2.0.0",
+    "vuexfire": "^3.2.5",
     "webpack": "^4.46.0"
   }
 }

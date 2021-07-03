@@ -1,3 +1,6 @@
+import { dateTimeFormats } from './configs/datetime-format'
+import { numberFormats } from './configs/currency-format'
+
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -44,6 +47,8 @@ export default {
     'nuxt-i18n',
     // https://bootstrap-vue.org/
     'bootstrap-vue/nuxt',
+    // https://firebase.nuxtjs.org/
+    '@nuxtjs/firebase',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -82,9 +87,9 @@ export default {
   i18n: {
     baseUrl: 'http://localhost:3000', // important for seo
     locales: [
-      { code: 'en', iso: 'en-gb', file: 'en.json', name: 'English' },
-      // { code: 'ms', iso: 'ms-my', file: 'ms.json5', name: 'Malay' },
-      // { code: 'zh', iso: 'zh-cn', file: 'zh.json5', name: '简体中文' },
+      { code: 'en', iso: 'en-GB', file: 'en.json', name: 'English' },
+      { code: 'ms', iso: 'ms-MY', file: 'ms.json', name: 'Malay' },
+      { code: 'zh', iso: 'zh-CN', file: 'zh.json', name: '简体中文' },
     ],
     lazy: true,
     langDir: '~/locales/',
@@ -100,32 +105,32 @@ export default {
     vuex: false,
     vueI18n: {
       fallbackLocale: 'en',
-      dateTimeFormats: {
-        en: {
-          short: {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-          },
-          long: {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            weekday: 'long',
-            hour: 'numeric',
-            minute: 'numeric',
-          },
-        },
-      },
-      numberFormats: {
-        en: {
-          currency: {
-            style: 'currency',
-            currency: 'MYR',
-            currencyDisplay: 'narrowSymbol',
-          },
-        },
-      },
+      dateTimeFormats,
+      numberFormats,
     },
+  },
+
+  firebase: {
+    config: {
+      apiKey: 'AIzaSyBYAGLl-aHRpwHmfZ5KbVD0NUuT8WQ0Gzk',
+      authDomain: 'ecommerce-30.firebaseapp.com',
+      projectId: 'ecommerce-30',
+      storageBucket: 'ecommerce-30.appspot.com',
+      messagingSenderId: '64244192584',
+      appId: '1:64244192584:web:e2585d4c643d405cb50f7d',
+      measurementId: 'G-EZLVFKFMWD',
+    },
+    services: {
+      auth: true,
+      firestore: true,
+      functions: false,
+      storage: false,
+      database: false,
+      messaging: false,
+      performance: false,
+      analytics: false,
+      remoteConfig: false,
+    },
+    terminateDatabasesAfterGenerate: false,
   },
 }

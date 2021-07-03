@@ -1,6 +1,6 @@
 {
   "general": {
-    "cancel": "Cancel",
+    "cancel": "取消",
     "delete": "Delete",
     "edit": "Edit",
     "home": "Home",
@@ -12,16 +12,10 @@
     "saveAndMore": "Save and more"
   },
 
-  "modules": {
-    "orders": { "title": "Orders" },
-    "products": { "title": "Products" },
-    "prices": { "title": "Prices" },
-    "settings": { "title": "Settings" },
-    "users": {}
-  },
+  "modules": {},
 
   "pluralization": {
-    "tableResults": "No result | {n} result | {n} results"
+    "tableResults": "没有结果 | {n} 个结果 | {n} 个结果"
   },
 
   "seo": {}
