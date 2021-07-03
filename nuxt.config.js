@@ -1,3 +1,6 @@
+import { dateTimeFormats } from './configs/datetime-format'
+import { numberFormats } from './configs/currency-format'
+
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -100,76 +103,8 @@ export default {
     vuex: false,
     vueI18n: {
       fallbackLocale: 'en',
-      dateTimeFormats: {
-        en: {
-          short: {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-          },
-          long: {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            weekday: 'long',
-            hour: 'numeric',
-            minute: 'numeric',
-          },
-        },
-        ms: {
-          short: {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-          },
-          long: {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            weekday: 'long',
-            hour: 'numeric',
-            minute: 'numeric',
-          },
-        },
-        zh: {
-          short: {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-          },
-          long: {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            weekday: 'long',
-            hour: 'numeric',
-            minute: 'numeric',
-          },
-        },
-      },
-      numberFormats: {
-        en: {
-          currency: {
-            style: 'currency',
-            currency: 'MYR',
-            currencyDisplay: 'narrowSymbol',
-          },
-        },
-        ms: {
-          currency: {
-            style: 'currency',
-            currency: 'MYR',
-            currencyDisplay: 'narrowSymbol',
-          },
-        },
-        zh: {
-          currency: {
-            style: 'currency',
-            currency: 'MYR',
-            currencyDisplay: 'narrowSymbol',
-          },
-        },
-      },
+      dateTimeFormats,
+      numberFormats,
     },
   },
 }
