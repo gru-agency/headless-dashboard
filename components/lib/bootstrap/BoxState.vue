@@ -3,10 +3,10 @@
     <div v-if="empty || error">
       <p>
         <b-avatar size="3rem" variant="light" rounded>
-          <b-icon
-            :icon="icon || empty ? 'exclamation-octagon' : 'arrow-repeat'"
-            variant="secondary"
-          ></b-icon>
+          <icon
+            :icon="icon || empty ? ['fad', 'empty-set'] : ['fad', 'exclamation']"
+            icon-variant="secondary"
+          ></icon>
         </b-avatar>
       </p>
       <p class="h4">{{ title }}</p>
@@ -16,15 +16,16 @@
         v-if="!btnHide"
         :name="empty ? 'bv-new' : error ? 'bv-refresh' : undefined"
         :variant="btnVariant || empty ? 'primary' : 'light'"
+        :text="btnText"
         :to="btnLink"
         :size="btnSize"
-        :text="btnText"
         :disabled="btnDisabled"
-        :append="btnLinkAppend"
+        :link-append="btnLinkAppend"
         :prefetch="btnLink ? true : false"
         @click="sendEvents"
       ></action-button>
     </div>
+
     <div v-if="loading">
       <b-spinner variant="secondary" label="Loading..."></b-spinner>
     </div>
@@ -32,16 +33,8 @@
 </template>
 
 <script>
-import { BIcon, BIconArrowRepeat, BIconExclamationOctagon } from 'bootstrap-vue'
-
 export default {
   name: 'BoxState',
-
-  components: {
-    BIcon,
-    BIconArrowRepeat, // eslint-disable-line vue/no-unused-components
-    BIconExclamationOctagon, // eslint-disable-line vue/no-unused-components
-  },
 
   props: {
     empty: { type: Boolean, default: false },
@@ -56,14 +49,7 @@ export default {
     btnHide: { type: Boolean, default: false },
     btnDisabled: { type: Boolean, default: false },
     btnLinkAppend: { type: Boolean, default: false },
-    // not recommended to use since icon is import explicitly
     icon: { type: String, default: undefined },
-  },
-
-  data() {
-    return {
-      def: {},
-    }
   },
 
   computed: {

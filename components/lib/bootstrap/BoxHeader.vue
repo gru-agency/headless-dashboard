@@ -7,7 +7,7 @@
     <div v-if="parentLink" class="d-flex justify-content-between align-items-center mb-2">
       <action-link
         :text="parentLinkText"
-        icon="arrow-left"
+        :icon="['fad', 'long-arrow-left']"
         :variant="parentLinkVariant || 'secondary'"
         :link-to-parent="parentLink"
       ></action-link>
@@ -32,14 +32,10 @@
             v-if="newBtn || editBtn || btnText"
             :name="newBtn ? 'bv-new' : editBtn ? 'bv-edit' : undefined"
             :variant="btnVariant || newBtn ? 'primary' : editBtn ? 'light' : undefined"
+            :text="btnText"
             :link="btnLink"
             :size="btnSize"
-            :text="btnText"
-            :append="btnLinkAppend"
-            :prefetch="btnLink ? true : false"
-            :icon-class="editBtn ? 'mr-1' : undefined"
-            :icon-size="editBtn ? '0.95' : undefined"
-            :icon-shift-v="editBtn ? '2' : undefined"
+            :link-append="btnLinkAppend"
             @click="sendEvents(newBtn ? 'new' : editBtn ? 'edit' : 'click')"
           ></action-button>
         </slot>

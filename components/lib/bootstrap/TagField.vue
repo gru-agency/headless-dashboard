@@ -1,5 +1,5 @@
 <template>
-  <b-badge :variant="variant" class="mx-1"> {{ getText }} </b-badge>
+  <b-badge :variant="variant"> {{ getText }} </b-badge>
 </template>
 
 <script>

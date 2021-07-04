@@ -8,30 +8,14 @@
     :prefetch="link ? true : false"
     @click.prevent="$emit('click')"
   >
-    <b-icon
-      v-if="hasIcon"
-      :icon="getIcon"
-      :class="iconClass || name === 'bv-edit' ? 'mr-1' : undefined"
-      :style="iconStyle"
-      :shift-v="iconShiftV || name === 'bv-edit' ? '2' : undefined"
-      :shift-h="iconShiftH"
-      :font-scale="iconSize || name === 'bv-edit' ? '0.95' : undefined"
-    ></b-icon>
+    <icon :icon="getIcon" icon-size="sm"></icon>
     <slot> {{ getText }} </slot>
   </b-button>
 </template>
 
 <script>
-import { BIcon, BIconPlus, BIconPencilFill } from 'bootstrap-vue'
-
 export default {
   name: 'ActionButton',
-
-  components: {
-    BIcon,
-    BIconPlus, // eslint-disable-line vue/no-unused-components
-    BIconPencilFill, // eslint-disable-line vue/no-unused-components
-  },
 
   props: {
     name: { type: String, default: undefined },
@@ -41,20 +25,19 @@ export default {
     variant: { type: String, default: 'light' },
     disabled: { type: Boolean, default: false },
     linkAppend: { type: Boolean, default: false },
-    // not recommended to use since icon is import explicitly
-    icon: { type: String, default: undefined },
-    iconClass: { type: String, default: undefined },
-    iconStyle: { type: String, default: undefined },
-    iconShiftV: { type: String, default: undefined },
-    iconShiftH: { type: String, default: undefined },
-    iconSize: { type: [Number, String], default: 1 },
+    icon: {
+      type: [String, Array],
+      default() {
+        return []
+      },
+    },
   },
 
   data() {
     return {
       predefined: [
-        { name: 'bv-new', text: this.$t('general.new'), icon: 'plus' },
-        { name: 'bv-edit', text: this.$t('general.edit'), icon: 'pencil-fill' },
+        { name: 'bv-new', text: this.$t('general.new'), icon: ['fas', 'plus'] },
+        { name: 'bv-edit', text: this.$t('general.edit'), icon: ['fad', 'pencil'] },
         { name: 'bv-save', text: this.$t('general.save') },
         { name: 'bv-cancel', text: this.$t('general.cancel') },
         { name: 'bv-refresh', text: this.$t('general.refresh') },
@@ -73,11 +56,11 @@ export default {
     },
 
     getIcon() {
-      return this.icon || this.findPredefined?.icon
-    },
-
-    hasIcon() {
-      return this.icon || this.findPredefined?.icon
+      return typeof this.icon === 'object' && this.icon.length > 0
+        ? this.icon
+        : this.icon === 'string'
+        ? this.icon
+        : this.findPredefined?.icon
     },
   },
 }
