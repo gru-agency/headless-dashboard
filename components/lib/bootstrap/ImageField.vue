@@ -1,7 +1,8 @@
 <template>
   <span>
+    <!-- placeholder -->
     <b-avatar v-if="list.length === 0" size="3rem" variant="light" rounded>
-      <b-icon :icon="icon" variant="secondary"></b-icon>
+      <icon icon-variant="secondary"></icon>
     </b-avatar>
 
     <b-avatar
@@ -14,20 +15,12 @@
       rounded
     >
     </b-avatar>
-    <b-icon variant="secondary"></b-icon>
   </span>
 </template>
 
 <script>
-import { BIcon, BIconBoxSeam } from 'bootstrap-vue'
-
 export default {
   name: 'ImageField',
-
-  components: {
-    BIcon,
-    BIconBoxSeam, // eslint-disable-line vue/no-unused-components
-  },
 
   props: {
     image: { type: String, default: undefined },

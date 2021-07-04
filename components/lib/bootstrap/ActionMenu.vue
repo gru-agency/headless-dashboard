@@ -9,7 +9,7 @@
     no-caret
     right
   >
-    <template #button-content> <b-icon-three-dots></b-icon-three-dots> </template>
+    <template #button-content> <icon :icon="['far', 'ellipsis-h']"></icon> </template>
 
     <slot>
       <b-dd-item
@@ -21,6 +21,7 @@
         :prefetch="editLink ? true : false"
         @click.prevent="sendEvents('edit')"
       >
+        <icon :icon="['fad', 'pencil']" class="mr-2"></icon>
         {{ editText || def.edit }}
       </b-dd-item>
 
@@ -33,6 +34,7 @@
         :append="deleteLinkAppend"
         @click.prevent="sendEvents('delete')"
       >
+        <icon :icon="['fad', 'trash']" class="mr-2"></icon>
         {{ deleteText || def.delete }}
       </b-dd-item>
     </slot>
@@ -40,12 +42,8 @@
 </template>
 
 <script>
-import { BIconThreeDots } from 'bootstrap-vue'
-
 export default {
   name: 'ActionMenu',
-
-  components: { BIconThreeDots },
 
   props: {
     size: { type: String, default: 'sm' },

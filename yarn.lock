@@ -1323,6 +1323,44 @@
   resolved "https://registry.yarnpkg.com/@firebase/webchannel-wrapper/-/webchannel-wrapper-0.5.1.tgz#a64d1af3c62e3bb89576ec58af880980a562bf4e"
   integrity sha512-dZMzN0uAjwJXWYYAcnxIwXqRTZw3o14hGe7O6uhwjD1ZQWPVYA5lASgnNskEBra0knVBsOXB4KXg+HnlKewN/A==
 
+"@fortawesome/fontawesome-common-types@^0.2.35":
+  version "0.2.35"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.2.35.tgz#01dd3d054da07a00b764d78748df20daf2b317e9"
+  integrity sha512-IHUfxSEDS9dDGqYwIW7wTN6tn/O8E0n5PcAHz9cAaBoZw6UpG20IG/YM3NNLaGPwPqgjBAFjIURzqoQs3rrtuw==
+
+"@fortawesome/fontawesome-svg-core@^1.2.27":
+  version "1.2.35"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-1.2.35.tgz#85aea8c25645fcec88d35f2eb1045c38d3e65cff"
+  integrity sha512-uLEXifXIL7hnh2sNZQrIJWNol7cTVIzwI+4qcBIq9QWaZqUblm0IDrtSqbNg+3SQf8SMGHkiSigD++rHmCHjBg==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.35"
+
+"@fortawesome/free-brands-svg-icons@^5.15.3":
+  version "5.15.3"
+  resolved "https://registry.yarnpkg.com/@fortawesome/free-brands-svg-icons/-/free-brands-svg-icons-5.15.3.tgz#bec2821d23b9c667be1d192a6c5bfb2667e588eb"
+  integrity sha512-1hirPcbjj72ZJtFvdnXGPbAbpn3Ox6mH3g5STbANFp3vGSiE5u5ingAKV06mK6ZVqNYxUPlh4DlTnaIvLtF2kw==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.35"
+
+"@fortawesome/free-regular-svg-icons@^5.15.3":
+  version "5.15.3"
+  resolved "https://registry.yarnpkg.com/@fortawesome/free-regular-svg-icons/-/free-regular-svg-icons-5.15.3.tgz#1ec4f2410ff638db549c5c5484fc60b66407dbe6"
+  integrity sha512-q4/p8Xehy9qiVTdDWHL4Z+o5PCLRChePGZRTXkl+/Z7erDVL8VcZUuqzJjs6gUz6czss4VIPBRdCz6wP37/zMQ==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.35"
+
+"@fortawesome/free-solid-svg-icons@^5.15.3":
+  version "5.15.3"
+  resolved "https://registry.yarnpkg.com/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-5.15.3.tgz#52eebe354f60dc77e0bde934ffc5c75ffd04f9d8"
+  integrity sha512-XPeeu1IlGYqz4VWGRAT5ukNMd4VHUEEJ7ysZ7pSSgaEtNvSo+FLurybGJVmiqkQdK50OkSja2bfZXOeyMGRD8Q==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.35"
+
+"@fortawesome/vue-fontawesome@^0.1.9":
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/@fortawesome/vue-fontawesome/-/vue-fontawesome-0.1.10.tgz#eeeec1e4e8850bed0468f938292b06cda793bf34"
+  integrity sha512-b2+SLF31h32LSepVcXe+BQ63yvbq5qmTCy4KfFogCYm2bn68H5sDWUnX+U7MBqnM2aeEk9M7xSoqGnu+wSdY6w==
+
 "@google-cloud/common@^3.6.0":
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/@google-cloud/common/-/common-3.6.0.tgz#c2f6da5f79279a4a9ac7c71fc02d582beab98e8b"
@@ -1822,6 +1860,14 @@
     consola "^2.15.3"
   optionalDependencies:
     firebase-admin "^9.9.0"
+
+"@nuxtjs/fontawesome@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@nuxtjs/fontawesome/-/fontawesome-1.1.2.tgz#0add6519095b392bdffb6e3ad40f3026d20f5c44"
+  integrity sha512-QAfo7hdc6hiCOohdR861oNQ+riKW/kD22bYyvaC++xXiiC1hBQcrRQ6xXd5gln+6SKCwT09+C4kGjzTgrwtr7w==
+  dependencies:
+    "@fortawesome/fontawesome-svg-core" "^1.2.27"
+    "@fortawesome/vue-fontawesome" "^0.1.9"
 
 "@nuxtjs/stylelint-module@^4.0.0":
   version "4.0.0"
@@ -7429,6 +7475,34 @@ nuxt@^2.15.7:
     "@nuxt/vue-app" "2.15.7"
     "@nuxt/vue-renderer" "2.15.7"
     "@nuxt/webpack" "2.15.7"
+
+obit-fa-pro-duotone@5.15.3:
+  version "5.15.3"
+  resolved "https://registry.yarnpkg.com/obit-fa-pro-duotone/-/obit-fa-pro-duotone-5.15.3.tgz#d822d98c422928f8279028f4bb94dfdcc215bb3b"
+  integrity sha512-0/J8Dwc12lUU57cx2ojs8DcBsAVfV+AJ4aUWxkQ1LO7MxrEJ6Z6wJfMvS1y3p7jiqzVtmGvYWsh+b5hHYZOtmQ==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.35"
+
+obit-fa-pro-light@^5.15.3:
+  version "5.15.3"
+  resolved "https://registry.yarnpkg.com/obit-fa-pro-light/-/obit-fa-pro-light-5.15.3.tgz#bead196166f6322e3060363a86ecbee234867547"
+  integrity sha512-6b2DpNtjy/pXaknkKX87GiJ/sJkF3WFbmbX4vqWSXZmKogjSZlIT7b5iMXVTi4zZiB9sYHB4GlmbOUs/akHmKw==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.35"
+
+obit-fa-pro-regular@^5.15.3:
+  version "5.15.3"
+  resolved "https://registry.yarnpkg.com/obit-fa-pro-regular/-/obit-fa-pro-regular-5.15.3.tgz#2e5ef800c390b2e1f9960d67579a1d4fd106e80c"
+  integrity sha512-wIaGWmQCUVNSPeudEMx51PABCbDhvpRHcWj/By0V1Sl/duGUfTmmpaBpEN4gMgHIqnSkMwuCrfQuJ0yYQGC9kQ==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.35"
+
+obit-fa-pro-solid@^5.15.3:
+  version "5.15.3"
+  resolved "https://registry.yarnpkg.com/obit-fa-pro-solid/-/obit-fa-pro-solid-5.15.3.tgz#f7f2a8348d40ed42d3f3281f711824d750d8b823"
+  integrity sha512-vpO1XNe8PqbtF0igqqPcX0tHV5/2ygB14MF2NOWtxirM/2qgEUoKoSqc4evRYkUlqBNzczS4ztQtP4JSPUXXJg==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.35"
 
 object-assign@^4.0.1, object-assign@^4.1.0, object-assign@^4.1.1:
   version "4.1.1"

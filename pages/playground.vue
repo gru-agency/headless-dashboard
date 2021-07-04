@@ -3,16 +3,20 @@
     <b-row class="py-3">
       <b-col cols="4" class="mt-4">
         <b-card header="ActionToggler">
-          <action-toggler target="collapsible" text="More" icon-placement="right"></action-toggler>
+          <action-toggler target="collapsible" text="More" icon-right></action-toggler>
           <b-collapse id="collapsible"> <span> peek-a-boo </span> </b-collapse>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
         <b-card header="ActionLink">
           <action-link text="Custom link" link="custom" class="mr-2" @click="echo"></action-link>
-          <action-link text="Parent link" icon="arrow-left" link-to-parent></action-link>
+          <action-link
+            text="Parent link"
+            :icon="['fad', 'long-arrow-left']"
+            link-to-parent
+          ></action-link>
           <action-link text="Colored link" variant="danger" class="ml-2"></action-link>
-          <action-link icon="x" icon-shift-v="-2" icon-size="1.5" link-to-parent></action-link>
+          <action-link :icon="['far', 'times']" link-to-parent></action-link>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
@@ -23,9 +27,9 @@
       <b-col cols="4" class="mt-4">
         <b-card header="ActionButton">
           <action-button name="bv-new" variant="primary" @click="echo"></action-button>
-          <action-button name="bv-edit" disabled></action-button>
-          <action-button name="bv-save" link="save" link-append></action-button>
-          <action-button name="bv-cancel" @click="echo"></action-button>
+          <action-button name="bv-edit" @click="echo"></action-button>
+          <action-button name="bv-save" link="save" link-append disabled></action-button>
+          <action-button name="bv-cancel" :icon="['far', 'times']"></action-button>
           <action-button name="bv-refresh" variant="dark" size="md" @click="echo"></action-button>
           <action-button name="bv-savemore" variant="info" size="md" @click="echo"></action-button>
           <action-button text="custom" variant="danger" size="lg" @click="echo"></action-button>
@@ -63,6 +67,22 @@
             {{ $tc('pluralization.tableResults', 1) }}, {{ $tc('pluralization.tableResults', 10) }}
           </div>
         </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card header="FontAwesome">
+          <fa :icon="['fas', 'home']" class="fa-sm"></fa>
+          <fa :icon="['far', 'home']" class="fa-md"></fa>
+          <fa :icon="['fal', 'home']" class="fa-lg"></fa>
+          <fa :icon="['fad', 'home']" class="fa-gru"></fa>
+          <fa :icon="['fad', 'home']" class="fa-2x fa-gru"></fa>
+          <fa :icon="['fad', 'home']" class="fa-3x fa-gru"></fa>
+        </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card header="Reserve"> </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card header="Reserve"> </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
         <b-card header="TagField">
