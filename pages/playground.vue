@@ -65,6 +65,22 @@
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
+        <b-card header="FontAwesome">
+          <fa :icon="['fas', 'home']" class="fa-sm"></fa>
+          <fa :icon="['far', 'home']" class="fa-md"></fa>
+          <fa :icon="['fal', 'home']" class="fa-lg"></fa>
+          <fa :icon="['fad', 'home']" class="fa-gru"></fa>
+          <fa :icon="['fad', 'home']" class="fa-2x fa-gru"></fa>
+          <fa :icon="['fad', 'home']" class="fa-3x fa-gru"></fa>
+        </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card header="Reserve"> </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card header="Reserve"> </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
         <b-card header="TagField">
           <tag-field name="bv-optional"></tag-field>
           <tag-field name="bv-required"></tag-field>
@@ -182,6 +198,11 @@ export default {
       // firestore
       message: null,
     }
+  },
+
+  mounted() {
+    const hello = { asd: 'asddd' }
+    window.console.log(typeof Object.values(hello))
   },
 
   methods: {

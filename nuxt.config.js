@@ -1,5 +1,6 @@
-import { dateTimeFormats } from './configs/datetime-format'
+import { resolve } from 'path'
 import { numberFormats } from './configs/currency-format'
+import { dateTimeFormats } from './configs/datetime-format'
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
@@ -49,6 +50,8 @@ export default {
     'bootstrap-vue/nuxt',
     // https://firebase.nuxtjs.org/
     '@nuxtjs/firebase',
+    // https://github.com/nuxt-community/fontawesome-module
+    '@nuxtjs/fontawesome',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -58,6 +61,13 @@ export default {
   build: {
     extractCSS: false,
     transpile: ['vue-currency-input'],
+  },
+
+  alias: {
+    '@fortawesome/pro-solid-svg-icons': resolve(__dirname, './node_modules/obit-fa-pro-solid'),
+    '@fortawesome/pro-light-svg-icons': resolve(__dirname, './node_modules/obit-fa-pro-light'),
+    '@fortawesome/pro-regular-svg-icons': resolve(__dirname, './node_modules/obit-fa-pro-regular'),
+    '@fortawesome/pro-duotone-svg-icons': resolve(__dirname, './node_modules/obit-fa-pro-duotone'),
   },
 
   router: {
@@ -82,6 +92,25 @@ export default {
     css: false,
     bvCss: false,
     icons: false,
+  },
+
+  fontawesome: {
+    component: 'fa',
+    addCss: true,
+    suffix: false,
+    useLayers: false,
+    useLayersText: false,
+    icons: {
+      brands: true,
+      solid: true,
+      regular: true,
+    },
+    proIcons: {
+      solid: true,
+      light: true,
+      regular: true,
+      duotone: true,
+    },
   },
 
   i18n: {
