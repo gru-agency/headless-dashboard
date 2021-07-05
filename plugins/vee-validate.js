@@ -8,18 +8,24 @@ async function loadLocale(code) {
   localize(code, locale)
 }
 
-const switchLocale = (locale) => {
-  if (locale.startsWith('ms')) {
-    loadLocale('ms_MY')
-  } else if (locale.startsWith('zh')) {
-    loadLocale('zh_CN')
-  } else {
-    loadLocale('en')
-  }
+const util = {
+  checkState: ({ dirty, validated, valid = null }) => {
+    return dirty || validated ? valid : null
+  },
+
+  switchLocale: (locale) => {
+    if (locale.startsWith('ms')) {
+      loadLocale('ms_MY')
+    } else if (locale.startsWith('zh')) {
+      loadLocale('zh_CN')
+    } else {
+      loadLocale('en')
+    }
+  },
 }
 
 export default (_, inject) => {
-  inject('switchLocale', switchLocale)
+  inject('vee', util)
 }
 
 // default to en
