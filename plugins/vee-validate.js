@@ -3,10 +3,9 @@ import { localize, extend, ValidationProvider, ValidationObserver } from 'vee-va
 import { required, email } from 'vee-validate/dist/rules'
 import en from 'vee-validate/dist/locale/en.json'
 
-function loadLocale(code) {
-  return import(`vee-validate/dist/locale/${code}.json`).then((locale) => {
-    localize(code, locale)
-  })
+async function loadLocale(code) {
+  const locale = await import(`vee-validate/dist/locale/${code}.json`)
+  localize(code, locale)
 }
 
 const switchLocale = (locale) => {
