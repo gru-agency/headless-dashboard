@@ -11,20 +11,22 @@
     "lint:style": "stylelint \"**/*.{vue,css}\" --ignore-path .gitignore",
     "lint": "yarn lint:js && yarn lint:style",
     "prepare": "husky install",
-    "analyze": "nuxt build --analyze"
+    "analyze": "nuxt build --analyze",
+    "upg": "yarn upgrade",
+    "out": "yarn outdated"
   },
   "lint-staged": {
     "*.{js,vue}": "eslint",
     "*.{css,vue}": "stylelint"
   },
   "dependencies": {
-    "core-js": "^3.15.1",
-    "nuxt": "^2.15.7",
-    "vue": "^2.6.14"
+    "core-js": "^3.15.2",
+    "nuxt": "^2.15.7"
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",
     "@babel/eslint-parser": "^7.14.7",
+    "@babel/runtime-corejs3": "^7.14.7",
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
@@ -36,23 +38,19 @@
     "@nuxtjs/fontawesome": "^1.1.2",
     "@nuxtjs/stylelint-module": "^4.0.0",
     "@vue/composition-api": "^1.0.0-rc.12",
-    "bootstrap": "^4.6.0",
     "bootstrap-vue": "^2.21.2",
-    "consola": "^2.15.3",
     "eslint": "^7.29.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-nuxt": "^2.0.0",
     "eslint-plugin-vue": "^7.12.1",
     "firebase": "^8.7.0",
     "husky": "^7.0.0",
-    "jquery": "^3.6.0",
     "lint-staged": "^11.0.0",
     "nuxt-i18n": "^6.27.2",
     "obit-fa-pro-duotone": "5.15.3",
     "obit-fa-pro-light": "^5.15.3",
     "obit-fa-pro-regular": "^5.15.3",
     "obit-fa-pro-solid": "^5.15.3",
-    "popper.js": "^1.16.1",
     "prettier": "^2.3.2",
     "sass": "1.32.x",
     "sass-loader": "^10.2.0",
@@ -60,6 +58,7 @@
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-standard": "^22.0.0",
     "vee-validate": "^3.4.10",
+    "vue": "^2.6.14",
     "vue-currency-input": "^2.0.0",
     "vuexfire": "^3.2.5",
     "webpack": "^4.46.0"

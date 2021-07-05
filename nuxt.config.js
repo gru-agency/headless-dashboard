@@ -61,6 +61,12 @@ export default {
   build: {
     extractCSS: false,
     transpile: ['vue-currency-input'],
+
+    babel: {
+      presets() {
+        return [['@nuxt/babel-preset-app', { corejs: { version: 3 } }]]
+      },
+    },
   },
 
   alias: {
