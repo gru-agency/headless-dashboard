@@ -1,4 +1,3 @@
-import { resolve } from 'path'
 import { numberFormats } from './configs/currency-format'
 import { dateTimeFormats } from './configs/datetime-format'
 
@@ -70,10 +69,10 @@ export default {
   },
 
   alias: {
-    '@fortawesome/pro-solid-svg-icons': resolve(__dirname, './node_modules/obit-fa-pro-solid'),
-    '@fortawesome/pro-light-svg-icons': resolve(__dirname, './node_modules/obit-fa-pro-light'),
-    '@fortawesome/pro-regular-svg-icons': resolve(__dirname, './node_modules/obit-fa-pro-regular'),
-    '@fortawesome/pro-duotone-svg-icons': resolve(__dirname, './node_modules/obit-fa-pro-duotone'),
+    '@fortawesome/pro-solid-svg-icons': 'obit-fa-pro-solid',
+    '@fortawesome/pro-light-svg-icons': 'obit-fa-pro-light',
+    '@fortawesome/pro-regular-svg-icons': 'obit-fa-pro-regular',
+    '@fortawesome/pro-duotone-svg-icons': 'obit-fa-pro-duotone',
   },
 
   router: {
