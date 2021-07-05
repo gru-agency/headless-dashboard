@@ -11,9 +11,7 @@
     "lint:style": "stylelint \"**/*.{vue,css}\" --ignore-path .gitignore",
     "lint": "yarn lint:js && yarn lint:style",
     "prepare": "husky install",
-    "analyze": "nuxt build --analyze",
-    "upg": "yarn upgrade",
-    "out": "yarn outdated"
+    "analyze": "nuxt build --analyze"
   },
   "lint-staged": {
     "*.{js,vue}": "eslint",
