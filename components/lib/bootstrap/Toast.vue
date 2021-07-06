@@ -41,6 +41,11 @@ export default {
           icon: ['fas', 'exclamation-triangle'],
           variant: 'danger',
         },
+        success: {
+          title: this.$t('general.success'),
+          icon: ['fas', 'check-circle'],
+          variant: 'success',
+        },
       },
     }
   },
