@@ -37,6 +37,7 @@
     "@nuxtjs/stylelint-module": "^4.0.0",
     "@vue/composition-api": "^1.0.0-rc.12",
     "bootstrap-vue": "^2.21.2",
+    "consola": "^2.15.3",
     "eslint": "^7.29.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-nuxt": "^2.0.0",
