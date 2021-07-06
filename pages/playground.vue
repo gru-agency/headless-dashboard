@@ -79,9 +79,7 @@
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card header="Reserve">
-          <users-reset-form></users-reset-form>
-        </b-card>
+        <b-card header="Reserve"> </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
         <b-card header="Toast">
@@ -183,6 +181,8 @@
 <script>
 export default {
   name: 'Playground',
+
+  layout: 'Default',
 
   data() {
     return {
