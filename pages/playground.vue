@@ -79,10 +79,15 @@
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card header="Reserve"> </b-card>
+        <b-card header="Reserve">
+          <users-reset-form></users-reset-form>
+        </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card header="Reserve"> </b-card>
+        <b-card header="Toast">
+          <action-button @click="$bvToast.show('bvBottomCenter')">Toast</action-button>
+          <toast preset="error"> Something is wrong with your input!! </toast>
+        </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
         <b-card header="TagField">
