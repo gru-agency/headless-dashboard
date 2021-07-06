@@ -18,12 +18,7 @@ export default {
     text: { type: String, default: undefined },
     target: { type: String, default: undefined },
     variant: { type: String, default: undefined },
-    icon: {
-      type: [String, Array],
-      default() {
-        return ['far', 'chevron-down']
-      },
-    },
+    icon: { type: Array, default: () => ['far', 'chevron-down'] },
     iconRight: { type: Boolean, default: false },
   },
 

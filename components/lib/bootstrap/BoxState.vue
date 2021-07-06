@@ -14,7 +14,7 @@
 
       <action-button
         v-if="!btnHide"
-        :name="empty ? 'bv-new' : error ? 'bv-refresh' : undefined"
+        :preset="empty ? 'bv-new' : error ? 'bv-refresh' : undefined"
         :variant="btnVariant || empty ? 'primary' : 'light'"
         :text="btnText"
         :to="btnLink"

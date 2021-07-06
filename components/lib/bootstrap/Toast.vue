@@ -51,15 +51,15 @@ export default {
     },
 
     getIcon() {
-      return this.icon ? this.icon : this.preset ? this.getPreset.icon : undefined
+      return this.icon || this.getPreset?.icon || undefined
     },
 
     getVariant() {
-      return this.variant ? this.variant : this.preset ? this.getPreset.variant : undefined
+      return this.variant || this.getPreset?.variant || undefined
     },
 
     getTitle() {
-      return this.title ? this.title : this.preset ? this.getPreset.title : undefined
+      return this.title || this.getPreset?.title || undefined
     },
   },
 }
