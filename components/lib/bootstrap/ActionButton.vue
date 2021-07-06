@@ -23,7 +23,7 @@ export default {
     name: { type: String, default: undefined },
     text: { type: String, default: undefined },
     link: { type: String, default: undefined },
-    size: { type: String, default: 'sm' },
+    size: { type: String, default: undefined },
     block: { type: Boolean, default: false },
     variant: { type: String, default: 'light' },
     disabled: { type: Boolean, default: false },

@@ -26,8 +26,8 @@
       </b-col>
       <b-col cols="4" class="mt-4">
         <b-card header="ActionButton">
-          <action-button preset="bv-new" variant="primary" @click="echo"></action-button>
-          <action-button preset="bv-edit" @click="echo"></action-button>
+          <action-button preset="bv-new" variant="primary" size="sm" @click="echo"></action-button>
+          <action-button preset="bv-edit" size="sm" @click="echo"></action-button>
           <action-button preset="bv-save" link="save" link-append disabled></action-button>
           <action-button preset="bv-cancel" :icon="['far', 'times']"></action-button>
           <action-button preset="bv-refresh" variant="dark" size="md" @click="echo"></action-button>
