@@ -4,12 +4,14 @@ const state = () => ({
   me: null,
 })
 
-const getters = {}
+const getters = {
+  authenticated: () => !!state.me,
+}
 
 const mutations = {
-  SET_ME: (state, user) => {
-    if (user) {
-      const { uid, email, emailVerified, displayName, phoneNumber, photoURL, metadata } = user
+  SET_ME: (state, { authUser }) => {
+    if (authUser) {
+      const { uid, email, emailVerified, displayName, phoneNumber, photoURL, metadata } = authUser
       state.me = {
         email,
         emailVerified,
@@ -17,13 +19,13 @@ const mutations = {
         phoneNumber,
         firebaseId: uid,
         photoUrl: photoURL,
-        creationTime: metadata.creationTime,
-        lastSignInTime: metadata.lastSignInTime,
+        creationTime: metadata?.creationTime,
+        lastSignInTime: metadata?.lastSignInTime,
       }
-    } else {
-      state.me = null
     }
   },
+
+  UNSET_ME: (state) => (state.me = null),
 }
 
 const actions = {
@@ -35,7 +37,7 @@ const actions = {
       // auth/invalid-email -> rely on client validation
       // auth/user-not-found -> dont let requestor knows
       // the rest (incl. developer errors) -> retry
-      if (this.$context.isDev) consola.error(error)
+      if (this.app.context.isDev) consola.error(error)
       return error
     }
   },
@@ -49,7 +51,7 @@ const actions = {
       // auth/user-disabled (e.g. acc locked) -> show & suggest
       // auth/user-not-found -> dont let requestor knows
       // auth/weak-password (< 6 chars) -> rely on client validation
-      if (this.$context.isDev) consola.error(error)
+      if (this.app.context.isDev) consola.error(error)
       return error
     }
   },
@@ -63,7 +65,7 @@ const actions = {
       // auth/user-disabled (e.g. acc locked) -> show & suggest
       // auth/user-not-found -> dont let requestor knows
       // auth/wrong-password -> retry
-      if (this.$context.isDev) consola.error(error)
+      if (this.app.context.isDev) consola.error(error)
       return error
     }
   },
@@ -77,7 +79,7 @@ const actions = {
       // auth/invalid-email -> rely on client validation
       // auth/operation-not-allowed -> dev error
       // auth/weak-password (< 6 chars) -> rely on client validation
-      if (this.$context.isDev) consola.error(error)
+      if (this.app.context.isDev) consola.error(error)
       return error
     }
   },
@@ -85,9 +87,9 @@ const actions = {
   async signOut({ commit }) {
     try {
       await this.$fire.auth.signOut()
-      commit('SET_ME', null)
+      commit('UNSET_ME')
     } catch (error) {
-      if (this.$context.isDev) consola.error(error)
+      if (this.app.context.isDev) consola.error(error)
       return error
     }
   },
@@ -99,7 +101,7 @@ const actions = {
     } catch (error) {
       // auth/weak-password (< 6 chars) -> rely on client validation
       // auth/requires-recent-login -> prompt login first
-      if (this.$context.isDev) consola.error(error)
+      if (this.app.context.isDev) consola.error(error)
       return error
     }
   },
@@ -109,7 +111,7 @@ const actions = {
       const user = this.$fire.auth.currentUser
       await user.sendEmailVerification()
     } catch (error) {
-      if (this.$context.isDev) consola.error(error)
+      if (this.app.context.isDev) consola.error(error)
       return error
     }
   },
@@ -124,16 +126,16 @@ const actions = {
       // auth/invalid-action-code -> show & suggest
       // auth/user-disabled (e.g. acc locked) -> show & suggest
       // auth/user-not-found -> dont let requestor knows
-      if (this.$context.isDev) consola.error(error)
+      if (this.app.context.isDev) consola.error(error)
       return error
     }
   },
 
-  onAuthStateChanged({ commit }, { user }) {
+  onAuthStateChanged({ commit }, { authUser }) {
     try {
-      user ? commit('SET_ME', user) : commit('SET_ME', null)
+      authUser ? commit('SET_ME', authUser) : commit('UNSET_ME')
     } catch (error) {
-      if (this.$context.isDev) consola.error(error)
+      if (this.app.context.isDev) consola.error(error)
       return error
     }
   },
