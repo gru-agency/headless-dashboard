@@ -155,7 +155,17 @@ export default {
       measurementId: 'G-EZLVFKFMWD',
     },
     services: {
-      auth: true,
+      auth: {
+        persistence: 'local',
+        initialize: {
+          onAuthStateChangedMutation: 'SET_ME',
+          onAuthStateChangedAction: 'onAuthStateChanged',
+          subscribeManually: true,
+        },
+        ssr: false,
+        emulatorPort: 9099,
+        emulatorHost: 'http://localhost',
+      },
       firestore: true,
       functions: false,
       storage: false,
@@ -165,6 +175,7 @@ export default {
       analytics: false,
       remoteConfig: false,
     },
+    injectModule: false,
     terminateDatabasesAfterGenerate: false,
   },
 }
