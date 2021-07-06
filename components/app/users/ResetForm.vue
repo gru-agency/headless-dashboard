@@ -1,0 +1,98 @@
+<template>
+  <validation-observer ref="resetForm">
+    <b-form-group :label="ui.email" label-for="rst-email">
+      <validation-provider v-slot="vp" :name="ui.email" rules="required|email|max:320">
+        <b-form-input
+          id="rst-email"
+          v-model="form.email"
+          :state="$vee.checkState(vp)"
+          autocomplete="email"
+          type="email"
+          size="lg"
+          trim
+        ></b-form-input>
+        <b-form-invalid-feedback> {{ vp.errors[0] }} </b-form-invalid-feedback>
+      </validation-provider>
+    </b-form-group>
+
+    <toast preset="error"> {{ toast.message }} </toast>
+  </validation-observer>
+</template>
+
+<script>
+import { mapActions } from 'vuex'
+
+export default {
+  name: 'ResetForm',
+
+  data() {
+    return {
+      events: {
+        validate: 'reset-validate',
+        validated: 'reset-validated',
+        submit: 'reset-submit',
+        submitted: 'reset-submitted',
+        reset: 'reset-reset',
+        resetted: 'reset-resetted',
+      },
+      ui: { email: this.$t('general.email') },
+      form: { email: null },
+      toast: {
+        id: 'bvBottomCenter',
+        message: 'asd',
+      },
+    }
+  },
+
+  mounted() {
+    this.$nuxt.$on(this.events.validate, this.validateForm)
+    this.$nuxt.$on(this.events.submit, this.submitForm)
+    this.$nuxt.$on(this.events.reset, this.resetForm)
+  },
+
+  beforeDestroy() {
+    this.$nuxt.$off(this.events.validate)
+    this.$nuxt.$off(this.events.submit)
+    this.$nuxt.$off(this.events.reset)
+    this.resetForm()
+  },
+
+  methods: {
+    ...mapActions('user', ['requestPasswordReset']),
+
+    async validateForm() {
+      const result = await this.$refs.resetForm.validate()
+      this.$emit(this.events.validated, result)
+      return result
+    },
+
+    submitForm() {
+      const valid = this.validateForm()
+      if (!valid) {
+        this.$emit(this.events.submitted, valid)
+        return
+      }
+
+      const result = this.requestPasswordReset(this.form)
+      if (result) {
+        if (result === 'auth/invalid-email' || result === 'auth/user-not-found') {
+          this.message = this.$t('modules.users.invalidEmail')
+        } else {
+          this.message = this.$t('general.error5xx')
+        }
+        this.$bvToast.show(this.toast.id)
+        this.$emit(this.events.submitted, false)
+        return
+      }
+
+      this.resetForm()
+      this.$emit(this.events.submitted, true, this.form)
+    },
+
+    resetForm() {
+      this.$refs.resetForm.reset()
+      this.$nextTick(() => (this.form.email = null))
+    },
+  },
+}
+</script>
