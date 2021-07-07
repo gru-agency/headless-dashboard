@@ -55,7 +55,10 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [],
+  modules: [
+    // https://github.com/nuxt-community/robots-module
+    '@nuxtjs/robots',
+  ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
@@ -179,4 +182,8 @@ export default {
     injectModule: false,
     terminateDatabasesAfterGenerate: false,
   },
+
+  robots: [
+    { UserAgent: '*', Disallow: ['/dashboard', '/en/dashboard', '/ms/dashboard', '/zh/dashboard'] },
+  ],
 }
