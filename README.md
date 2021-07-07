@@ -10,6 +10,10 @@ $ brew install node@14
 
 # yarn as preferred package manager
 $ npm install --global yarn
+
+# yarn 2
+$ yarn set version berry
+
 ```
 
 2. Setup VSCode with following plugins
