@@ -66,6 +66,7 @@ export default {
     transpile: ['vue-currency-input'],
 
     babel: {
+      compact: true,
       presets() {
         return [['@nuxt/babel-preset-app', { corejs: { version: 3 } }]]
       },
