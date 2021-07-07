@@ -39,7 +39,7 @@ export default {
       form: { email: null },
       toast: {
         id: 'bvBottomCenter',
-        message: 'asd',
+        message: null,
       },
     }
   },
@@ -61,24 +61,24 @@ export default {
     ...mapActions('user', ['requestPasswordReset']),
 
     async validateForm() {
-      const result = await this.$refs.resetForm.validate()
-      this.$emit(this.events.validated, result)
-      return result
+      const valid = await this.$refs.resetForm.validate().then()
+      this.$emit(this.events.validated, valid)
+      return valid
     },
 
-    submitForm() {
-      const valid = this.validateForm()
+    async submitForm() {
+      const valid = await this.validateForm()
       if (!valid) {
         this.$emit(this.events.submitted, valid)
         return
       }
 
-      const result = this.requestPasswordReset(this.form)
-      if (result) {
-        if (result === 'auth/invalid-email' || result === 'auth/user-not-found') {
-          this.message = this.$t('modules.users.invalidEmail')
+      const { code } = await this.requestPasswordReset(this.form)
+      if (code) {
+        if (code === 'auth/invalid-email' || code === 'auth/user-not-found') {
+          this.toast.message = this.$t('modules.users.invalidEmail')
         } else {
-          this.message = this.$t('general.error5xx')
+          this.toast.message = this.$t('general.error5xx')
         }
         this.$bvToast.show(this.toast.id)
         this.$emit(this.events.submitted, false)

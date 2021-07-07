@@ -1,19 +1,23 @@
 {
   "general": {
     "cancel": "Cancel",
+    "contact": "Contact",
     "continue": "Continue",
     "delete": "Delete",
     "edit": "Edit",
     "email": "Email",
     "error": "Error",
-    "error5xx": "Time out. Try again later.",
+    "error5xx": "There was an error. Try again later.",
     "home": "Home",
     "new": "New",
     "optional": "Optional",
+    "privacy": "Privacy",
     "refresh": "Refresh",
     "required": "Required",
     "save": "Save",
-    "saveAndMore": "Save and more"
+    "saveAndMore": "Save and more",
+    "success": "Success",
+    "terms": "Terms"
   },
 
   "modules": {
@@ -24,7 +28,7 @@
     "users": {
       "invalidEmail": "Invalid email. Enter a valid email.",
       "resetTitle": "Reset your password",
-      "resetSubtitle": "Ener the email address associated with your account, and we'll send you a link to reset your password.",
+      "resetSubtitle": "Enter the email address associated with your account, and we'll send you a link to reset your password.",
       "resetBack": "Return to sign in"
     }
   },
