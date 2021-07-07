@@ -1,5 +1,6 @@
 import { numberFormats } from './configs/currency-format'
 import { dateTimeFormats } from './configs/datetime-format'
+import { restrictedRoutes } from './configs/restricted-routes'
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
@@ -10,10 +11,8 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'headless-dashboard',
-    htmlAttrs: {
-      lang: 'en',
-    },
+    title: 'Shoplex',
+    htmlAttrs: { lang: 'en' },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -28,8 +27,9 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '~/plugins/utils.js', mode: 'client' },
-    { src: '~/plugins/vee-validate.js', mode: 'client' },
+    { mode: 'client', src: '~/plugins/i18n.js' },
+    { mode: 'client', src: '~/plugins/utils.js' },
+    { mode: 'client', src: '~/plugins/vee-validate.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -51,6 +51,10 @@ export default {
     '@nuxtjs/firebase',
     // https://github.com/nuxt-community/fontawesome-module
     '@nuxtjs/fontawesome',
+    // https://github.com/nuxt-community/robots-module
+    '@nuxtjs/robots',
+    // https://sitemap.nuxtjs.org
+    '@nuxtjs/sitemap',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -62,6 +66,7 @@ export default {
     transpile: ['vue-currency-input'],
 
     babel: {
+      compact: true,
       presets() {
         return [['@nuxt/babel-preset-app', { corejs: { version: 3 } }]]
       },
@@ -87,11 +92,7 @@ export default {
     },
   },
 
-  vue: {
-    config: {
-      devtools: true,
-    },
-  },
+  vue: { config: { devtools: true } },
 
   bootstrapVue: {
     css: false,
@@ -177,5 +178,14 @@ export default {
     },
     injectModule: false,
     terminateDatabasesAfterGenerate: false,
+  },
+
+  robots: [{ UserAgent: '*', Disallow: restrictedRoutes }],
+
+  sitemap: {
+    hostname: 'http://localhost:3000',
+    gzip: true,
+    i18n: true,
+    exclude: restrictedRoutes,
   },
 }
