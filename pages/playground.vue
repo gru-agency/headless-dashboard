@@ -216,7 +216,6 @@ export default {
     },
 
     changeLocale(locale) {
-      this.$vee.switchLocale(locale)
       this.$router.push(this.switchLocalePath(locale))
     },
 
