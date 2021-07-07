@@ -2,6 +2,7 @@
   <b-button
     :to="link"
     :size="size"
+    :block="block"
     :variant="variant"
     :disabled="disabled"
     :append="linkAppend"
@@ -18,49 +19,43 @@ export default {
   name: 'ActionButton',
 
   props: {
+    preset: { type: String, default: undefined },
     name: { type: String, default: undefined },
     text: { type: String, default: undefined },
     link: { type: String, default: undefined },
-    size: { type: String, default: 'sm' },
+    size: { type: String, default: undefined },
+    block: { type: Boolean, default: false },
     variant: { type: String, default: 'light' },
     disabled: { type: Boolean, default: false },
     linkAppend: { type: Boolean, default: false },
-    icon: {
-      type: [String, Array],
-      default() {
-        return []
-      },
-    },
+    icon: { type: Array, default: () => null },
   },
 
   data() {
     return {
-      predefined: [
-        { name: 'bv-new', text: this.$t('general.new'), icon: ['fas', 'plus'] },
-        { name: 'bv-edit', text: this.$t('general.edit'), icon: ['fad', 'pencil'] },
-        { name: 'bv-save', text: this.$t('general.save') },
-        { name: 'bv-cancel', text: this.$t('general.cancel') },
-        { name: 'bv-refresh', text: this.$t('general.refresh') },
-        { name: 'bv-savemore', text: this.$t('general.saveAndMore') },
-      ],
+      presets: {
+        'bv-new': { text: this.$t('general.new'), icon: ['fas', 'plus'] },
+        'bv-edit': { text: this.$t('general.edit'), icon: ['fad', 'pencil'] },
+        'bv-save': { text: this.$t('general.save'), icon: undefined },
+        'bv-cancel': { text: this.$t('general.cancel'), icon: undefined },
+        'bv-refresh': { text: this.$t('general.refresh'), icon: undefined },
+        'bv-continue': { text: this.$t('general.continue'), icon: undefined },
+        'bv-savemore': { text: this.$t('general.saveAndMore'), icon: undefined },
+      },
     }
   },
 
   computed: {
-    findPredefined() {
-      return this.predefined.find((el) => el.name === this.name)
+    getPreset() {
+      return this.presets[this.preset]
     },
 
     getText() {
-      return this.text || this.findPredefined?.text || this.name
+      return this.text || this.getPreset?.text || undefined
     },
 
     getIcon() {
-      return typeof this.icon === 'object' && this.icon.length > 0
-        ? this.icon
-        : this.icon === 'string'
-        ? this.icon
-        : this.findPredefined?.icon
+      return this.icon || this.getPreset?.icon || undefined
     },
   },
 }

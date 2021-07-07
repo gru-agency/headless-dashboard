@@ -24,12 +24,7 @@ export default {
 
   props: {
     image: { type: String, default: undefined },
-    images: {
-      type: Array,
-      default() {
-        return []
-      },
-    },
+    images: { type: Array, default: () => [] },
     max: { type: [Number, String], default: undefined },
     icon: { type: String, default: undefined },
   },

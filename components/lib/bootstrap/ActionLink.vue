@@ -26,12 +26,7 @@ export default {
     disabled: { type: Boolean, default: false },
     linkAppend: { type: Boolean, default: false },
     linkToParent: { type: Boolean, default: false },
-    icon: {
-      type: [String, Array],
-      default() {
-        return []
-      },
-    },
+    icon: { type: Array, default: () => null },
   },
 
   computed: {

@@ -1,6 +1,6 @@
 <template>
   <fa
-    v-if="hasIcon"
+    v-if="icon"
     :id="id"
     :icon="icon"
     :class="getIconClass"
@@ -25,12 +25,7 @@ export default {
 
   props: {
     id: { type: String, default: undefined },
-    icon: {
-      type: Array,
-      default() {
-        return []
-      },
-    },
+    icon: { type: Array, default: () => null },
     iconClass: { type: String, default: undefined },
     iconStyle: { type: String, default: undefined },
     iconSize: { type: String, default: undefined },
@@ -49,10 +44,6 @@ export default {
   },
 
   computed: {
-    hasIcon() {
-      return typeof this.icon === 'object' && this.icon.length > 0
-    },
-
     getIconClass() {
       const classes = [this.iconClass]
       classes.push(this.getIconVariant)

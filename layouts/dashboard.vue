@@ -36,6 +36,14 @@ export default {
       title: this.$app.brandName,
     }
   },
+
+  mounted() {
+    this.$fireAuthStore.subscribe()
+  },
+
+  beforeDestroy() {
+    this.$fireAuthStore.unsubscribe()
+  },
 }
 </script>
 

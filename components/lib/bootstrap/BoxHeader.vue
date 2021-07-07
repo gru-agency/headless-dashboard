@@ -30,7 +30,7 @@
         <slot name="right">
           <action-button
             v-if="newBtn || editBtn || btnText"
-            :name="newBtn ? 'bv-new' : editBtn ? 'bv-edit' : undefined"
+            :preset="newBtn ? 'bv-new' : editBtn ? 'bv-edit' : undefined"
             :variant="btnVariant || newBtn ? 'primary' : editBtn ? 'light' : undefined"
             :text="btnText"
             :link="btnLink"

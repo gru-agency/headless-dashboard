@@ -26,12 +26,12 @@
       </b-col>
       <b-col cols="4" class="mt-4">
         <b-card header="ActionButton">
-          <action-button name="bv-new" variant="primary" @click="echo"></action-button>
-          <action-button name="bv-edit" @click="echo"></action-button>
-          <action-button name="bv-save" link="save" link-append disabled></action-button>
-          <action-button name="bv-cancel" :icon="['far', 'times']"></action-button>
-          <action-button name="bv-refresh" variant="dark" size="md" @click="echo"></action-button>
-          <action-button name="bv-savemore" variant="info" size="md" @click="echo"></action-button>
+          <action-button preset="bv-new" variant="primary" size="sm" @click="echo"></action-button>
+          <action-button preset="bv-edit" size="sm" @click="echo"></action-button>
+          <action-button preset="bv-save" link="save" link-append disabled></action-button>
+          <action-button preset="bv-cancel" :icon="['far', 'times']"></action-button>
+          <action-button preset="bv-refresh" variant="dark" size="md" @click="echo"></action-button>
+          <action-button preset="bv-savemore" variant="info" @click="echo"></action-button>
           <action-button text="custom" variant="danger" size="lg" @click="echo"></action-button>
         </b-card>
       </b-col>
@@ -82,12 +82,16 @@
         <b-card header="Reserve"> </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card header="Reserve"> </b-card>
+        <b-card header="Toast">
+          <action-button @click="$bvToast.show('bvBottomCenter')">Toast</action-button>
+          <toast preset="error"> Something is wrong with your input!! </toast>
+          <toast preset="success"> Congratulations </toast>
+        </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
         <b-card header="TagField">
-          <tag-field name="bv-optional"></tag-field>
-          <tag-field name="bv-required"></tag-field>
+          <tag-field preset="bv-optional"></tag-field>
+          <tag-field preset="bv-required"></tag-field>
           <tag-field text="custom" variant="primary"></tag-field>
           <tag-field text="custom" variant="info"></tag-field>
           <tag-field text="custom" variant="dark"></tag-field>
@@ -179,6 +183,8 @@
 export default {
   name: 'Playground',
 
+  layout: 'Default',
+
   data() {
     return {
       // TextField
@@ -210,7 +216,7 @@ export default {
     },
 
     changeLocale(locale) {
-      this.$switchLocale(locale)
+      this.$vee.switchLocale(locale)
       this.$router.push(this.switchLocalePath(locale))
     },
 
