@@ -2,7 +2,7 @@
   <span>
     <!-- placeholder -->
     <b-avatar v-if="list.length === 0" size="3rem" variant="light" rounded>
-      <icon icon-variant="secondary"></icon>
+      <icon :icon="icon"></icon>
     </b-avatar>
 
     <b-avatar

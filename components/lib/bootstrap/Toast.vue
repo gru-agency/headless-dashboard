@@ -9,7 +9,7 @@
     :solid="solid"
   >
     <template #toast-title>
-      <icon :icon="getIcon" :icon-variant="getVariant"></icon>
+      <icon :icon="getIcon" :variant="getVariant"></icon>
       <span class="mx-2"> {{ getTitle }} </span>
     </template>
     <slot> {{ message }} </slot>

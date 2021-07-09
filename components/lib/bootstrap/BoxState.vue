@@ -3,10 +3,7 @@
     <div v-if="empty || error">
       <p>
         <b-avatar size="3rem" variant="light" rounded>
-          <icon
-            :icon="icon || empty ? ['fad', 'empty-set'] : ['fad', 'exclamation']"
-            icon-variant="secondary"
-          ></icon>
+          <icon :icon="icon || empty ? ['fad', 'empty-set'] : ['fad', 'exclamation']"></icon>
         </b-avatar>
       </p>
       <p class="h4">{{ title }}</p>

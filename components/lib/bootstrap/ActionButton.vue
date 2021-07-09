@@ -9,7 +9,7 @@
     :prefetch="link ? true : false"
     @click.prevent="$emit('click')"
   >
-    <icon :icon="getIcon" icon-size="sm"></icon>
+    <icon :icon="getIcon" size="sm"></icon>
     <slot> {{ getText }} </slot>
   </b-button>
 </template>
