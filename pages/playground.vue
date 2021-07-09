@@ -69,13 +69,13 @@
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card header="FontAwesome">
-          <fa :icon="['fas', 'home']" class="fa-sm"></fa>
-          <fa :icon="['far', 'home']" class="fa-md"></fa>
-          <fa :icon="['fal', 'home']" class="fa-lg"></fa>
-          <fa :icon="['fad', 'home']" class="fa-gru"></fa>
-          <fa :icon="['fad', 'home']" class="fa-2x fa-gru"></fa>
-          <fa :icon="['fad', 'home']" class="fa-3x fa-gru"></fa>
+        <b-card header="Icon w. FontAwesome">
+          <icon :icon="['fas', 'home']" class="fa-sm"></icon>
+          <icon :icon="['far', 'home']" class="fa-md"></icon>
+          <icon :icon="['fal', 'home']" class="fa-lg" variant="primary"></icon>
+          <icon :icon="['fad', 'home']" class="fa-gru"></icon>
+          <icon :icon="['fad', 'home']" class="fa-2x fa-gru"></icon>
+          <icon :icon="['fad', 'home']" class="fa-3x fa-gru"></icon>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
@@ -99,8 +99,8 @@
       </b-col>
       <b-col cols="4" class="mt-4">
         <b-card header="TipsField">
-          <tips-field> {{ text }} </tips-field>
-          <tips-field placement="top" trigger="hover"> {{ text }} </tips-field>
+          <tips-field preset="bv-info"> {{ text }} </tips-field>
+          <tips-field preset="bv-info" placement="top" trigger="hover"> {{ text }} </tips-field>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
