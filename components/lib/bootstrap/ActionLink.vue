@@ -10,7 +10,7 @@
     <icon :icon="icon"></icon>
 
     <span v-if="text ? true : false">
-      <slot> {{ text }} </slot>
+      <slot>{{ text }}</slot>
     </span>
   </b-link>
 </template>
