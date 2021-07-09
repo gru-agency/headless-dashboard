@@ -50,6 +50,10 @@ $ ls node_modules | wc -l && du -sh node_modules
 
 For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
 
+## Production Checklist
+Firebase Auth
+- enable email / password
+
 ## Commit Guide
 
 Use conventional commits standard
