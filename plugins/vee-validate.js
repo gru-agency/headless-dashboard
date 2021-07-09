@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { localize, extend, ValidationProvider, ValidationObserver } from 'vee-validate'
-import { required, email } from 'vee-validate/dist/rules'
+import { required, email, min, max } from 'vee-validate/dist/rules'
 import en from 'vee-validate/dist/locale/en.json'
 
 async function loadLocale(code) {
@@ -9,8 +9,8 @@ async function loadLocale(code) {
 }
 
 const util = {
-  checkState: ({ dirty, validated, valid = null }) => {
-    return dirty || validated ? valid : null
+  checkState: ({ touched, dirty, validated, valid = null }) => {
+    return touched && (dirty || validated) ? valid : null
   },
 
   switchLocale: (locale) => {
@@ -33,6 +33,8 @@ localize('en', en)
 
 extend('required', required)
 extend('email', email)
+extend('min', min)
+extend('max', max)
 
 // register globally
 Vue.component('ValidationProvider', ValidationProvider)

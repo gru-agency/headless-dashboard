@@ -8,14 +8,20 @@
     "email": "Email",
     "error": "Error",
     "error5xx": "There was an error. Try again later.",
+    "hidePassword": "Hide password",
     "home": "Home",
+    "name": "Name",
     "new": "New",
     "optional": "Optional",
+    "password": "Password",
     "privacy": "Privacy",
+    "privacyPolicy": "Privacy Policy",
     "refresh": "Refresh",
     "required": "Required",
     "save": "Save",
     "saveAndMore": "Save and more",
+    "showPassword": "Show password",
+    "signin": "Sign in",
     "success": "Success",
     "terms": "Terms"
   },
@@ -26,10 +32,13 @@
     "prices": { "title": "Prices" },
     "settings": { "title": "Settings" },
     "users": {
-      "invalidEmail": "Invalid email. Enter a valid email.",
       "resetTitle": "Reset your password",
       "resetSubtitle": "Enter the email address associated with your account, and we'll send you a link to reset your password.",
-      "resetBack": "Return to sign in"
+      "resetBack": "Return to sign in",
+      "registerTitle": "Create your {_brand} account",
+      "registerConsent": "Get email from {_brand} about product updates, industry news and events. If you change your mind, you can unsubscribe any time.",
+      "registerBack": "Have an account?",
+      "registerButton": "Create account"
     }
   },
 
@@ -37,5 +46,12 @@
     "tableResults": "No result | {n} result | {n} results"
   },
 
-  "seo": {}
+  "seo": {},
+
+  "validation": {
+    "accountExists": "An account already exists with this email address. If you'd like to create a new {_brand} account with the same email address, ",
+    "emailInvalid": "The @:general.email field must be a valid email",
+    "passwordInvalid": "The @:general.password field must be at least 10 characters",
+    "passwordHint": "Your password needs to be at least 10 characters, include multiple words and phrases to make it more secure."
+  }
 }
