@@ -35,6 +35,8 @@
       "resetTitle": "Reset your password",
       "resetSubtitle": "Enter the email address associated with your account, and we'll send you a link to reset your password.",
       "resetBack": "Return to sign in",
+      "resetSuccessTitle":"Thanks, check your email for instructions to reset your password",
+      "resetSuccessSubtitle":"Didn't get the email? Check your spam folder.",
       "registerTitle": "Create your {_brand} account",
       "registerConsent": "Get email from {_brand} about product updates, industry news and events. If you change your mind, you can unsubscribe any time.",
       "registerBack": "Have an account?",
