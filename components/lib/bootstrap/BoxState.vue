@@ -1,13 +1,15 @@
 <template>
-  <b-card-body class="text-center p-sm-5">
-    <div v-if="empty || error">
+  <b-card-body class="text-center p-sm-4">
+    <div v-if="empty || error || success">
       <p>
-        <b-avatar size="3rem" variant="light" rounded>
-          <icon :icon="icon || empty ? ['fad', 'empty-set'] : ['fad', 'exclamation']"></icon>
-        </b-avatar>
+        <slot name="icon">
+          <b-avatar size="3rem" variant="light" rounded>
+            <icon :icon="icon || empty ? ['fad', 'empty-set'] : ['fad', 'exclamation']"></icon>
+          </b-avatar>
+        </slot>
       </p>
       <p class="h4">{{ title }}</p>
-      <p>{{ body }}</p>
+      <p class="pt-3 text-secondary">{{ body }}</p>
 
       <action-button
         v-if="!btnHide"
@@ -36,6 +38,7 @@ export default {
   props: {
     empty: { type: Boolean, default: false },
     error: { type: Boolean, default: false },
+    success: { type: Boolean, default: false },
     loading: { type: Boolean, default: false },
     title: { type: String, default: undefined },
     body: { type: String, default: undefined },
@@ -46,7 +49,7 @@ export default {
     btnHide: { type: Boolean, default: false },
     btnDisabled: { type: Boolean, default: false },
     btnLinkAppend: { type: Boolean, default: false },
-    icon: { type: String, default: undefined },
+    icon: { type: Array, default: () => null },
   },
 
   computed: {
