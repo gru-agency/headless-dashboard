@@ -20,7 +20,6 @@ export default {
 
   props: {
     preset: { type: String, default: undefined },
-    name: { type: String, default: undefined },
     text: { type: String, default: undefined },
     link: { type: String, default: undefined },
     size: { type: String, default: undefined },

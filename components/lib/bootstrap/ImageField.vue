@@ -26,7 +26,7 @@ export default {
     image: { type: String, default: undefined },
     images: { type: Array, default: () => [] },
     max: { type: [Number, String], default: undefined },
-    icon: { type: String, default: undefined },
+    icon: { type: Array, default: () => null },
   },
 
   computed: {
