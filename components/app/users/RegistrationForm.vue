@@ -159,6 +159,7 @@ export default {
     ...mapActions('auth', ['registerWithEmailAndPassword']),
 
     errorHandler(error) {
+      this.serverError.validated = true
       if (error.code) {
         this.serverError.valid = false
         this.serverError.code = error.code
@@ -197,8 +198,6 @@ export default {
       this.registerWithEmailAndPassword(this.form)
         .then((response) => this.successHandler(response))
         .catch((error) => this.errorHandler(error))
-
-      this.serverError.validated = true
     },
 
     async validateForm() {

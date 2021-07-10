@@ -1,5 +1,5 @@
 <template>
-  <b-card class="px-3 shadow">
+  <b-card class="p-4 shadow">
     <b-card-title class="pt-3"> {{ ui.title }} </b-card-title>
     <div class="py-3">
       <users-registration-form
