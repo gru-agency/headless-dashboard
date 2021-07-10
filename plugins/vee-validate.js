@@ -10,7 +10,7 @@ async function loadLocale(code) {
 
 const util = {
   checkState: ({ touched, dirty, validated, valid = null }) => {
-    return touched && (dirty || validated) ? valid : null
+    return (touched && dirty) || validated ? valid : null
   },
 
   switchLocale: (locale) => {
