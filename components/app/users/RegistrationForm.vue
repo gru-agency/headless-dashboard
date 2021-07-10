@@ -1,5 +1,8 @@
 <template>
-  <validation-observer ref="registrationForm" tag="form">
+  <validation-observer ref="registrationForm" v-slot="{ invalid }" tag="form">
+    <!-- broadcast form state -->
+    <vee-broadcaster :invalid="invalid" @invalid="onFormInvalid"></vee-broadcaster>
+
     <b-form-group :label="ui.email" label-for="reg-email">
       <validation-provider v-slot="vp" :name="ui.email" rules="required|email|max:320">
         <b-form-input
@@ -47,12 +50,12 @@
       <validation-provider v-slot="vp" :name="ui.password" rules="required|min:10|max:128">
         <tips-field
           v-if="form.password"
-          :preset="passwordRevealed ? 'bv-eye-slash' : 'bv-eye'"
+          :preset="shouldRevealPassword ? 'bv-eye-slash' : 'bv-eye'"
           tooltip
           class="input-inset right"
           @click="onRevealToggle()"
         >
-          {{ passwordRevealed ? ui.hidePassword : ui.showPassword }}
+          {{ shouldRevealPassword ? ui.hidePassword : ui.showPassword }}
         </tips-field>
         <b-form-input
           id="reg-password"
@@ -131,7 +134,7 @@ export default {
       return this.passwordFocus && !this.form.password
     },
 
-    passwordRevealed() {
+    shouldRevealPassword() {
       return this.passwordType === 'text'
     },
 
@@ -150,18 +153,52 @@ export default {
     this.$nuxt.$off(this.events.validate)
     this.$nuxt.$off(this.events.submit)
     this.$nuxt.$off(this.events.reset)
-    this.resetForm()
   },
 
   methods: {
-    ...mapActions('user', ['registerWithEmailAndPassword']),
+    ...mapActions('auth', ['registerWithEmailAndPassword']),
 
-    checkServerState(field) {
-      return this.serverError.validated
-        ? field === this.serverError.field
-          ? this.serverError.valid
-          : null
-        : null
+    errorHandler(error) {
+      if (error.code) {
+        this.serverError.valid = false
+        this.serverError.code = error.code
+        if (error.code === 'auth/invalid-email') {
+          this.serverError.field = 'email'
+          this.serverError.message = this.$t('validation.emailInvalid')
+        } else if (error.code === 'auth/weak-password') {
+          this.serverError.field = 'password'
+          this.serverError.message = this.$t('validation.passwordInvalid')
+        } else if (error.code === 'auth/email-already-in-use') {
+          this.serverError.field = 'email'
+          this.serverError.message = this.$t('validation.accountExists', {
+            _brand: this.$app.brandName,
+          })
+        } else {
+          this.serverError.field = null
+          this.serverError.message = this.$t('general.error5xx')
+          this.$bvToast.show('reg-toast')
+        }
+        this.$emit(this.events.submitted, false)
+      }
+    },
+
+    successHandler(response) {
+      this.resetForm()
+      this.$emit(this.events.submitted, true, response)
+    },
+
+    async submitForm() {
+      const valid = await this.validateForm()
+      if (!valid) {
+        this.$emit(this.events.submitted, valid)
+        return
+      }
+
+      this.registerWithEmailAndPassword(this.form)
+        .then((response) => this.successHandler(response))
+        .catch((error) => this.errorHandler(error))
+
+      this.serverError.validated = true
     },
 
     async validateForm() {
@@ -170,60 +207,26 @@ export default {
       return valid
     },
 
-    async submitForm() {
-      // reset previous state first before start fresh
-      this.$bvToast.show('reg-toast')
-
-      const valid = await this.validateForm()
-      if (!valid) {
-        this.$emit(this.events.submitted, valid)
-        return
-      }
-
-      const { code } = await this.registerWithEmailAndPassword(this.form)
-      this.serverError.validated = true
-      if (code) {
-        this.serverError.valid = false
-        this.serverError.code = code
-        if (code === 'auth/invalid-email') {
-          this.serverError.field = 'email'
-          this.serverError.message = this.$t('validation.emailInvalid')
-        } else if (code === 'auth/weak-password') {
-          this.serverError.field = 'password'
-          this.serverError.message = this.$t('validation.passwordInvalid')
-        } else if (code === 'auth/email-already-in-use') {
-          this.serverError.field = 'email'
-          this.serverError.message = this.$t('validation.accountExists', {
-            _brand: this.$app.brandName,
-          })
-        } else {
-          this.serverError.message = this.$t('general.error5xx')
-          this.$bvToast.show('reg-toast')
-        }
-        this.$emit(this.events.submitted, false)
-        return
-      }
-
-      this.resetForm()
-      this.$emit(this.events.submitted, true, this.form)
-    },
-
     resetForm() {
-      this.$refs.registrationForm.reset()
-      this.$nextTick(() => {
-        this.serverError = {
-          validated: false,
-          valid: false,
-          field: null,
-          code: null,
-          message: null,
-        }
-        this.form = { email: null, name: null, password: null, emailConsent: false }
-      })
+      this.serverError = { validated: false, valid: false, field: null, code: null, message: null }
+      this.form = { email: null, name: null, password: null, emailConsent: false }
+      this.$nextTick(() => this.$refs.registrationForm.reset())
     },
 
     onRevealToggle() {
       this.passwordType = this.passwordType === 'text' ? 'password' : 'text'
+    },
+
+    onFormInvalid(invalid) {
+      this.$emit(this.events.validated, invalid)
+    },
+
+    checkServerState(field) {
+      return this.serverError.validated
+        ? field === this.serverError.field
+          ? this.serverError.valid
+          : null
+        : null
     },
   },
 }

@@ -29,12 +29,18 @@ export default {
   plugins: [
     { mode: 'client', src: '~/plugins/i18n.js' },
     { mode: 'client', src: '~/plugins/utils.js' },
+    { mode: 'client', src: '~/plugins/firebase.js' },
     { mode: 'client', src: '~/plugins/vee-validate.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: {
-    dirs: ['~/components', '~/components/app', '~/components/lib/bootstrap'],
+    dirs: [
+      '~/components',
+      '~/components/app',
+      '~/components/lib/bootstrap',
+      '~/components/lib/vee-validate',
+    ],
   },
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -159,15 +165,18 @@ export default {
       auth: {
         persistence: 'local',
         initialize: {
-          onAuthStateChangedMutation: 'user/SET_ME',
-          onAuthStateChangedAction: 'user/onAuthStateChanged',
+          onAuthStateChangedAction: 'auth/onAuthStateChanged',
           subscribeManually: true,
         },
         ssr: false,
-        // emulatorPort: 9099,
-        // emulatorHost: 'http://localhost',
+        emulatorPort: 9099,
+        emulatorHost: 'http://localhost',
       },
-      firestore: true,
+      firestore: {
+        enablePersistence: { synchronizeTabs: true },
+        emulatorPort: 8080,
+        emulatorHost: 'localhost',
+      },
       functions: false,
       storage: false,
       database: false,

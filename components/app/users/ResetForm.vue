@@ -54,7 +54,6 @@ export default {
     this.$nuxt.$off(this.events.validate)
     this.$nuxt.$off(this.events.submit)
     this.$nuxt.$off(this.events.reset)
-    this.resetForm()
   },
 
   methods: {
@@ -90,8 +89,8 @@ export default {
     },
 
     resetForm() {
-      this.$refs.resetForm.reset()
-      this.$nextTick(() => (this.form.email = null))
+      this.form.email = null
+      this.$nextTick(() => this.$refs.resetForm.reset())
     },
   },
 }
