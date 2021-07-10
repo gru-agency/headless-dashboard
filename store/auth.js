@@ -62,6 +62,7 @@ const actions = {
       )
       await dispatch('requestEmailVerification')
 
+      if (this.app.context.isDev) consola.info('registerWithEmailAndPassword', 'Successful')
       return new Promise((resolve, reject) => resolve(state.currentUser))
     } catch (error) {
       if (this.app.context.isDev) consola.error('registerWithEmailAndPassword | error', error)
@@ -92,6 +93,7 @@ const actions = {
       .signOut()
       .then(() => {
         commit('SET', null)
+        if (this.app.context.isDev) consola.info('signOut', 'Successful')
         return new Promise((resolve, reject) => resolve())
       })
       .catch((error) => {
@@ -108,17 +110,23 @@ const actions = {
     const cred = this.$fire.auth.EmailAuthProvider.credential(email, password)
     await this.$fire.auth.currentUser
       .reauthenticateWithCredential(cred)
-      .then(({ user }) => new Promise((resolve, reject) => resolve()))
+      .then(({ user }) => {
+        if (this.app.context.isDev) consola.info('reauthenticateWithCredential', 'Successful')
+        return new Promise((resolve, reject) => resolve())
+      })
       .catch((error) => {
         if (this.app.context.isDev) consola.error('reauthenticateWithCredential | error', error)
         return new Promise((resolve, reject) => reject(error))
       })
   },
 
-  async updatePassword({ newPassword }) {
+  async updatePassword({ commit }, { newPassword }) {
     await this.$fire.auth.currentUser
       .updatePassword(newPassword)
-      .then(() => new Promise((resolve, reject) => resolve()))
+      .then(() => {
+        if (this.app.context.isDev) consola.info('updatePassword', 'Successful')
+        return new Promise((resolve, reject) => resolve())
+      })
       .catch((error) => {
         // auth/weak-password (< 6 chars) -> rely on client validation
         // auth/requires-recent-login -> prompt login first
@@ -127,11 +135,14 @@ const actions = {
       })
   },
 
-  async requestEmailVerification() {
+  async requestEmailVerification({ commit }) {
     this.$fire.auth.languageCode = this.$i18n.locale
     await this.$fire.auth.currentUser
       .sendEmailVerification()
-      .then(() => new Promise((resolve, reject) => resolve()))
+      .then(() => {
+        if (this.app.context.isDev) consola.info('requestEmailVerification', 'Successful')
+        return new Promise((resolve, reject) => resolve())
+      })
       .catch((error) => {
         if (this.app.context.isDev) consola.error('requestEmailVerification | error', error)
         return new Promise((resolve, reject) => reject(error))
@@ -143,6 +154,7 @@ const actions = {
       .applyActionCode(code)
       .then(() => {
         commit('SET', { authUser: this.$fire.auth.currentUser })
+        if (this.app.context.isDev) consola.info('confirmEmail', 'Successful')
         return new Promise((resolve, reject) => resolve())
       })
       .catch((error) => {
@@ -155,21 +167,25 @@ const actions = {
       })
   },
 
-  async requestPasswordReset({ email }) {
-    this.$fire.auth.languageCode = this.$i18n.locale
-    await this.$fire.auth
-      .sendPasswordResetEmail(email)
-      .then(() => new Promise((resolve, reject) => resolve()))
-      .catch((error) => {
-        if (this.app.context.isDev) consola.error('requestPasswordReset | error', error)
-        return new Promise((resolve, reject) => reject(error))
-      })
+  async requestPasswordReset({ commit }, { email }) {
+    try {
+      this.$fire.auth.languageCode = this.$i18n.locale
+      await this.$fire.auth.sendPasswordResetEmail(email)
+      if (this.app.context.isDev) consola.info('requestPasswordReset', 'Successful')
+      return new Promise((resolve, reject) => resolve())
+    } catch (error) {
+      if (this.app.context.isDev) consola.error('requestPasswordReset | error', error)
+      return new Promise((resolve, reject) => reject(error))
+    }
   },
 
-  async confirmPasswordReset({ code, newPassword }) {
+  async confirmPasswordReset({ commit }, { code, newPassword }) {
     await this.$fire.auth
       .confirmPasswordReset(code, newPassword)
-      .then(() => new Promise((resolve, reject) => resolve()))
+      .then(() => {
+        if (this.app.context.isDev) consola.info('confirmPasswordReset', 'Successful')
+        return new Promise((resolve, reject) => resolve())
+      })
       .catch((error) => {
         // auth/expired-action-code -> show & suggest
         // auth/invalid-action-code -> show & suggest

@@ -23,6 +23,7 @@ const actions = {
       .then((doc) => {
         if (this.app.context.isDev) consola.info('user.js | add | doc', doc)
         commit('SET', payload)
+        if (this.app.context.isDev) consola.info('user.js | add', 'Successful')
         return new Promise((resolve, reject) => resolve(payload))
       })
       .catch((error) => {
@@ -42,8 +43,8 @@ const actions = {
       .doc(docId)
       .update(payload)
       .then(() => {
-        if (this.app.context.isDev) consola.info('user.js | update', 'Update successful')
         commit('SET', payload)
+        if (this.app.context.isDev) consola.info('user.js | update', 'Successful')
         return new Promise((resolve, reject) => resolve())
       })
       .catch((error) => {
@@ -62,6 +63,7 @@ const actions = {
         if (this.app.context.isDev) consola.info('user.js | get| snapshot', snapshot)
         const doc = snapshot[0] // expecting one record ONLY
         commit('SET', { payload: doc })
+        if (this.app.context.isDev) consola.info('user.js | get', 'Successful')
         return new Promise((resolve, reject) => resolve(doc?.data))
       })
       .catch((error) => {
