@@ -180,6 +180,8 @@
 </template>
 
 <script>
+import * as consola from 'consola'
+
 export default {
   name: 'Playground',
 
@@ -193,7 +195,7 @@ export default {
       money: 123456789,
 
       // image field
-      icon: 'box-seam',
+      icon: ['fad', 'box'],
       images: [
         'http://placekitten.com/72/72',
         'http://placekitten.com/73/73',
@@ -230,7 +232,7 @@ export default {
           message: new Date(),
         })
       } catch (e) {
-        window.console.log(e)
+        consola.error(e)
       }
     },
 
@@ -240,7 +242,7 @@ export default {
         const doc = await ref.get()
         this.message = doc.data().message.toDate()
       } catch (e) {
-        window.console.log(e)
+        consola.error(e)
       }
     },
   },
