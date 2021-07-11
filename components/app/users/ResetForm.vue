@@ -1,21 +1,30 @@
 <template>
   <validation-observer ref="resetForm">
     <b-form-group :label="ui.email" label-for="rst-email">
-      <validation-provider v-slot="vp" :name="ui.email" rules="required|email|max:320">
+      <validation-provider v-slot="vp" :name="ui.email" mode="eager" rules="required|email|max:320">
         <b-form-input
           id="rst-email"
           v-model="form.email"
-          :state="$vee.checkState(vp)"
+          :state="$vee.checkState(vp) && checkServerState('email')"
           autocomplete="email"
           type="email"
           size="lg"
           trim
         ></b-form-input>
-        <b-form-invalid-feedback> {{ vp.errors[0] }} </b-form-invalid-feedback>
+        <b-form-invalid-feedback>
+          <span v-if="vp.errors.length > 0">
+            <icon preset="bv-error"></icon> {{ vp.errors[0] }}
+          </span>
+          <span v-if="serverError.validated">
+            <icon preset="bv-error"></icon> {{ serverError.message }}
+          </span>
+        </b-form-invalid-feedback>
       </validation-provider>
     </b-form-group>
 
-    <toast preset="error"> {{ toast.message }} </toast>
+    <toast id="rst-toast" class="py-3" :preset="toastPreset" is-static no-auto-hide>
+      {{ serverError.message }}
+    </toast>
   </validation-observer>
 </template>
 
@@ -37,11 +46,14 @@ export default {
       },
       ui: { email: this.$t('general.email') },
       form: { email: null },
-      toast: {
-        id: 'bvBottomCenter',
-        message: null,
-      },
+      serverError: { validated: false, valid: false, field: null, code: null, message: null },
     }
+  },
+
+  computed: {
+    toastPreset() {
+      return this.serverError.valid ? 'success' : 'error'
+    },
   },
 
   mounted() {
@@ -54,16 +66,28 @@ export default {
     this.$nuxt.$off(this.events.validate)
     this.$nuxt.$off(this.events.submit)
     this.$nuxt.$off(this.events.reset)
-    this.resetForm()
   },
 
   methods: {
-    ...mapActions('user', ['requestPasswordReset']),
+    ...mapActions('auth', ['requestPasswordReset']),
 
-    async validateForm() {
-      const valid = await this.$refs.resetForm.validate().then()
-      this.$emit(this.events.validated, valid)
-      return valid
+    errorHandler(error) {
+      this.serverError.validated = true
+      if (error.code) {
+        if (error.code === 'auth/invalid-email' || error.code === 'auth/user-not-found') {
+          this.serverError.field = 'email'
+          this.serverError.message = this.$t('validation.emailInvalid')
+        } else {
+          this.serverError.field = null
+          this.serverError.message = this.$t('general.error5xx')
+          this.$bvToast.show('rst-toast')
+        }
+      }
+    },
+
+    successHandler() {
+      this.resetForm()
+      this.$emit(this.events.submitted, true)
     },
 
     async submitForm() {
@@ -73,25 +97,29 @@ export default {
         return
       }
 
-      const { code } = await this.requestPasswordReset(this.form)
-      if (code) {
-        if (code === 'auth/invalid-email' || code === 'auth/user-not-found') {
-          this.toast.message = this.$t('modules.users.invalidEmail')
-        } else {
-          this.toast.message = this.$t('general.error5xx')
-        }
-        this.$bvToast.show(this.toast.id)
-        this.$emit(this.events.submitted, false)
-        return
-      }
+      this.requestPasswordReset(this.form)
+        .then(() => this.successHandler())
+        .catch((error) => this.errorHandler(error))
+    },
 
-      this.resetForm()
-      this.$emit(this.events.submitted, true, this.form)
+    async validateForm() {
+      const valid = await this.$refs.resetForm.validate().then()
+      this.$emit(this.events.validated, valid)
+      return valid
     },
 
     resetForm() {
-      this.$refs.resetForm.reset()
-      this.$nextTick(() => (this.form.email = null))
+      this.serverError = { validated: false, valid: false, field: null, code: null, message: null }
+      this.form.email = null
+      this.$nextTick(() => this.$refs.resetForm.reset())
+    },
+
+    checkServerState(field) {
+      return this.serverError.validated
+        ? field === this.serverError.field
+          ? this.serverError.valid
+          : null
+        : null
     },
   },
 }

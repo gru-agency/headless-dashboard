@@ -2,7 +2,7 @@
   <span>
     <!-- placeholder -->
     <b-avatar v-if="list.length === 0" size="3rem" variant="light" rounded>
-      <icon icon-variant="secondary"></icon>
+      <icon :icon="icon"></icon>
     </b-avatar>
 
     <b-avatar
@@ -26,7 +26,7 @@ export default {
     image: { type: String, default: undefined },
     images: { type: Array, default: () => [] },
     max: { type: [Number, String], default: undefined },
-    icon: { type: String, default: undefined },
+    icon: { type: Array, default: () => null },
   },
 
   computed: {

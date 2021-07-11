@@ -9,7 +9,7 @@
     :prefetch="link ? true : false"
     @click.prevent="$emit('click')"
   >
-    <icon :icon="getIcon" icon-size="sm"></icon>
+    <icon :icon="getIcon" size="sm"></icon>
     <slot> {{ getText }} </slot>
   </b-button>
 </template>
@@ -20,7 +20,6 @@ export default {
 
   props: {
     preset: { type: String, default: undefined },
-    name: { type: String, default: undefined },
     text: { type: String, default: undefined },
     link: { type: String, default: undefined },
     size: { type: String, default: undefined },
