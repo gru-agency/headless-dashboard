@@ -111,7 +111,7 @@ export default {
     resetForm() {
       this.serverError = { validated: false, valid: false, field: null, code: null, message: null }
       this.form.email = null
-      this.$nextTick(() => this.$refs.resetForm.reset())
+      this.$nextTick(() => this.$refs.resetForm?.reset())
     },
 
     checkServerState(field) {

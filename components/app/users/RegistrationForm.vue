@@ -209,7 +209,7 @@ export default {
     resetForm() {
       this.serverError = { validated: false, valid: false, field: null, code: null, message: null }
       this.form = { email: null, name: null, password: null, emailConsent: false }
-      this.$nextTick(() => this.$refs.registrationForm.reset())
+      this.$nextTick(() => this.$refs.registrationForm?.reset())
     },
 
     onRevealToggle() {
