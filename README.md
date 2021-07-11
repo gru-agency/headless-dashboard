@@ -55,6 +55,7 @@ For detailed explanation on how things work, check out the [documentation](https
   - enable email/password sign-in methods
   - change password reset email template base url from `localhost` to `{{ PROD_URL }}`
   - change verify email template base url from `localhost` to `{{ PROD_URL }}`
+  - setup support email e.g. support@shoplex.com
 
 ## Commit Guide
 
