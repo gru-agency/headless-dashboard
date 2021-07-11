@@ -1,5 +1,11 @@
 import Vue from 'vue'
-import { localize, extend, ValidationProvider, ValidationObserver } from 'vee-validate'
+import {
+  localize,
+  extend,
+  setInteractionMode,
+  ValidationProvider,
+  ValidationObserver,
+} from 'vee-validate'
 import { required, email, min, max } from 'vee-validate/dist/rules'
 import en from 'vee-validate/dist/locale/en.json'
 
@@ -35,6 +41,9 @@ extend('required', required)
 extend('email', email)
 extend('min', min)
 extend('max', max)
+
+// less offensive mode
+setInteractionMode('eager')
 
 // register globally
 Vue.component('ValidationProvider', ValidationProvider)
