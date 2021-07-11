@@ -41,7 +41,10 @@ export default {
   data() {
     return {
       presets: {
-        'bv-error': { icon: ['fas', 'exclamation-triangle'] },
+        'bv-empty': { icon: ['fad', 'empty-set'] },
+        'bv-error': { icon: ['fad', 'exclamation-triangle'] },
+        'bv-success': { icon: ['fad', 'check-double'] },
+        'bv-loading': { icon: ['fad', 'spinner'] },
       },
     }
   },
