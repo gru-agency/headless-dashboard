@@ -13,6 +13,7 @@ const ui = {
 
 const app = {
   brandName: 'Shoplex',
+  supportMail: 'support@shoplex.com',
 }
 
 const utils = {
