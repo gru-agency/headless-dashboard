@@ -169,8 +169,8 @@ export default {
           subscribeManually: true,
         },
         ssr: false,
-        // emulatorPort: 9099,
-        // emulatorHost: 'http://localhost',
+        emulatorPort: 9099,
+        emulatorHost: 'http://localhost',
       },
       firestore: {
         enablePersistence: { synchronizeTabs: true },
