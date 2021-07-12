@@ -17,7 +17,8 @@
         ></b-form-input>
         <b-form-invalid-feedback>
           <span v-if="vp.errors.length > 0">
-            <icon preset="bv-error"></icon> {{ vp.errors[0] }}
+            <icon preset="bv-error" :icon="['fas', 'exclamation-triangle']"></icon>
+            {{ vp.errors[0] }}
           </span>
           <span v-if="serverError.validated">
             <span v-if="serverError.code === 'auth/email-already-in-use'">
@@ -195,13 +196,13 @@ export default {
         return
       }
 
-      this.registerWithEmailAndPassword(this.form)
+      await this.registerWithEmailAndPassword(this.form)
         .then((response) => this.successHandler(response))
         .catch((error) => this.errorHandler(error))
     },
 
     async validateForm() {
-      const valid = await this.$refs.registrationForm.validate().then()
+      const valid = await this.$refs.registrationForm.validate()
       this.$emit(this.events.validated, valid)
       return valid
     },

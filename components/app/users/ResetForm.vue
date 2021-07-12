@@ -1,7 +1,7 @@
 <template>
   <validation-observer ref="resetForm">
     <b-form-group :label="ui.email" label-for="rst-email">
-      <validation-provider v-slot="vp" :name="ui.email" mode="eager" rules="required|email|max:320">
+      <validation-provider v-slot="vp" :name="ui.email" rules="required|email|max:320">
         <b-form-input
           id="rst-email"
           v-model="form.email"
@@ -97,7 +97,7 @@ export default {
         return
       }
 
-      this.requestPasswordReset(this.form)
+      await this.requestPasswordReset(this.form)
         .then(() => this.successHandler())
         .catch((error) => this.errorHandler(error))
     },

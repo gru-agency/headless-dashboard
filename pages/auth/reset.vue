@@ -36,7 +36,7 @@ export default {
       ui: {
         title: this.$t('modules.users.resetTitle'),
         subtitle: this.$t('modules.users.resetSubtitle'),
-        back: this.$t('modules.users.resetBack'),
+        back: this.$t('general.returnSignIn'),
         successTitle: this.$t('modules.users.resetSuccessTitle'),
         successSubtitle: this.$t('modules.users.resetSuccessSubtitle'),
       },

@@ -39,10 +39,7 @@ const actions = {
     }
   },
 
-  async registerWithEmailAndPassword(
-    { commit, dispatch, state },
-    { email, password, name, emailConsent }
-  ) {
+  async registerWithEmailAndPassword({ commit, dispatch, state }, { email, password, name, emailConsent }) {
     try {
       const { user } = await this.$fire.auth.createUserWithEmailAndPassword(email, password)
       if (this.app.context.isDev) consola.info('registerWithEmailAndPassword | user', user)
@@ -158,10 +155,6 @@ const actions = {
         return new Promise((resolve, reject) => resolve())
       })
       .catch((error) => {
-        // auth/expired-action-code -> show & suggest
-        // auth/invalid-action-code -> show & suggest
-        // auth/user-disabled (e.g. acc locked) -> show & suggest
-        // auth/user-not-found -> dont let requestor knows
         if (this.app.context.isDev) consola.error('confirmEmail | error', error)
         return new Promise((resolve, reject) => reject(error))
       })
@@ -187,11 +180,6 @@ const actions = {
         return new Promise((resolve, reject) => resolve())
       })
       .catch((error) => {
-        // auth/expired-action-code -> show & suggest
-        // auth/invalid-action-code -> show & suggest
-        // auth/user-disabled (e.g. acc locked) -> show & suggest
-        // auth/user-not-found -> dont let requestor knows
-        // auth/weak-password (< 6 chars) -> rely on client validation
         if (this.app.context.isDev) consola.error('confirmPasswordReset | error', error)
         return new Promise((resolve, reject) => reject(error))
       })
