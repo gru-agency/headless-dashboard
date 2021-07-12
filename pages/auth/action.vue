@@ -1,18 +1,16 @@
 <template>
-  <div>
-    <b-card v-if="!interpretPath" class="px-3 shadow">
-      <box-state
-        state="error"
-        :title="ui.title"
-        :body="ui.subtitle"
-        :btn-link="links.home"
-        :btn-text="ui.home"
-        btn-variant="primary"
-      ></box-state>
-    </b-card>
+  <b-card v-if="!interpretPath" class="px-3 shadow">
+    <box-state
+      state="error"
+      :title="ui.title"
+      :body="ui.subtitle"
+      :btn-link="links.home"
+      :btn-text="ui.home"
+      btn-variant="primary"
+    ></box-state>
+  </b-card>
 
-    <nuxt-child v-else></nuxt-child>
-  </div>
+  <nuxt-child v-else></nuxt-child>
 </template>
 
 <script>
