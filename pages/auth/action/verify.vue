@@ -12,9 +12,7 @@
         <template #body>
           <b-card-text class="text-secondary">
             {{ boxState.body }}
-            <a :href="'mailto:' + links.supportMail" class="text-primary">
-              {{ links.supportMail }}
-            </a>
+            <a :href="'mailto:' + links.supportMail" class="text-primary">{{ links.supportMail }}</a>
           </b-card-text>
         </template>
       </box-state>
@@ -56,39 +54,50 @@ export default {
     ...mapActions('auth', ['confirmEmail']),
 
     errorHandler(error) {
-      this.boxState.success = false
-      this.serverError = { success: false, code: error.code, message: error.message }
-      if (error.code) {
-        if (['auth/expired-action-code', 'auth/invalid-action-code'].includes(error.code)) {
-          this.boxState = {
-            title: this.$t('modules.users.verifyEmailLinkInvalid'),
-            actionText: this.$t('modules.users.verifyEmailRetry'),
-            actionLink: this.localePath('/dashboard/users'),
-          }
-        } else if (error.code === 'auth/user-disabled') {
-          this.boxState = {
-            title: this.$t('validation.accountSuspended'),
-            body: this.$t('general.supportText'),
-          }
-        } else if (error.code === 'auth/user-not-found') {
-          this.boxState = {
-            title: this.$t('validation.accountNotFound'),
-            body: this.$t('general.supportText'),
-          }
-        } else {
-          this.boxState.title = this.$t('general.error5xx')
+      this.boxState = { ...this.boxState, success: false }
+
+      this.serverError = {
+        ...this.serverError,
+        validated: true,
+        success: false,
+        code: error.code,
+        message: error.message,
+      }
+
+      // determine form/page error
+      if (['auth/expired-action-code', 'auth/invalid-action-code'].includes(error.code)) {
+        this.boxState = {
+          ...this.boxState,
+          title: this.$t('modules.users.verifyEmailLinkInvalid'),
+          actionText: this.$t('modules.users.verifyEmailRetry'),
+          actionLink: this.localePath('/dashboard/users'),
         }
+      } else if (error.code === 'auth/user-disabled') {
+        this.boxState = {
+          ...this.boxState,
+          title: this.$t('validation.accountSuspended'),
+          body: this.$t('general.supportText'),
+        }
+      } else if (error.code === 'auth/user-not-found') {
+        this.boxState = {
+          ...this.boxState,
+          title: this.$t('validation.accountNotFound'),
+          body: this.$t('general.supportText'),
+        }
+      } else {
+        this.boxState = { ...this.boxState, title: this.$t('general.error5xx') }
       }
     },
 
     successHandler(response) {
       this.boxState = {
+        ...this.boxState,
         success: true,
         title: this.$t('modules.users.verifyEmailSuccess'),
         actionLink: this.localePath('/dashboard'),
         actionText: this.$t('general.continueDashboard'),
       }
-      this.serverError.success = true
+      this.serverError = { ...this.serverError, validated: true, success: true }
     },
 
     async submitForm() {
@@ -98,9 +107,10 @@ export default {
         .catch((error) => this.errorHandler(error))
     },
 
-    resetForm() {
+    async resetForm() {
       this.boxState = { success: false, title: null, body: null, actionLink: null, actionText: null }
       this.serverError = { validated: false, valid: false, field: null, code: null, message: null }
+      await this.$nextTick()
     },
   },
 }
