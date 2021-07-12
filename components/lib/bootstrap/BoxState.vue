@@ -91,7 +91,7 @@ export default {
     },
 
     getPresetAction() {
-      return !this.btnText && (this.isEmpty ? 'bv-new' : undefined)
+      return !this.btnText && this.isEmpty ? 'bv-new' : undefined
     },
 
     getIconClass() {
