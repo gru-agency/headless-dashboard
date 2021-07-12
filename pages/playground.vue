@@ -1,6 +1,6 @@
 <template>
   <b-container>
-    <b-row class="py-3">
+    <b-row class="py-3 mb-5">
       <b-col cols="4" class="mt-4">
         <b-card header="ActionToggler">
           <action-toggler target="collapsible" text="More" icon-right></action-toggler>
@@ -76,6 +76,7 @@
           <icon :icon="['fad', 'home']" class="fa-gru"></icon>
           <icon :icon="['fad', 'home']" class="fa-2x fa-gru"></icon>
           <icon :icon="['fad', 'home']" class="fa-3x fa-gru"></icon>
+          <icon :icon="['fad', 'spinner']" pulse size="3x" class="text-primary"></icon>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
@@ -161,18 +162,32 @@
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card header="BoxState - Refresh">
-          <box-state error title="Error!" body="Opss.. something happens" @click="echo"></box-state>
+        <b-card header="BoxState - Empty">
+          <box-state
+            state="empty"
+            title="No content"
+            body="Nothing"
+            btn-variant="primary"
+          ></box-state>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card header="BoxState - Empty">
-          <box-state empty title="No content" body="Nothing's here." @click="echo"></box-state>
+        <b-card header="BoxState - Error">
+          <box-state state="error" title="Error!" body="Opss.. something happens">
+            <template #action>
+              <action-button preset="bv-refresh"></action-button>
+            </template>
+          </box-state>
+        </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card header="BoxState - Success">
+          <box-state state="success" title="Well done!" body="All set."></box-state>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
         <b-card header="BoxState - Loading">
-          <box-state loading></box-state>
+          <box-state state="loading"></box-state>
         </b-card>
       </b-col>
     </b-row>
