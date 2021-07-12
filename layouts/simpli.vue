@@ -8,7 +8,7 @@
       </div>
 
       <b-row class="w-100 align-self-center">
-        <nuxt></nuxt>
+        <b-col cols="12"><nuxt></nuxt></b-col>
       </b-row>
 
       <ul class="align-self-start py-4 mx-4 px-3 list-unstyled">

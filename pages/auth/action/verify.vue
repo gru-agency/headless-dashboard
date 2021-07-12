@@ -93,20 +93,13 @@ export default {
 
     async submitForm() {
       this.resetForm()
-      const form = { code: this.$route.query.oobCode }
-      await this.confirmEmail(form)
+      await this.confirmEmail({ code: this.$route.query.oobCode })
         .then((response) => this.successHandler(response))
         .catch((error) => this.errorHandler(error))
     },
 
     resetForm() {
-      this.boxState = {
-        success: false,
-        title: null,
-        body: null,
-        actionLink: null,
-        actionText: null,
-      }
+      this.boxState = { success: false, title: null, body: null, actionLink: null, actionText: null }
       this.serverError = { validated: false, valid: false, field: null, code: null, message: null }
     },
   },

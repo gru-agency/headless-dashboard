@@ -10,11 +10,7 @@
       <b-col cols="4" class="mt-4">
         <b-card header="ActionLink">
           <action-link text="Custom link" link="custom" class="mr-2" @click="echo"></action-link>
-          <action-link
-            text="Parent link"
-            :icon="['fad', 'long-arrow-left']"
-            link-to-parent
-          ></action-link>
+          <action-link text="Parent link" :icon="['fad', 'long-arrow-left']" link-to-parent></action-link>
           <action-link text="Colored link" variant="danger" class="ml-2"></action-link>
           <action-link :icon="['far', 'times']" link-to-parent></action-link>
         </b-card>
@@ -163,12 +159,7 @@
       </b-col>
       <b-col cols="4" class="mt-4">
         <b-card header="BoxState - Empty">
-          <box-state
-            state="empty"
-            title="No content"
-            body="Nothing"
-            btn-variant="primary"
-          ></box-state>
+          <box-state state="empty" title="No content" body="Nothing" btn-variant="primary"></box-state>
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
@@ -189,6 +180,9 @@
         <b-card header="BoxState - Loading">
           <box-state state="loading"></box-state>
         </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card header="Reserved"> </b-card>
       </b-col>
     </b-row>
   </b-container>
