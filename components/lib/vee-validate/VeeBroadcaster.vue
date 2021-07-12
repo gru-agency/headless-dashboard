@@ -6,13 +6,13 @@
 export default {
   name: 'VeeBroadcaster',
 
-  props: { invalid: { type: Boolean, default: null } },
+  props: { states: { type: Object, default: () => undefined } },
 
   watch: {
-    invalid: {
+    states: {
       immediate: true,
       handler() {
-        this.$emit('invalid', !this.invalid)
+        this.$emit('states', this.states)
       },
     },
   },
