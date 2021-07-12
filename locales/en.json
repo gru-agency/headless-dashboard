@@ -3,26 +3,33 @@
     "cancel": "Cancel",
     "contact": "Contact",
     "continue": "Continue",
+    "continueDashboard": "Continue to Dashboard",
     "delete": "Delete",
     "edit": "Edit",
     "email": "Email",
     "error": "Error",
+    "error404Title": "Page not found!",
+    "error404Subtitle": "Sorry, but the page you were looking for could not be found.",
     "error5xx": "There was an error. Try again later.",
     "hidePassword": "Hide password",
     "home": "Home",
     "name": "Name",
     "new": "New",
+    "newPassword": "New password",
     "optional": "Optional",
     "password": "Password",
     "privacy": "Privacy",
     "privacyPolicy": "Privacy Policy",
     "refresh": "Refresh",
     "required": "Required",
+    "returnHome": "Return to home",
+    "returnSignIn": "Return to sign in",
     "save": "Save",
     "saveAndMore": "Save and more",
     "showPassword": "Show password",
     "signin": "Sign in",
     "success": "Success",
+    "supportText": "Write and describe your issue to us at ",
     "terms": "Terms"
   },
 
@@ -32,15 +39,20 @@
     "prices": { "title": "Prices" },
     "settings": { "title": "Settings" },
     "users": {
+      "resetPasswordLinkInvalid": "This password reset link has expired",
+      "resetPasswordRetry": "Try reset your password again",
+      "resetPasswordSuccess": "You've successfully changed your password",
       "resetTitle": "Reset your password",
       "resetSubtitle": "Enter the email address associated with your account, and we'll send you a link to reset your password.",
-      "resetBack": "Return to sign in",
-      "resetSuccessTitle":"Thanks, check your email for instructions to reset your password",
-      "resetSuccessSubtitle":"Didn't get the email? Check your spam folder.",
+      "resetSuccessTitle": "Thanks, check your email for instructions to reset your password",
+      "resetSuccessSubtitle": "Didn't get the email? Check your spam folder.",
       "registerTitle": "Create your {_brand} account",
       "registerConsent": "Get email from {_brand} about product updates, industry news and events. If you change your mind, you can unsubscribe any time.",
       "registerBack": "Have an account?",
-      "registerButton": "Create account"
+      "registerButton": "Create account",
+      "verifyEmailLinkInvalid": "This verify email link has expired",
+      "verifyEmailRetry": "Try verify your email again",
+      "verifyEmailSuccess": "You've successfully verified your email"
     }
   },
 
@@ -52,6 +64,8 @@
 
   "validation": {
     "accountExists": "An account already exists with this email address. If you'd like to create a new {_brand} account with the same email address, ",
+    "accountNotFound": "Account not found",
+    "accountSuspended": "Your account has been suspended",
     "emailInvalid": "The @:general.email field must be a valid email",
     "passwordInvalid": "The @:general.password field must be at least 10 characters",
     "passwordHint": "Your password needs to be at least 10 characters, include multiple words and phrases to make it more secure."
