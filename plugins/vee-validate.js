@@ -43,6 +43,15 @@ extend('email', email)
 extend('min', min)
 extend('max', max)
 
+// custom rules for password
+extend('hint_pw', {
+  validate(value, args) {
+    return value.length >= args.length
+  },
+  params: ['length'],
+  message: 'Your password needs to be at least 10 characters, include multiple words and phrases to make it more secure.'
+})
+
 // less offensive mode
 setInteractionMode('eager')
 
