@@ -13,11 +13,16 @@ const ui = {
 
 const app = {
   brandName: 'Shoplex',
+  supportMail: 'support@shoplex.com',
 }
 
 const utils = {
   getParentRoute: (path) => {
     return path.substr(0, path.lastIndexOf('/'))
+  },
+
+  evaluateState: (client, server) => {
+    return server === null ? client : client && server
   },
   // random: () => {
   //   return Math.random().toString(36).slice(2)
@@ -27,8 +32,17 @@ const utils = {
   // },
 }
 
+const validation = {
+  state: ({ validated, field, valid }, fieldName) => {
+    return validated ? (field === fieldName ? valid : null) : null
+  },
+
+  error: (states) => states.message,
+}
+
 export default (_, inject) => {
   inject('ui', ui)
   inject('app', app)
+  inject('val', validation)
   inject('utils', utils)
 }

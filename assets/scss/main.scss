@@ -101,11 +101,14 @@ label {
 .form-group {
   .input-inset {
     position: absolute;
-    transform: translateY(50%);
+    transform: translateY(35%);
+
+    &.lg {
+      transform: translateY(50%);
+    }
 
     &.right {
-      // card padding + border width + standard padding
-      right: calc(21px + 2rem);
+      right: 1rem;
     }
 
     + input.form-control-lg {

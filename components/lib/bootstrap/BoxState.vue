@@ -1,33 +1,43 @@
 <template>
   <b-card-body class="text-center p-sm-4">
-    <div v-if="empty || error || success">
-      <p>
-        <slot name="icon">
-          <b-avatar size="3rem" variant="light" rounded>
-            <icon :icon="icon || empty ? ['fad', 'empty-set'] : ['fad', 'exclamation']"></icon>
+    <slot name="icon">
+      <b-card-text>
+        <icon v-if="isLoading" :preset="getPresetIcon" size="2x" pulse></icon>
+        <span v-else>
+          <b-avatar v-if="iconHolder" size="3rem" variant="light" rounded>
+            <icon :icon="icon" :preset="getPresetIcon" :class="getIconClass"></icon>
           </b-avatar>
-        </slot>
-      </p>
-      <p class="h4">{{ title }}</p>
-      <p class="pt-3 text-secondary">{{ body }}</p>
+          <icon v-else :icon="icon" :preset="getPresetIcon" :class="getIconClass" size="2x"></icon>
+        </span>
+      </b-card-text>
+    </slot>
 
+    <slot name="title">
+      <b-card-title v-if="title">{{ title }}</b-card-title>
+    </slot>
+
+    <slot name="subtitle">
+      <b-card-text v-if="subtitle">{{ subtitle }}</b-card-text>
+    </slot>
+
+    <slot name="body">
+      <b-card-text class="text-secondary">{{ body }}</b-card-text>
+    </slot>
+
+    <slot name="action">
       <action-button
-        v-if="!btnHide"
-        :preset="empty ? 'bv-new' : error ? 'bv-refresh' : undefined"
-        :variant="btnVariant || empty ? 'primary' : 'light'"
+        v-if="shouldShowButton"
+        :preset="getPresetAction"
+        :variant="btnVariant"
         :text="btnText"
-        :to="btnLink"
+        :link="btnLink"
         :size="btnSize"
         :disabled="btnDisabled"
         :link-append="btnLinkAppend"
         :prefetch="btnLink ? true : false"
         @click="sendEvents"
       ></action-button>
-    </div>
-
-    <div v-if="loading">
-      <b-spinner variant="secondary" label="Loading..."></b-spinner>
-    </div>
+    </slot>
   </b-card-body>
 </template>
 
@@ -44,17 +54,68 @@ export default {
     body: { type: String, default: undefined },
     btnText: { type: String, default: undefined },
     btnLink: { type: String, default: undefined },
-    btnSize: { type: String, default: 'sm' },
+    btnSize: { type: String, default: undefined },
     btnVariant: { type: String, default: undefined },
     btnHide: { type: Boolean, default: false },
     btnDisabled: { type: Boolean, default: false },
     btnLinkAppend: { type: Boolean, default: false },
     icon: { type: Array, default: () => null },
+    iconClass: { type: String, default: undefined },
+    // new props
+    state: { type: String, default: undefined },
+    subtitle: { type: String, default: undefined },
+    iconHolder: { type: Boolean, default: false },
+  },
+
+  data() {
+    return {}
   },
 
   computed: {
-    getDefaultButtonText() {
-      return this.$ui.getTextVariant(this.variant)
+    getPresetIcon() {
+      return this.icon
+        ? undefined
+        : this.isLoading
+        ? 'bv-loading'
+        : this.isEmpty
+        ? 'bv-empty'
+        : this.isError
+        ? 'bv-error'
+        : this.isSuccess
+        ? 'bv-success'
+        : undefined
+    },
+
+    getPresetIconVariant() {
+      return this.isError ? 'text-danger' : this.isSuccess ? 'text-success' : undefined
+    },
+
+    getPresetAction() {
+      return !this.btnText && this.isEmpty ? 'bv-new' : undefined
+    },
+
+    getIconClass() {
+      return this.iconClass || this.getPresetIconVariant
+    },
+
+    isLoading() {
+      return this.state === 'loading' || this.loading
+    },
+
+    isEmpty() {
+      return this.state === 'empty' || this.empty
+    },
+
+    isError() {
+      return this.state === 'error' || this.error
+    },
+
+    isSuccess() {
+      return this.state === 'success' || this.success
+    },
+
+    shouldShowButton() {
+      return !this.btnHide && (this.btnText || this.getPresetAction)
     },
   },
 

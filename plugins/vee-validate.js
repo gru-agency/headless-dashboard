@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { localize, extend, ValidationProvider, ValidationObserver } from 'vee-validate'
+import { localize, extend, setInteractionMode, ValidationProvider, ValidationObserver } from 'vee-validate'
 import { required, email, min, max } from 'vee-validate/dist/rules'
 import en from 'vee-validate/dist/locale/en.json'
 
@@ -9,9 +9,16 @@ async function loadLocale(code) {
 }
 
 const util = {
+  // deprecated
   checkState: ({ touched, dirty, validated, valid = null }) => {
     return (touched && dirty) || validated ? valid : null
   },
+
+  state: ({ touched, dirty, validated, valid = null }) => {
+    return (touched && dirty) || validated ? valid : null
+  },
+
+  error: (states) => states.errors[0],
 
   switchLocale: (locale) => {
     if (locale.startsWith('ms')) {
@@ -35,6 +42,18 @@ extend('required', required)
 extend('email', email)
 extend('min', min)
 extend('max', max)
+
+// custom rules for password
+extend('hint_pw', {
+  validate(value, args) {
+    return value.length >= args.length
+  },
+  params: ['length'],
+  message: 'Your password needs to be at least 10 characters, include multiple words and phrases to make it more secure.'
+})
+
+// less offensive mode
+setInteractionMode('eager')
 
 // register globally
 Vue.component('ValidationProvider', ValidationProvider)

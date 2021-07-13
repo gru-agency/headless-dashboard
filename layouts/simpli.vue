@@ -1,6 +1,6 @@
 <template>
   <div class="bg-light">
-    <b-container class="vh-100 bg-fixed-500 d-flex flex-column">
+    <b-container class="vh-100 bg-fixed-width d-flex flex-column">
       <div class="flex-grow-1"></div>
 
       <div class="align-self-start py-4 mx-4 px-3">
@@ -8,7 +8,7 @@
       </div>
 
       <b-row class="w-100 align-self-center">
-        <nuxt></nuxt>
+        <b-col cols="12"><nuxt></nuxt></b-col>
       </b-row>
 
       <ul class="align-self-start py-4 mx-4 px-3 list-unstyled">
@@ -41,7 +41,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.bg-fixed-500 {
-  width: 500px;
+.bg-fixed-width {
+  width: 550px;
 }
 </style>

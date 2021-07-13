@@ -1,14 +1,13 @@
 <template>
-  <validation-observer ref="registrationForm" v-slot="{ invalid }" tag="form">
-    <!-- broadcast form state -->
-    <vee-broadcaster :invalid="invalid" @invalid="onFormInvalid"></vee-broadcaster>
+  <validation-observer ref="registrationForm" v-slot="vo" tag="form">
+    <vee-broadcaster :states="vo" @states="onFormStateChanged"></vee-broadcaster>
 
-    <b-form-group :label="ui.email" label-for="reg-email">
-      <validation-provider v-slot="vp" :name="ui.email" rules="required|email|max:320">
+    <validation-provider v-slot="vp" :name="ui.email" rules="required|email|max:320">
+      <b-form-group :label="ui.email" label-for="reg-email">
         <b-form-input
           id="reg-email"
           v-model="form.email"
-          :state="$vee.checkState(vp) && checkServerState('email')"
+          :state="$utils.evaluateState($vee.state(vp), $val.state(serverError, 'email'))"
           autocomplete="email"
           type="email"
           size="lg"
@@ -16,69 +15,60 @@
           autofocus
         ></b-form-input>
         <b-form-invalid-feedback>
-          <span v-if="vp.errors.length > 0">
-            <icon preset="bv-error"></icon> {{ vp.errors[0] }}
-          </span>
-          <span v-if="serverError.validated">
-            <span v-if="serverError.code === 'auth/email-already-in-use'">
-              <icon preset="bv-error"></icon> {{ serverError.message }}
+          <span>
+            <icon preset="bv-error"></icon> {{ $vee.error(vp) || $val.error(serverError) }}
+            <span v-if="accountExists">
               <action-link :link="links.signin" :text="ui.signin" variant="primary"></action-link>.
             </span>
-            <span v-else><icon preset="bv-error"></icon> {{ serverError.message }}</span>
           </span>
         </b-form-invalid-feedback>
-      </validation-provider>
-    </b-form-group>
+      </b-form-group>
+    </validation-provider>
 
-    <b-form-group :label="ui.name" label-for="reg-name">
-      <validation-provider v-slot="vp" :name="ui.email" rules="max:320">
+    <validation-provider v-slot="vp" :name="ui.email" immediate rules="max:320">
+      <b-form-group :label="ui.name" label-for="reg-name">
         <b-form-input
           id="reg-name"
           v-model="form.name"
-          :state="$vee.checkState(vp)"
+          :state="$vee.state(vp)"
           autocomplete="name"
           size="lg"
           trim
         ></b-form-input>
         <b-form-invalid-feedback>
-          <icon preset="bv-error"></icon> {{ vp.errors[0] }}
+          <span><icon preset="bv-error"></icon> {{ $vee.error(vp) }}</span>
         </b-form-invalid-feedback>
-      </validation-provider>
-    </b-form-group>
+      </b-form-group>
+    </validation-provider>
 
-    <b-form-group :label="ui.password" label-for="reg-password">
-      <validation-provider v-slot="vp" :name="ui.password" rules="required|min:10|max:128">
+    <validation-provider v-slot="vp" :name="ui.password" slim mode="aggressive" rules="hint_pw:10|max:128">
+      <b-form-group :label="ui.password" label-for="reg-password" class="position-relative">
         <tips-field
           v-if="form.password"
-          :preset="shouldRevealPassword ? 'bv-eye-slash' : 'bv-eye'"
+          :preset="passwordRevealable ? 'bv-eye-slash' : 'bv-eye'"
+          class="input-inset right lg"
           tooltip
-          class="input-inset right"
-          @click="onRevealToggle()"
+          trim
+          @click="onPasswordToggle()"
         >
-          {{ shouldRevealPassword ? ui.hidePassword : ui.showPassword }}
+          {{ passwordRevealable ? password.hideText : password.showText }}
         </tips-field>
         <b-form-input
-          id="reg-password"
+          id="new-password"
           v-model="form.password"
-          :state="$vee.checkState(vp) && checkServerState('password')"
+          :state="$utils.evaluateState($vee.state(vp), $val.state(serverError, 'password'))"
           autocomplete="new-password"
-          :type="passwordType"
+          :type="password.type"
           size="lg"
           trim
-          @blur="passwordFocus = false"
-          @focus="passwordFocus = true"
+          @blur="password.focus = false"
+          @focus="password.focus = true"
         ></b-form-input>
         <b-form-invalid-feedback>
-          <span v-if="vp.errors.length > 0">
-            <icon preset="bv-error"></icon> {{ vp.errors[0] }}
-          </span>
-          <span v-if="serverError.validated">
-            <icon preset="bv-error"></icon> {{ serverError.message }}
-          </span>
+          <span><icon preset="bv-error"></icon> {{ $vee.error(vp) || $val.error(serverError) }}</span>
         </b-form-invalid-feedback>
-      </validation-provider>
-      <b-form-text v-if="passwordHint"> {{ ui.passwordHint }} </b-form-text>
-    </b-form-group>
+      </b-form-group>
+    </validation-provider>
 
     <b-form-group label-for="reg-consent" class="small text-secondary">
       <b-form-checkbox id="reg-consent" v-model="form.emailConsent" size="sm">
@@ -86,10 +76,6 @@
         <action-link :link="links.privacy" :text="ui.privacy" variant="primary"></action-link>
       </b-form-checkbox>
     </b-form-group>
-
-    <toast id="reg-toast" class="py-3" :preset="toastPreset" is-static no-auto-hide>
-      {{ serverError.message }}
-    </toast>
   </validation-observer>
 </template>
 
@@ -101,7 +87,6 @@ export default {
 
   data() {
     return {
-      links: { privacy: this.localePath('/privacy'), signin: this.localePath('/signin') },
       events: {
         validate: 'register-validate',
         validated: 'register-validated',
@@ -114,33 +99,32 @@ export default {
         email: this.$t('general.email'),
         name: this.$t('general.name'),
         password: this.$t('general.password'),
-        passwordHint: this.$t('validation.passwordHint'),
         consent: this.$t('modules.users.registerConsent', { _brand: this.$app.brandName }),
         privacy: this.$t('general.privacyPolicy'),
         signin: this.$t('general.signin').toLowerCase(),
-        hidePassword: this.$t('general.hidePassword'),
-        showPassword: this.$t('general.showPassword'),
+      },
+      links: { privacy: this.localePath('/privacy'), signin: this.localePath('/signin') },
+      password: {
+        type: 'password',
+        focus: false,
+        hideText: this.$t('general.hidePassword'),
+        showText: this.$t('general.showPassword'),
       },
       form: { email: null, name: null, password: null, emailConsent: false },
       serverError: { validated: false, valid: false, field: null, code: null, message: null },
-      passwordFocus: false,
-      passwordType: 'password',
     }
   },
 
   computed: {
-    passwordHint() {
-      // only show when start typing
-      return this.passwordFocus && !this.form.password
+    accountExists() {
+      return this.serverError.code === 'auth/email-already-in-use'
     },
 
-    shouldRevealPassword() {
-      return this.passwordType === 'text'
+    /** [START] password-related methods */
+    passwordRevealable() {
+      return this.password.type === 'text'
     },
-
-    toastPreset() {
-      return this.serverError.valid ? 'success' : 'error'
-    },
+    /** [END] password-related methods */
   },
 
   mounted() {
@@ -159,74 +143,76 @@ export default {
     ...mapActions('auth', ['registerWithEmailAndPassword']),
 
     errorHandler(error) {
-      this.serverError.validated = true
-      if (error.code) {
-        this.serverError.valid = false
-        this.serverError.code = error.code
-        if (error.code === 'auth/invalid-email') {
-          this.serverError.field = 'email'
-          this.serverError.message = this.$t('validation.emailInvalid')
-        } else if (error.code === 'auth/weak-password') {
-          this.serverError.field = 'password'
-          this.serverError.message = this.$t('validation.passwordInvalid')
-        } else if (error.code === 'auth/email-already-in-use') {
-          this.serverError.field = 'email'
-          this.serverError.message = this.$t('validation.accountExists', {
-            _brand: this.$app.brandName,
-          })
-        } else {
-          this.serverError.field = null
-          this.serverError.message = this.$t('general.error5xx')
-          this.$bvToast.show('reg-toast')
+      this.serverError = {
+        ...this.serverError,
+        validated: true,
+        valid: false,
+        code: error.code,
+        message: error.message,
+      }
+
+      // determine field error and propagate non-field error to parent
+      if (error.code === 'auth/invalid-email') {
+        this.serverError = {
+          ...this.serverError,
+          field: 'email',
+          message: this.$t('validation.emailInvalid'),
         }
-        this.$emit(this.events.submitted, false)
+      } else if (error.code === 'auth/email-already-in-use') {
+        this.serverError = {
+          ...this.serverError,
+          field: 'email',
+          message: this.$t('validation.accountExists', { _brand: this.$app.brandName }),
+        }
+      } else if (error.code === 'auth/weak-password') {
+        this.serverError = {
+          ...this.serverError,
+          field: 'password',
+          message: this.$t('validation.passwordInvalid'),
+        }
+      }
+
+      if (!this.serverError.field) {
+        this.$emit(this.events.submitted, false, this.serverError)
       }
     },
 
     successHandler(response) {
-      this.resetForm()
-      this.$emit(this.events.submitted, true, response)
+      this.serverError = { ...this.serverError, validated: true, valid: true }
+      this.$emit(this.events.submitted, true, null, response)
     },
 
     async submitForm() {
-      const valid = await this.validateForm()
-      if (!valid) {
-        this.$emit(this.events.submitted, valid)
-        return
-      }
+      const valid = this.validateForm()
+      if (!valid) return
 
-      this.registerWithEmailAndPassword(this.form)
+      await this.registerWithEmailAndPassword(this.form)
         .then((response) => this.successHandler(response))
         .catch((error) => this.errorHandler(error))
     },
 
-    async validateForm() {
-      const valid = await this.$refs.registrationForm.validate().then()
+    validateForm() {
+      const valid = this.$refs.registrationForm.validate()
       this.$emit(this.events.validated, valid)
       return valid
     },
 
-    resetForm() {
+    async resetForm() {
       this.serverError = { validated: false, valid: false, field: null, code: null, message: null }
-      this.form = { email: null, name: null, password: null, emailConsent: false }
-      this.$nextTick(() => this.$refs.registrationForm.reset())
+      this.$refs.registrationForm?.reset()
+      await this.$nextTick()
+      this.$emit(this.events.resetted)
     },
 
-    onRevealToggle() {
-      this.passwordType = this.passwordType === 'text' ? 'password' : 'text'
+    onFormStateChanged(states) {
+      if (states.validated) this.$emit(this.events.validated, !states.invalid)
     },
 
-    onFormInvalid(invalid) {
-      this.$emit(this.events.validated, invalid)
+    /** [START] password-related methods */
+    onPasswordToggle() {
+      this.password.type = this.password.type === 'text' ? 'password' : 'text'
     },
-
-    checkServerState(field) {
-      return this.serverError.validated
-        ? field === this.serverError.field
-          ? this.serverError.valid
-          : null
-        : null
-    },
+    /** [END] password-related methods */
   },
 }
 </script>
