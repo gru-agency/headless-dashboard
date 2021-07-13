@@ -35,12 +35,7 @@ export default {
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: {
-    dirs: [
-      '~/components',
-      '~/components/app',
-      '~/components/lib/bootstrap',
-      '~/components/lib/vee-validate',
-    ],
+    dirs: ['~/components', '~/components/app', '~/components/lib/bootstrap', '~/components/lib/vee-validate'],
   },
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -69,7 +64,7 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extractCSS: false,
-    transpile: ['vue-currency-input'],
+    transpile: ['vue-currency-input', 'vee-validate/dist/rules'],
 
     babel: {
       compact: true,
