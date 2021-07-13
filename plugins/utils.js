@@ -21,9 +21,8 @@ const utils = {
     return path.substr(0, path.lastIndexOf('/'))
   },
 
-  /** priority non-null value first */
   evaluateState: (client, server) => {
-    return client !== null ? client : server !== null ? server : null
+    return server === null ? client : client && server
   },
   // random: () => {
   //   return Math.random().toString(36).slice(2)
