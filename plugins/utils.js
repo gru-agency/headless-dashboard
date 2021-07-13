@@ -20,6 +20,11 @@ const utils = {
   getParentRoute: (path) => {
     return path.substr(0, path.lastIndexOf('/'))
   },
+
+  /** priority non-null value first */
+  evaluateState: (client, server) => {
+    return client !== null ? client : server !== null ? server : null
+  },
   // random: () => {
   //   return Math.random().toString(36).slice(2)
   // },
@@ -28,8 +33,17 @@ const utils = {
   // },
 }
 
+const validation = {
+  state: ({ validated, field, valid }, fieldName) => {
+    return validated ? (field === fieldName ? valid : null) : null
+  },
+
+  error: (states) => states.message,
+}
+
 export default (_, inject) => {
   inject('ui', ui)
   inject('app', app)
+  inject('val', validation)
   inject('utils', utils)
 }
