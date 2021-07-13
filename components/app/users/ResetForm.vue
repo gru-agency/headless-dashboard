@@ -1,30 +1,21 @@
 <template>
-  <validation-observer ref="resetForm">
-    <b-form-group :label="ui.email" label-for="rst-email">
-      <validation-provider v-slot="vp" :name="ui.email" rules="required|email|max:320">
+  <validation-observer ref="resetForm" slim>
+    <validation-provider v-slot="vp" :name="ui.email" slim rules="required|email|max:320">
+      <b-form-group :label="ui.email" label-for="rst-email">
         <b-form-input
           id="rst-email"
           v-model="form.email"
-          :state="$vee.checkState(vp) && checkServerState('email')"
+          :state="$utils.evaluateState($vee.state(vp), $val.state(serverError, 'email'))"
           autocomplete="email"
           type="email"
           size="lg"
           trim
         ></b-form-input>
         <b-form-invalid-feedback>
-          <span v-if="vp.errors.length > 0">
-            <icon preset="bv-error"></icon> {{ vp.errors[0] }}
-          </span>
-          <span v-if="serverError.validated">
-            <icon preset="bv-error"></icon> {{ serverError.message }}
-          </span>
+          <span><icon preset="bv-error"></icon> {{ $vee.error(vp) || $val.error(serverError) }}</span>
         </b-form-invalid-feedback>
-      </validation-provider>
-    </b-form-group>
-
-    <toast id="rst-toast" class="py-3" :preset="toastPreset" is-static no-auto-hide>
-      {{ serverError.message }}
-    </toast>
+      </b-form-group>
+    </validation-provider>
   </validation-observer>
 </template>
 
@@ -50,12 +41,6 @@ export default {
     }
   },
 
-  computed: {
-    toastPreset() {
-      return this.serverError.valid ? 'success' : 'error'
-    },
-  },
-
   mounted() {
     this.$nuxt.$on(this.events.validate, this.validateForm)
     this.$nuxt.$on(this.events.submit, this.submitForm)
@@ -72,54 +57,54 @@ export default {
     ...mapActions('auth', ['requestPasswordReset']),
 
     errorHandler(error) {
-      this.serverError.validated = true
-      if (error.code) {
-        if (error.code === 'auth/invalid-email' || error.code === 'auth/user-not-found') {
-          this.serverError.field = 'email'
-          this.serverError.message = this.$t('validation.emailInvalid')
-        } else {
-          this.serverError.field = null
-          this.serverError.message = this.$t('general.error5xx')
-          this.$bvToast.show('rst-toast')
-        }
+      this.serverError = {
+        ...this.serverError,
+        validated: true,
+        success: false,
+        code: error.code,
+        message: error.message,
       }
+
+      // determine field error
+      // Note: 'auth/user-not-found' intentionally put a different meesage
+      // to obfuscate the fact in order to prevent malicious attempts
+      if (['auth/invalid-email', 'auth/user-not-found'].includes(error.code)) {
+        this.serverError = {
+          ...this.serverError,
+          field: 'email',
+          message: this.$t('validation.emailInvalid'),
+        }
+        return
+      }
+      this.$emit(this.events.submitted, false, this.serverError)
     },
 
-    successHandler() {
-      this.resetForm()
-      this.$emit(this.events.submitted, true)
+    successHandler(response) {
+      this.serverError = { ...this.serverError, validated: true, success: true }
+      this.$emit(this.events.submitted, true, null, response)
     },
 
     async submitForm() {
-      const valid = await this.validateForm()
-      if (!valid) {
-        this.$emit(this.events.submitted, valid)
-        return
-      }
+      const valid = this.validateForm()
+      if (!valid) return
 
+      this.resetForm()
       await this.requestPasswordReset(this.form)
-        .then(() => this.successHandler())
+        .then((response) => this.successHandler(response))
         .catch((error) => this.errorHandler(error))
     },
 
-    async validateForm() {
-      const valid = await this.$refs.resetForm.validate().then()
+    validateForm() {
+      const valid = this.$refs.resetForm.validate()
       this.$emit(this.events.validated, valid)
       return valid
     },
 
-    resetForm() {
+    async resetForm() {
       this.serverError = { validated: false, valid: false, field: null, code: null, message: null }
-      this.form.email = null
-      this.$nextTick(() => this.$refs.resetForm?.reset())
-    },
-
-    checkServerState(field) {
-      return this.serverError.validated
-        ? field === this.serverError.field
-          ? this.serverError.valid
-          : null
-        : null
+      this.$refs.resetForm?.reset()
+      await this.$nextTick()
+      this.$emit(this.events.resetted)
     },
   },
 }

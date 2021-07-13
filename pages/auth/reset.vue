@@ -1,26 +1,28 @@
 <template>
-  <b-card v-if="!serverSuccess" class="p-4 shadow">
+  <b-card v-if="shouldShowBoxState" class="px-3 shadow">
+    <box-state :state="boxState.success ? 'success' : 'error'" :title="boxState.title" :body="boxState.body">
+    </box-state>
+  </b-card>
+
+  <b-card v-else class="p-4 shadow">
     <b-card-title class="pt-3"> {{ ui.title }} </b-card-title>
+
     <b-card-sub-title class="py-3 text-secondary"> {{ ui.subtitle }} </b-card-sub-title>
+
     <div class="py-3">
-      <users-reset-form @reset-submitted="onSubmitted"></users-reset-form>
+      <users-reset-form
+        @reset-submitted="onFormSubmitted"
+        @reset-resetted="onFormResetted"
+      ></users-reset-form>
     </div>
+
     <div class="pb-3">
-      <action-button preset="bv-continue" variant="primary" block @click="onSubmit"></action-button>
+      <action-button preset="bv-continue" variant="primary" block @click="onFormSubmit"></action-button>
     </div>
+
     <div class="pb-3 text-center">
       <action-link :text="ui.back" :link="links.signin"></action-link>
     </div>
-  </b-card>
-
-  <b-card v-else class="px-3 shadow">
-    <box-state :title="ui.successTitle" :body="ui.successSubtitle" btn-hide success>
-      <template #icon>
-        <b-avatar size="3rem" variant="light" rounded>
-          <icon :icon="['fad', 'check-double']" class="text-success"></icon>
-        </b-avatar>
-      </template>
-    </box-state>
   </b-card>
 </template>
 
@@ -32,14 +34,6 @@ export default {
 
   data() {
     return {
-      links: { signin: this.localePath('/signin') },
-      ui: {
-        title: this.$t('modules.users.resetTitle'),
-        subtitle: this.$t('modules.users.resetSubtitle'),
-        back: this.$t('general.returnSignIn'),
-        successTitle: this.$t('modules.users.resetSuccessTitle'),
-        successSubtitle: this.$t('modules.users.resetSuccessSubtitle'),
-      },
       events: {
         validate: 'reset-validate',
         validated: 'reset-validated',
@@ -48,16 +42,53 @@ export default {
         reset: 'reset-reset',
         resetted: 'reset-resetted',
       },
-      serverSuccess: false,
+      ui: {
+        title: this.$t('modules.users.resetTitle'),
+        subtitle: this.$t('modules.users.resetSubtitle'),
+        back: this.$t('general.returnSignIn'),
+      },
+      links: { signin: this.localePath('/signin') },
+      boxState: { success: false, title: null, body: null, actionLink: null, actionText: null },
+      serverError: { validated: false, valid: false, field: null, code: null, message: null },
     }
   },
 
+  computed: {
+    shouldShowBoxState() {
+      return this.serverError.validated && !this.serverError.field
+    },
+  },
+
   methods: {
-    onSubmitted(result) {
-      this.serverSuccess = result
+    errorHandler(error) {
+      this.boxState = { ...this.boxState, success: false }
+      this.serverError = error
+
+      // determine form/page error
+      this.boxState = { ...this.boxState, title: this.$t('general.error5xx') }
     },
 
-    onSubmit() {
+    successHandler(response) {
+      this.boxState = {
+        ...this.boxState,
+        success: true,
+        title: this.$t('modules.users.resetSuccessTitle'),
+        body: this.$t('modules.users.resetSuccessSubtitle'),
+      }
+      this.serverError = { ...this.serverError, validated: true, success: true }
+    },
+
+    onFormSubmitted(success, error, response) {
+      success ? this.successHandler(response) : this.errorHandler(error)
+    },
+
+    async onFormResetted() {
+      this.boxState = { success: false, title: null, body: null, actionLink: null, actionText: null }
+      this.serverError = { validated: false, valid: false, field: null, code: null, message: null }
+      await this.$nextTick()
+    },
+
+    onFormSubmit() {
       this.$nuxt.$emit(this.events.submit)
     },
   },
