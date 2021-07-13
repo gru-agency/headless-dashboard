@@ -10,6 +10,7 @@
           :class="size"
           class="input-inset right"
           tooltip
+          trim
           @click="onPasswordToggle()"
         >
           {{ passwordRevealable ? password.hideText : password.showText }}
@@ -17,7 +18,7 @@
         <b-form-input
           id="new-password"
           v-model="form.newPassword"
-          :state="$vee.checkState(vp) && checkServerState('password')"
+          :state="$utils.evaluateState($vee.state(vp), $val.state(serverError, 'password'))"
           autocomplete="new-password"
           :type="password.type"
           :size="size"
@@ -26,8 +27,7 @@
           @focus="password.focus = true"
         ></b-form-input>
         <b-form-invalid-feedback>
-          <span v-if="hasClientError(vp)"> <icon preset="bv-error"></icon> {{ vp.errors[0] }} </span>
-          <span v-if="hasServerError()"> <icon preset="bv-error"></icon> {{ serverError.message }} </span>
+          <span><icon preset="bv-error"></icon> {{ $vee.error(vp) || $val.error(serverError) }}</span>
         </b-form-invalid-feedback>
         <b-form-text v-if="passwordHintVisible"> {{ password.hint }} </b-form-text>
       </b-form-group>
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'NewPasswordForm',
@@ -68,12 +68,6 @@ export default {
   },
 
   computed: {
-    ...mapState('auth', ['currentUser']),
-
-    getCurrentUser() {
-      return this.currentUser
-    },
-
     /** [START] password-related methods */
     passwordRevealable() {
       return this.password.type === 'text'
@@ -111,13 +105,14 @@ export default {
         message: error.message,
       }
 
-      // determine field error
+      // determine field error and propagate to parent if non-field error
       if (error.code === 'auth/weak-password') {
         this.serverError = {
           ...this.serverError,
           field: 'password',
           message: this.$t('validation.passwordInvalid'),
         }
+        return
       }
       this.$emit(this.events.submitted, false, this.serverError)
     },
@@ -150,30 +145,10 @@ export default {
       this.$emit(this.events.resetted)
     },
 
-    checkServerState(field) {
-      return this.serverError.validated
-        ? field === this.serverError.field
-          ? this.serverError.valid
-          : null
-        : null
-    },
-
-    /** [START] validation-related methods */
-    hasClientError(vp) {
-      const error = vp.errors.length > 0
-      this.clientError = error
-      return error
-    },
-
-    hasServerError() {
-      return this.serverError.validated
-    },
-
     onFormStateChanged(states) {
       this.formState = states
       if (states.validated) this.$emit(this.events.validated, !states.invalid)
     },
-    /** [END] validation-related methods */
 
     /** [START] password-related methods */
     onPasswordToggle() {
