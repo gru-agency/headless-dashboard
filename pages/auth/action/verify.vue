@@ -59,7 +59,7 @@ export default {
       this.serverError = {
         ...this.serverError,
         validated: true,
-        success: false,
+        valid: false,
         code: error.code,
         message: error.message,
       }
@@ -97,20 +97,13 @@ export default {
         actionLink: this.localePath('/dashboard'),
         actionText: this.$t('general.continueDashboard'),
       }
-      this.serverError = { ...this.serverError, validated: true, success: true }
+      this.serverError = { ...this.serverError, validated: true, valid: true }
     },
 
     async submitForm() {
-      this.resetForm()
       await this.confirmEmail({ code: this.$route.query.oobCode })
         .then((response) => this.successHandler(response))
         .catch((error) => this.errorHandler(error))
-    },
-
-    async resetForm() {
-      this.boxState = { success: false, title: null, body: null, actionLink: null, actionText: null }
-      this.serverError = { validated: false, valid: false, field: null, code: null, message: null }
-      await this.$nextTick()
     },
   },
 }

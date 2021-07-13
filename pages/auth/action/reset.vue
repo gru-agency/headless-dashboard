@@ -1,5 +1,5 @@
 <template>
-  <b-card v-if="serverError.validated" class="px-3 shadow">
+  <b-card v-if="shouldShowBoxState" class="px-3 shadow">
     <box-state :state="boxState.success ? 'success' : 'error'" :title="boxState.title" :body="boxState.body">
       <template #body>
         <b-card-text
@@ -23,7 +23,7 @@
     </box-state>
   </b-card>
 
-  <b-card v-else class="px-3 shadow">
+  <b-card v-else class="p-4 shadow">
     <b-card-title class="pt-3"> {{ ui.title }} </b-card-title>
 
     <div class="py-3">
@@ -31,7 +31,6 @@
         size="lg"
         @password-validated="onFormValidated"
         @password-submitted="onFormSubmitted"
-        @password-resetted="onFormResetted"
       ></users-new-password-form>
     </div>
 
@@ -69,17 +68,16 @@ export default {
     }
   },
 
+  computed: {
+    shouldShowBoxState() {
+      return this.serverError.validated && !this.serverError.field
+    },
+  },
+
   methods: {
     errorHandler(error) {
       this.boxState = { ...this.boxState, success: false }
-
-      this.serverError = {
-        ...this.serverError,
-        validated: true,
-        success: false,
-        code: error.code,
-        message: error.message,
-      }
+      this.serverError = error
 
       // determine form/page error
       if (['auth/expired-action-code', 'auth/invalid-action-code'].includes(error.code)) {
@@ -114,7 +112,6 @@ export default {
         actionLink: this.localePath('/dashboard'),
         actionText: this.$t('general.continueDashboard'),
       }
-      this.serverError = { ...this.serverError, validated: true, success: true }
     },
 
     onFormSubmitted(success, error, response) {
@@ -123,12 +120,6 @@ export default {
 
     onFormValidated(valid) {
       this.buttonDisabled = !valid
-    },
-
-    async onFormResetted() {
-      this.boxState = { success: false, title: null, body: null, actionLink: null, actionText: null }
-      this.serverError = { validated: false, valid: false, field: null, code: null, message: null }
-      await this.$nextTick()
     },
 
     onFormSubmit() {

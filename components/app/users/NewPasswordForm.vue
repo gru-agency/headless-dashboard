@@ -2,7 +2,7 @@
   <validation-observer ref="newPasswordForm" v-slot="vo" tag="form">
     <vee-broadcaster :states="vo" @states="onFormStateChanged"></vee-broadcaster>
 
-    <validation-provider v-slot="vp" :name="ui.newPassword" slim mode="aggressive" rules="min:10|max:128">
+    <validation-provider v-slot="vp" :name="ui.newPassword" slim mode="aggressive" rules="hint_pw:10|max:128">
       <b-form-group :label="ui.newPassword" label-for="new-password" class="position-relative">
         <tips-field
           v-if="form.newPassword"
@@ -29,7 +29,6 @@
         <b-form-invalid-feedback>
           <span><icon preset="bv-error"></icon> {{ $vee.error(vp) || $val.error(serverError) }}</span>
         </b-form-invalid-feedback>
-        <b-form-text v-if="passwordHintVisible"> {{ password.hint }} </b-form-text>
       </b-form-group>
     </validation-provider>
   </validation-observer>
@@ -57,13 +56,11 @@ export default {
       password: {
         type: 'password',
         focus: false,
-        hint: this.$t('validation.passwordHint'),
         hideText: this.$t('general.hidePassword'),
         showText: this.$t('general.showPassword'),
       },
       form: { code: this.$route.query.oobCode, newPassword: null },
       serverError: { validated: false, valid: false, field: null, code: null, message: null },
-      formState: null,
     }
   },
 
@@ -71,12 +68,6 @@ export default {
     /** [START] password-related methods */
     passwordRevealable() {
       return this.password.type === 'text'
-    },
-
-    passwordHintVisible() {
-      // Note: Hint should show on initial focus. So long there is an input,
-      // the validator will take over the responsibility
-      return this.password.focus && !this.form.newPassword
     },
     /** [END] password-related methods */
   },
@@ -100,25 +91,27 @@ export default {
       this.serverError = {
         ...this.serverError,
         validated: true,
-        success: false,
+        valid: false,
         code: error.code,
         message: error.message,
       }
 
-      // determine field error and propagate to parent if non-field error
+      // determine field error and propagate non-field error to parent
       if (error.code === 'auth/weak-password') {
         this.serverError = {
           ...this.serverError,
           field: 'password',
           message: this.$t('validation.passwordInvalid'),
         }
-        return
       }
-      this.$emit(this.events.submitted, false, this.serverError)
+
+      if (!this.serverError.field) {
+        this.$emit(this.events.submitted, false, this.serverError)
+      }
     },
 
     successHandler(response) {
-      this.serverError = { ...this.serverError, validated: true, success: true }
+      this.serverError = { ...this.serverError, validated: true, valid: true }
       this.$emit(this.events.submitted, true, null, response)
     },
 
@@ -126,7 +119,6 @@ export default {
       const valid = this.validateForm()
       if (!valid) return
 
-      this.resetForm()
       await this.confirmPasswordReset(this.form)
         .then((response) => this.successHandler(response))
         .catch((error) => this.errorHandler(error))
@@ -138,15 +130,7 @@ export default {
       return valid
     },
 
-    async resetForm() {
-      this.serverError = { validated: false, valid: false, field: null, code: null, message: null }
-      this.$refs.newPasswordForm?.reset()
-      await this.$nextTick()
-      this.$emit(this.events.resetted)
-    },
-
     onFormStateChanged(states) {
-      this.formState = states
       if (states.validated) this.$emit(this.events.validated, !states.invalid)
     },
 

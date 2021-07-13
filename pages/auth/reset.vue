@@ -10,10 +10,7 @@
     <b-card-sub-title class="py-3 text-secondary"> {{ ui.subtitle }} </b-card-sub-title>
 
     <div class="py-3">
-      <users-reset-form
-        @reset-submitted="onFormSubmitted"
-        @reset-resetted="onFormResetted"
-      ></users-reset-form>
+      <users-reset-form @reset-submitted="onFormSubmitted"></users-reset-form>
     </div>
 
     <div class="pb-3">
@@ -75,17 +72,10 @@ export default {
         title: this.$t('modules.users.resetSuccessTitle'),
         body: this.$t('modules.users.resetSuccessSubtitle'),
       }
-      this.serverError = { ...this.serverError, validated: true, success: true }
     },
 
     onFormSubmitted(success, error, response) {
       success ? this.successHandler(response) : this.errorHandler(error)
-    },
-
-    async onFormResetted() {
-      this.boxState = { success: false, title: null, body: null, actionLink: null, actionText: null }
-      this.serverError = { validated: false, valid: false, field: null, code: null, message: null }
-      await this.$nextTick()
     },
 
     onFormSubmit() {

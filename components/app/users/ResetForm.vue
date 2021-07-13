@@ -60,12 +60,12 @@ export default {
       this.serverError = {
         ...this.serverError,
         validated: true,
-        success: false,
+        valid: false,
         code: error.code,
         message: error.message,
       }
 
-      // determine field error
+      // determine field error and propagate non-field error to parent
       // Note: 'auth/user-not-found' intentionally put a different meesage
       // to obfuscate the fact in order to prevent malicious attempts
       if (['auth/invalid-email', 'auth/user-not-found'].includes(error.code)) {
@@ -74,13 +74,15 @@ export default {
           field: 'email',
           message: this.$t('validation.emailInvalid'),
         }
-        return
       }
-      this.$emit(this.events.submitted, false, this.serverError)
+
+      if (!this.serverError.field) {
+        this.$emit(this.events.submitted, false, this.serverError)
+      }
     },
 
     successHandler(response) {
-      this.serverError = { ...this.serverError, validated: true, success: true }
+      this.serverError = { ...this.serverError, validated: true, valid: true }
       this.$emit(this.events.submitted, true, null, response)
     },
 
@@ -88,7 +90,6 @@ export default {
       const valid = this.validateForm()
       if (!valid) return
 
-      this.resetForm()
       await this.requestPasswordReset(this.form)
         .then((response) => this.successHandler(response))
         .catch((error) => this.errorHandler(error))
@@ -98,13 +99,6 @@ export default {
       const valid = this.$refs.resetForm.validate()
       this.$emit(this.events.validated, valid)
       return valid
-    },
-
-    async resetForm() {
-      this.serverError = { validated: false, valid: false, field: null, code: null, message: null }
-      this.$refs.resetForm?.reset()
-      await this.$nextTick()
-      this.$emit(this.events.resetted)
     },
   },
 }

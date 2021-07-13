@@ -178,7 +178,7 @@ export default {
     },
 
     successHandler(response) {
-      this.serverError = { validated: true, valid: true }
+      this.serverError = { ...this.serverError, validated: true, valid: true }
       this.$emit(this.events.submitted, true, null, response)
     },
 
