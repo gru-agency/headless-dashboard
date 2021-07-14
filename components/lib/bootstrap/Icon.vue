@@ -45,6 +45,7 @@ export default {
         'bv-error': { icon: ['fad', 'exclamation-triangle'] },
         'bv-success': { icon: ['fad', 'check-double'] },
         'bv-loading': { icon: ['fad', 'spinner'] },
+        'bv-person': { icon: ['fad', 'user-alt'] },
       },
     }
   },
