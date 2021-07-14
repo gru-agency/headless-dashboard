@@ -12,11 +12,9 @@
         <b-navbar toggleable="lg" type="light" class="navbar-h border-bottom">
           <b-navbar-toggle target="sidebar"></b-navbar-toggle>
 
-          <b-list-group horizontal class="navbar-nav ml-auto">
-            <b-list-group-item class="border-0"> Document </b-list-group-item>
-            <b-list-group-item class="border-0"> Feedback </b-list-group-item>
-            <b-list-group-item class="border-0"> User </b-list-group-item>
-          </b-list-group>
+          <b-navbar-nav class="ml-auto px-5">
+            <users-info-menu></users-info-menu>
+          </b-navbar-nav>
         </b-navbar>
 
         <b-container fluid>

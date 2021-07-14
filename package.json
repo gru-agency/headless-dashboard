@@ -48,6 +48,7 @@
     "firebase": "^8.7.0",
     "husky": "^7.0.0",
     "lint-staged": "^11.0.0",
+    "nanoid": "^3.1.23",
     "nuxt-i18n": "^6.27.2",
     "obit-fa-pro-duotone": "5.15.3",
     "obit-fa-pro-light": "^5.15.3",

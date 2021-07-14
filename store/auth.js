@@ -2,18 +2,18 @@ import * as consola from 'consola'
 import { Timestamp } from '~/plugins/firebase'
 
 const state = () => ({
-  currentUser: null,
+  authUser: null,
 })
 
 const getters = {
-  authenticated: () => !!state.currentUser,
+  authenticated: () => !!state.authUser,
 }
 
 const mutations = {
   SET: (state, { authUser }) => {
     if (authUser) {
       const { uid, email, emailVerified, phoneNumber, metadata } = authUser
-      state.currentUser = {
+      state.authUser = {
         email,
         emailVerified,
         phoneNumber,
@@ -22,11 +22,11 @@ const mutations = {
         lastSignIn: metadata?.lastSignInTime,
       }
     } else {
-      state.currentUser = null
+      state.authUser = null
     }
   },
 
-  UNSET_USER: (state) => (state.currentUser = null),
+  UNSET: (state) => (state.authUser = null),
 }
 
 const actions = {
@@ -45,11 +45,11 @@ const actions = {
       if (this.app.context.isDev) consola.info('registerWithEmailAndPassword | user', user)
       commit('SET', { authUser: user })
 
-      const { created, lastSignIn } = state.currentUser
+      const { created, lastSignIn } = state.authUser
       await dispatch(
         'user/add',
         {
-          ...state.currentUser,
+          ...state.authUser,
           created: Timestamp.fromMillis(Date.parse(created)),
           lastSignIn: Timestamp.fromMillis(Date.parse(lastSignIn)),
           displayName: name,
@@ -60,7 +60,7 @@ const actions = {
       await dispatch('requestEmailVerification')
 
       if (this.app.context.isDev) consola.info('registerWithEmailAndPassword', 'Successful')
-      return new Promise((resolve, reject) => resolve(state.currentUser))
+      return new Promise((resolve, reject) => resolve(state.authUser))
     } catch (error) {
       if (this.app.context.isDev) consola.error('registerWithEmailAndPassword | error', error)
       return new Promise((resolve, reject) => reject(error))
@@ -86,17 +86,14 @@ const actions = {
   },
 
   async signOut({ commit }) {
-    await this.$fire.auth
-      .signOut()
-      .then(() => {
-        commit('SET', null)
-        if (this.app.context.isDev) consola.info('signOut', 'Successful')
-        return new Promise((resolve, reject) => resolve())
-      })
-      .catch((error) => {
-        if (this.app.context.isDev) consola.error('signOut | error', error)
-        return new Promise((resolve, reject) => reject(error))
-      })
+    try {
+      await this.$fire.auth.signOut()
+      commit('UNSET')
+      if (this.app.context.isDev) consola.info('auth | signOut', 'successful')
+    } catch (error) {
+      if (this.app.context.isDev) consola.error('auth | signOut | error', error)
+      return error
+    }
   },
 
   async reauthenticateWithCredential({ commit }, { email, password }) {

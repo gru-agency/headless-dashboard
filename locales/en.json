@@ -1,5 +1,6 @@
 {
   "general": {
+    "administrator": "Administrator",
     "cancel": "Cancel",
     "contact": "Contact",
     "continue": "Continue",
@@ -20,6 +21,7 @@
     "password": "Password",
     "privacy": "Privacy",
     "privacyPolicy": "Privacy Policy",
+    "profile": "Profile",
     "refresh": "Refresh",
     "required": "Required",
     "returnHome": "Return to home",
@@ -28,6 +30,7 @@
     "saveAndMore": "Save and more",
     "showPassword": "Show password",
     "signin": "Sign in",
+    "signout": "Sign out",
     "success": "Success",
     "supportText": "Write and describe your issue to us at ",
     "terms": "Terms"

@@ -30,6 +30,7 @@ export default {
         'bv-info': { icon: ['fas', 'info-square'] },
         'bv-eye': { icon: ['fad', 'eye'] },
         'bv-eye-slash': { icon: ['fad', 'eye-slash'] },
+        'bv-person': { icon: ['fad', 'user-alt'] },
       },
     }
   },

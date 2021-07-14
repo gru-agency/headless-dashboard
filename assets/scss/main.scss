@@ -12,6 +12,26 @@
 // remove unwanted maps
 $form-validation-states: map-remove($form-validation-states, 'valid');
 
+// more spacing options
+$spacers: map-remove($spacers, '3');
+$spacers: map-remove($spacers, '4');
+$spacers: map-remove($spacers, '5');
+
+$custom-spacers: (
+  '3': ($spacer * .75),
+  '4': ($spacer * 1),
+  '5': ($spacer * 1.25),
+  '6': ($spacer * 1.5),
+  '7': ($spacer * 1.75),
+  '8': ($spacer * 2),
+  '9': ($spacer * 2.25),
+  '10': ($spacer * 2.5),
+  '11': ($spacer * 2.75),
+  '12': ($spacer * 3),
+);
+
+$spacers: map-merge($spacers, $custom-spacers);
+
 // optional
 @import '~bootstrap/scss/root';
 @import '~bootstrap/scss/reboot';
@@ -132,6 +152,10 @@ label {
 
 .z-tooltip {
   z-index: 1070;
+}
+
+.z-alert {
+  z-index: 1080;
 }
 
 .-z-1 {
