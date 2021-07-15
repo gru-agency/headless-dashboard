@@ -31,6 +31,7 @@
     "showPassword": "Show password",
     "signin": "Sign in",
     "signout": "Sign out",
+    "signup": "Sign up",
     "success": "Success",
     "supportText": "Write and describe your issue to us at ",
     "terms": "Terms"
@@ -53,6 +54,10 @@
       "registerConsent": "Get email from {_brand} about product updates, industry news and events. If you change your mind, you can unsubscribe any time.",
       "registerBack": "Have an account?",
       "registerButton": "Create account",
+      "signInBack":"Don't have an account?",
+      "signInTitle": "Sign in to your account",
+      "signInForgotPassword": "Forgot your password?",
+      "signInPersist": "Stay signed in",
       "verifyEmailLinkInvalid": "This verify email link has expired",
       "verifyEmailRetry": "Try verify your email again",
       "verifyEmailSuccess": "You've successfully verified your email"
@@ -70,6 +75,7 @@
     "accountNotFound": "Account not found",
     "accountSuspended": "Your account has been suspended",
     "emailInvalid": "The @:general.email field must be a valid email",
+    "emailPasswordWrong": "Incorrect email or password",
     "passwordInvalid": "The @:general.password field must be at least 10 characters",
     "passwordHint": "Your password needs to be at least 10 characters, include multiple words and phrases to make it more secure."
   }
