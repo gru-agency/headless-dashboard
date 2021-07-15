@@ -1,5 +1,5 @@
 <template>
-  <b-card v-if="showError" class="px-4 shadow">
+  <b-card v-if="showError" class="p-12 shadow">
     <box-state state="error" :title="boxState.title" :body="boxState.body">
       <template #body>
         <b-card-text v-if="server.code === 'auth/user-disabled'" class="text-secondary">
@@ -11,7 +11,7 @@
     </box-state>
   </b-card>
 
-  <b-card v-else class="p-8 shadow">
+  <b-card v-else class="p-12 shadow">
     <b-card-title> {{ ui.title }} </b-card-title>
 
     <div class="py-4">

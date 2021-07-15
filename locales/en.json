@@ -72,7 +72,7 @@
 
   "validation": {
     "accountExists": "An account already exists with this email address. If you'd like to create a new {_brand} account with the same email address, ",
-    "accountNotFound": "Account not found",
+    "accountNotFound": "We couldn't find that email. Please try again.",
     "accountSuspended": "Your account has been suspended",
     "emailInvalid": "The @:general.email field must be a valid email",
     "emailPasswordWrong": "Incorrect email or password",

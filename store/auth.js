@@ -48,7 +48,8 @@ const actions = {
       commit('SET', { authUser: user })
 
       // keep a copy of user in firestore optimistically
-      await dispatch('user/add', { ...state.authUser, displayName: name, emailConsent }, { root: true })
+      const payload = { ...state.authUser, displayName: name, emailConsent }
+      await dispatch('user/add', { payload }, { root: true })
 
       // automatically send email verification upon successful registration
       // though can be requested manually at later time
@@ -58,10 +59,10 @@ const actions = {
     } catch (error) {
       // auth/email-already-in-use
       // auth/invalid-email
-      // auth/operation-not-allowed (email/password accounts are not enabled)
+      // auth/operation-not-allowed (email/password accounts are not enabled) -- log
       // auth/weak-password
       if (isDev) consola.error('auth | registerWithEmailAndPassword | error', error)
-      return error
+      throw error
     }
   },
 
@@ -93,7 +94,7 @@ const actions = {
       if (isDev) consola.info('auth | signOut', 'successful')
     } catch (error) {
       if (isDev) consola.error('auth | signOut | error', error)
-      return error
+      throw error
     }
   },
 
@@ -112,7 +113,7 @@ const actions = {
       // auth/invalid-verification-code (for phone auth)
       // auth/invalid-verification-id (for phone auth)
       if (isDev) consola.error('auth | reauthenticateWithCredential | error', error)
-      return error
+      throw error
     }
   },
 
@@ -125,7 +126,7 @@ const actions = {
       // auth/weak-password (less than 6 chars)
       // auth/requires-recent-login
       if (isDev) consola.error('auth | updatePassword | error', error)
-      return error
+      throw error
     }
   },
 
@@ -137,7 +138,7 @@ const actions = {
       if (isDev) consola.info('auth | requestEmailVerification', 'successful')
     } catch (error) {
       if (isDev) consola.error('auth | requestEmailVerification | error', error)
-      return error
+      throw error
     }
   },
 
@@ -151,9 +152,9 @@ const actions = {
       // auth/expired-action-code
       // auth/invalid-action-code
       // auth/user-disabled
-      // auth/user-not-found
+      // auth/user-not-found -- log
       if (isDev) consola.error('auth | confirmEmail | error', error)
-      return error
+      throw error
     }
   },
 
@@ -167,7 +168,7 @@ const actions = {
       // auth/invalid-email
       // auth/user-not-found
       if (isDev) consola.error('auth | requestPasswordReset | error', error)
-      return error
+      throw error
     }
   },
 
@@ -180,10 +181,10 @@ const actions = {
       // auth/expired-action-code
       // auth/invalid-action-code
       // auth/user-disabled
-      // auth/user-not-found
+      // auth/user-not-found -- log
       // auth/weak-password
       if (isDev) consola.error('auth | confirmPasswordReset | error', error)
-      return error
+      throw error
     }
   },
 }

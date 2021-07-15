@@ -1,11 +1,8 @@
 <template>
-  <b-card v-if="shouldShowBoxState" class="px-3 shadow">
+  <b-card v-if="showError" class="p-12 shadow">
     <box-state :state="boxState.success ? 'success' : 'error'" :title="boxState.title" :body="boxState.body">
       <template #body>
-        <b-card-text
-          v-if="['auth/user-disabled', 'auth/user-not-found'].includes(serverError.code)"
-          class="text-secondary"
-        >
+        <b-card-text v-if="accountIssues" class="text-secondary">
           {{ boxState.body }}
           <a :href="'mailto:' + supportMail" class="text-primary">{{ supportMail }}</a>
         </b-card-text>
@@ -14,7 +11,7 @@
 
       <template #action>
         <action-button
-          v-if="['auth/expired-action-code', 'auth/invalid-action-code'].includes(serverError.code)"
+          v-if="codeIssues"
           :text="boxState.actionText"
           :link="boxState.actionLink"
           variant="primary"
@@ -23,10 +20,10 @@
     </box-state>
   </b-card>
 
-  <b-card v-else class="p-4 shadow">
-    <b-card-title class="pt-3"> {{ ui.title }} </b-card-title>
+  <b-card v-else class="p-12 shadow">
+    <b-card-title>{{ ui.title }}</b-card-title>
 
-    <div class="py-3">
+    <div class="py-4">
       <users-new-password-form
         size="lg"
         @password-validated="onFormValidated"
@@ -34,7 +31,7 @@
       ></users-new-password-form>
     </div>
 
-    <div class="pb-3">
+    <div class="pb-4">
       <action-button
         :disabled="buttonDisabled"
         preset="bv-continue"
@@ -49,6 +46,7 @@
 <script>
 export default {
   name: 'Reset',
+  layout: 'simpli',
 
   data() {
     return {
@@ -62,7 +60,7 @@ export default {
       },
       ui: { title: this.$t('modules.users.resetTitle') },
       boxState: { success: false, title: null, body: null, actionLink: null, actionText: null },
-      serverError: { validated: false, valid: false, field: null, code: null, message: null },
+      server: { validated: false, valid: false, field: null, code: null, message: null },
       buttonDisabled: true,
     }
   },
@@ -72,17 +70,26 @@ export default {
       return this.$app.supportMail
     },
 
-    shouldShowBoxState() {
-      return this.serverError.validated && !this.serverError.field
+    showError() {
+      const { validated, field } = this.server
+      return validated && !field
+    },
+
+    accountIssues() {
+      return ['auth/user-disabled', 'auth/user-not-found'].includes(this.server.code)
+    },
+
+    codeIssues() {
+      return ['auth/expired-action-code', 'auth/invalid-action-code'].includes(this.server.code)
     },
   },
 
   methods: {
     errorHandler(error) {
       this.boxState = { ...this.boxState, success: false }
-      this.serverError = error
+      this.server = error
 
-      // determine form/page error
+      // determine terminal error
       if (['auth/expired-action-code', 'auth/invalid-action-code'].includes(error.code)) {
         this.boxState = {
           ...this.boxState,
@@ -94,12 +101,6 @@ export default {
         this.boxState = {
           ...this.boxState,
           title: this.$t('validation.accountSuspended'),
-          body: this.$t('general.supportText'),
-        }
-      } else if (error.code === 'auth/user-not-found') {
-        this.boxState = {
-          ...this.boxState,
-          title: this.$t('validation.accountNotFound'),
           body: this.$t('general.supportText'),
         }
       } else {

@@ -1,20 +1,20 @@
 <template>
-  <b-card v-if="shouldShowBoxState" class="px-3 shadow">
+  <b-card v-if="showError" class="p-12 shadow">
     <box-state :state="boxState.success ? 'success' : 'error'" :title="boxState.title" :body="boxState.body">
     </box-state>
   </b-card>
 
-  <b-card v-else class="p-4 shadow">
-    <b-card-title class="pt-3"> {{ ui.title }} </b-card-title>
+  <b-card v-else class="p-12 shadow">
+    <b-card-title> {{ ui.title }} </b-card-title>
 
-    <div class="py-3">
+    <div class="py-4">
       <users-registration-form
         @register-validated="onFormValidated"
         @register-submitted="onFormSubmitted"
       ></users-registration-form>
     </div>
 
-    <div class="pb-3">
+    <div class="pb-4">
       <action-button
         :disabled="buttonDisabled"
         :text="ui.button"
@@ -24,7 +24,7 @@
       ></action-button>
     </div>
 
-    <div class="pb-3 text-center text-secondary">
+    <div class="text-center text-secondary">
       {{ ui.back }}
       <action-link :text="ui.signin" :link="links.signin" variant="primary"></action-link>
     </div>
@@ -32,11 +32,8 @@
 </template>
 
 <script>
-import consola from 'consola'
-
 export default {
   name: 'Register',
-
   layout: 'simpli',
 
   data() {
@@ -57,27 +54,24 @@ export default {
       },
       links: { signin: this.localePath('/signin'), dashboard: this.localePath('/dashboard') },
       boxState: { success: false, title: null, body: null, actionLink: null, actionText: null },
-      serverError: { validated: false, valid: false, field: null, code: null, message: null },
+      server: { validated: false, valid: false, field: null, code: null, message: null },
       buttonDisabled: true,
     }
   },
 
   computed: {
-    shouldShowBoxState() {
-      return this.serverError.validated && !this.serverError.field
+    showError() {
+      const { validated, field } = this.server
+      return validated && !field
     },
   },
 
   methods: {
     errorHandler(error) {
-      this.boxState = { ...this.boxState, success: false }
-      this.serverError = error
+      this.boxState.success = false
+      this.server = error
 
-      // determine form/page error
-      if (error.code === 'auth/operation-not-allowed') {
-        // TODO use analytis to log this developer's error
-        consola.error('errorHandler', 'Receiving dev error -> auth/operation-not-allowed')
-      }
+      // determine terminal error
       this.boxState = { ...this.boxState, title: this.$t('general.error5xx') }
     },
 

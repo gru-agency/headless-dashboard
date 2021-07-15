@@ -38,7 +38,7 @@ const actions = {
       commit('SET', { ...payload, id: docId, created: Timestamp.fromDate(new Date()) })
     } catch (error) {
       if (isDev) consola.error('user | add | error', error)
-      return error
+      throw error
     }
   },
 
@@ -60,7 +60,7 @@ const actions = {
       commit('SET', { ...payload, updated: Timestamp.fromDate(new Date()) })
     } catch (error) {
       if (isDev) consola.error('user | update | error', error)
-      return error
+      throw error
     }
   },
 
@@ -86,7 +86,7 @@ const actions = {
       return user
     } catch (error) {
       if (isDev) consola.error('user | get | error', error)
-      return error
+      throw error
     }
   },
 }

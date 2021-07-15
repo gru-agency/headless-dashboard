@@ -1,6 +1,6 @@
 <template>
   <validation-observer ref="signInForm" tag="form">
-    <validation-provider v-slot="vp" :name="ui.email" rules="required|email">
+    <validation-provider v-slot="vp" :name="ui.email" rules="">
       <b-form-group :label="ui.email" label-for="sign-email">
         <b-form-input
           id="sign-email"
@@ -18,7 +18,7 @@
       </b-form-group>
     </validation-provider>
 
-    <validation-provider v-slot="vp" :name="ui.password" slim rules="required">
+    <validation-provider v-slot="vp" :name="ui.password" slim rules="">
       <b-form-group label-for="sign-password" class="position-relative">
         <template #label>
           {{ ui.password }}
@@ -64,7 +64,7 @@
     </b-form-group>
 
     <b-form-group v-if="showError" class="mb-3">
-      <span class="text-danger">{{ server.message }}</span>
+      <span class="text-danger"><icon preset="bv-error"></icon> {{ server.message }}</span>
     </b-form-group>
   </validation-observer>
 </template>
@@ -154,9 +154,7 @@ export default {
           ...this.server,
           message: this.$t('validation.emailPasswordWrong'),
         }
-      }
-
-      if (!this.server.field) {
+      } else {
         this.$emit(this.events.submitted, false, this.server)
       }
     },
