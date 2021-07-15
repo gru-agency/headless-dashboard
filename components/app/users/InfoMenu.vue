@@ -25,7 +25,7 @@ export default {
         profile: this.$t('general.profile'),
         signout: this.$t('general.signout'),
       },
-      links: { users: this.localePath('/dashboard/users'), signin: this.localePath('/signin') },
+      links: { users: this.localePath('/dashboard/users'), login: this.localePath('/login') },
     }
   },
 
@@ -62,7 +62,7 @@ export default {
 
     async onSignOut() {
       await this.signOut()
-      this.$router.push(this.links.signin)
+      this.$router.push(this.links.login)
     },
   },
 }

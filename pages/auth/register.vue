@@ -26,7 +26,7 @@
 
     <div class="text-center text-secondary">
       {{ ui.back }}
-      <action-link :text="ui.signin" :link="links.signin" variant="primary"></action-link>
+      <action-link :text="ui.login" :link="links.login" variant="primary"></action-link>
     </div>
   </b-card>
 </template>
@@ -50,9 +50,9 @@ export default {
         title: this.$t('modules.users.registerTitle', { _brand: this.$app.brandName }),
         back: this.$t('modules.users.registerBack'),
         button: this.$t('modules.users.registerButton'),
-        signin: this.$t('general.signin'),
+        login: this.$t('general.login'),
       },
-      links: { signin: this.localePath('/signin'), dashboard: this.localePath('/dashboard') },
+      links: { login: this.localePath('/login'), dashboard: this.localePath('/dashboard') },
       boxState: { success: false, title: null, body: null, actionLink: null, actionText: null },
       server: { validated: false, valid: false, field: null, code: null, message: null },
       buttonDisabled: true,

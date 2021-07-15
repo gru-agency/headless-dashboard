@@ -18,7 +18,7 @@
     </div>
 
     <div class="text-center">
-      <action-link :text="ui.back" :link="links.signin"></action-link>
+      <action-link :text="ui.back" :link="links.login"></action-link>
     </div>
   </b-card>
 </template>
@@ -41,9 +41,9 @@ export default {
       ui: {
         title: this.$t('modules.users.resetTitle'),
         subtitle: this.$t('modules.users.resetSubtitle'),
-        back: this.$t('general.returnSignIn'),
+        back: this.$t('general.returnLogin'),
       },
-      links: { signin: this.localePath('/signin') },
+      links: { login: this.localePath('/login') },
       boxState: { success: false, title: null, body: null, actionLink: null, actionText: null },
       server: { validated: false, valid: false, field: null, code: null, message: null },
     }

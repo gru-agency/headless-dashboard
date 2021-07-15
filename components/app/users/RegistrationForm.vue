@@ -18,7 +18,7 @@
           <span>
             <icon preset="bv-error"></icon> {{ $vee.error(vp) || $val.error(server) }}
             <span v-if="accountExists">
-              <action-link :link="links.signin" :text="ui.signin" variant="primary"></action-link>.
+              <action-link :link="links.login" :text="ui.login" variant="primary"></action-link>.
             </span>
           </span>
         </b-form-invalid-feedback>
@@ -105,9 +105,9 @@ export default {
         password: this.$t('general.password'),
         consent: this.$t('modules.users.registerConsent', { _brand: this.$app.brandName }),
         privacy: this.$t('general.privacyPolicy'),
-        signin: this.$t('general.signin').toLowerCase(),
+        login: this.$t('general.login').toLowerCase(),
       },
-      links: { privacy: this.localePath('/privacy'), signin: this.localePath('/signin') },
+      links: { privacy: this.localePath('/privacy'), login: this.localePath('/login') },
       password: {
         type: 'password',
         focus: false,

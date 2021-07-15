@@ -18,7 +18,7 @@ const mutations = {
         phoneNumber,
         firebaseId: uid,
         created: metadata?.creationTime,
-        lastSignIn: metadata?.lastSignInTime,
+        lastLogin: metadata?.lastSignInTime,
       }
     } else {
       state.authUser = null
@@ -66,22 +66,22 @@ const actions = {
     }
   },
 
-  async signInWithEmailAndPassword({ commit }, { email, password, persist }) {
+  async loginWithEmailAndPassword({ commit }, { email, password, persist }) {
     const { $fire, isDev } = this.app.context
     const persistence = persist ? 'local' : 'session'
     try {
       await $fire.auth.setPersistence(persistence)
       const { user } = await $fire.auth.signInWithEmailAndPassword(email, password)
-      if (isDev) consola.info('auth | signInWithEmailAndPassword | authUser', user)
+      if (isDev) consola.info('auth | loginWithEmailAndPassword | authUser', user)
       commit('SET', { authUser: user })
 
-      if (isDev) consola.info('auth | signInWithEmailAndPassword', 'successful')
+      if (isDev) consola.info('auth | loginWithEmailAndPassword', 'successful')
     } catch (error) {
       // auth/invalid-email
       // auth/user-disabled
       // auth/user-not-found
       // auth/wrong-password
-      if (isDev) consola.error('auth | signInWithEmailAndPassword | error', error)
+      if (isDev) consola.error('auth | loginWithEmailAndPassword | error', error)
       throw error
     }
   },

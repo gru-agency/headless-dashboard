@@ -101,7 +101,7 @@
       <div class="mt-4">
         <b-list-group horizontal>
           <b-list-group-item to="/en/playground">Playground</b-list-group-item>
-          <b-list-group-item to="/en/signin">Login</b-list-group-item>
+          <b-list-group-item to="/en/login">Login</b-list-group-item>
           <b-list-group-item to="/en/dashboard">Dashboard</b-list-group-item>
         </b-list-group>
       </div>

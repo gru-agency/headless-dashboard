@@ -1,5 +1,5 @@
 <template>
-  <validation-observer ref="signInForm" tag="form">
+  <validation-observer ref="loginForm" tag="form">
     <validation-provider v-slot="vp" :name="ui.email" rules="">
       <b-form-group :label="ui.email" label-for="sign-email">
         <b-form-input
@@ -73,23 +73,23 @@
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  name: 'SignInForm',
+  name: 'LoginForm',
 
   data() {
     return {
       events: {
-        validate: 'signin-validate',
-        validated: 'signin-validated',
-        submit: 'signin-submit',
-        submitted: 'signin-submitted',
-        reset: 'signin-reset',
-        resetted: 'signin-resetted',
+        validate: 'login-validate',
+        validated: 'login-validated',
+        submit: 'login-submit',
+        submitted: 'login-submitted',
+        reset: 'login-reset',
+        resetted: 'login-resetted',
       },
       ui: {
         email: this.$t('general.email'),
         password: this.$t('general.password'),
-        forgot: this.$t('modules.users.signInForgotPassword'),
-        remember: this.$t('modules.users.signInPersist'),
+        forgot: this.$t('modules.users.loginForgotPassword'),
+        remember: this.$t('modules.users.loginPersist'),
       },
       links: { reset: this.localePath('/reset') },
       password: {
@@ -131,7 +131,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('auth', ['signInWithEmailAndPassword']),
+    ...mapActions('auth', ['loginWithEmailAndPassword']),
 
     errorHandler(error) {
       this.server = {
@@ -149,7 +149,7 @@ export default {
           field: 'email',
           message: this.$t('validation.emailInvalid'),
         }
-      } else if (['auth/user-not-found', 'auth/wrong-password'].includes(error.code)) {
+      } else if (['auth/user-not-found', 'auth/wrong-password', 'auth/argument-error'].includes(error.code)) {
         this.server = {
           ...this.server,
           message: this.$t('validation.emailPasswordWrong'),
@@ -170,21 +170,21 @@ export default {
       if (!valid) return
 
       this.resetFormState()
-      this.signInWithEmailAndPassword(this.form).then(
+      this.loginWithEmailAndPassword(this.form).then(
         (response) => this.successHandler(response),
         (error) => this.errorHandler(error)
       )
     },
 
     validateForm() {
-      const valid = this.$refs.signInForm.validate()
+      const valid = this.$refs.loginForm.validate()
       this.$emit(this.events.validated, valid)
       return valid
     },
 
     async resetForm() {
       this.resetFormState()
-      this.$refs.signInForm?.reset()
+      this.$refs.loginForm?.reset()
       await this.$nextTick()
       this.$emit(this.events.resetted)
     },
