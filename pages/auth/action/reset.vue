@@ -7,7 +7,7 @@
           class="text-secondary"
         >
           {{ boxState.body }}
-          <a :href="'mailto:' + links.supportMail" class="text-primary">{{ links.supportMail }}</a>
+          <a :href="'mailto:' + supportMail" class="text-primary">{{ supportMail }}</a>
         </b-card-text>
         <b-card-text v-else class="text-secondary">{{ boxState.body }}</b-card-text>
       </template>
@@ -61,7 +61,6 @@ export default {
         resetted: 'password-resetted',
       },
       ui: { title: this.$t('modules.users.resetTitle') },
-      links: { supportMail: this.$app.supportMail },
       boxState: { success: false, title: null, body: null, actionLink: null, actionText: null },
       serverError: { validated: false, valid: false, field: null, code: null, message: null },
       buttonDisabled: true,
@@ -69,6 +68,10 @@ export default {
   },
 
   computed: {
+    supportMail() {
+      return this.$app.supportMail
+    },
+
     shouldShowBoxState() {
       return this.serverError.validated && !this.serverError.field
     },

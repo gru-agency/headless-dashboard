@@ -10,7 +10,6 @@
           :class="size"
           class="input-inset right"
           tooltip
-          trim
           @click="onPasswordToggle()"
         >
           {{ passwordRevealable ? password.hideText : password.showText }}

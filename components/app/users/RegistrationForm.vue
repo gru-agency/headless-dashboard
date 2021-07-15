@@ -48,7 +48,6 @@
           :preset="passwordRevealable ? 'bv-eye-slash' : 'bv-eye'"
           class="input-inset right lg"
           tooltip
-          trim
           @click="onPasswordToggle()"
         >
           {{ passwordRevealable ? password.hideText : password.showText }}
