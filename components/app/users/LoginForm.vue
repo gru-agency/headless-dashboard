@@ -1,26 +1,52 @@
 <template>
-  <validation-observer ref="newPasswordForm" v-slot="vo" tag="form">
-    <vee-broadcaster :states="vo" @states="onFormStateChanged"></vee-broadcaster>
+  <validation-observer ref="loginForm" tag="form">
+    <validation-provider v-slot="vp" :name="ui.email" rules="">
+      <b-form-group :label="ui.email" label-for="sign-email">
+        <b-form-input
+          id="sign-email"
+          v-model="form.email"
+          :state="$utils.evaluateState($vee.state(vp), $val.state(server, 'email'))"
+          autocomplete="email"
+          type="email"
+          size="lg"
+          trim
+          autofocus
+        ></b-form-input>
+        <b-form-invalid-feedback>
+          <span> <icon preset="bv-error"></icon> {{ $vee.error(vp) || $val.error(server) }} </span>
+        </b-form-invalid-feedback>
+      </b-form-group>
+    </validation-provider>
 
-    <validation-provider v-slot="vp" :name="ui.newPassword" slim mode="aggressive" rules="hint_pw:10|max:128">
-      <b-form-group :label="ui.newPassword" label-for="new-password" class="position-relative">
+    <validation-provider v-slot="vp" :name="ui.password" slim rules="">
+      <b-form-group label-for="sign-password" class="position-relative">
+        <template #label>
+          {{ ui.password }}
+          <action-link
+            :text="ui.forgot"
+            :link="links.reset"
+            variant="primary"
+            class="float-right"
+          ></action-link>
+        </template>
+
         <tips-field
-          v-if="form.newPassword"
+          v-if="form.password"
           :preset="passwordRevealable ? 'bv-eye-slash' : 'bv-eye'"
-          :class="size"
-          class="input-inset right"
+          class="input-inset right lg"
           tooltip
           @click="onPasswordToggle()"
         >
           {{ passwordRevealable ? password.hideText : password.showText }}
         </tips-field>
+
         <b-form-input
-          id="new-password"
-          v-model="form.newPassword"
+          id="sign-password"
+          v-model="form.password"
           :state="$utils.evaluateState($vee.state(vp), $val.state(server, 'password'))"
-          autocomplete="new-password"
+          autocomplete="current-password"
           :type="password.type"
-          :size="size"
+          size="lg"
           trim
           @blur="password.focus = false"
           @focus="password.focus = true"
@@ -31,6 +57,12 @@
       </b-form-group>
     </validation-provider>
 
+    <b-form-group label-for="sign-remember" class="small text-secondary">
+      <b-form-checkbox id="sign-remember" v-model="form.persist" size="sm">
+        {{ ui.remember }}
+      </b-form-checkbox>
+    </b-form-group>
+
     <b-form-group v-if="showError" class="mb-3">
       <span class="text-danger"><icon preset="bv-error"></icon> {{ server.message }}</span>
     </b-form-group>
@@ -38,36 +70,42 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  name: 'NewPasswordForm',
-
-  props: { size: { type: String, default: undefined } },
+  name: 'LoginForm',
 
   data() {
     return {
       events: {
-        validate: 'password-validate',
-        validated: 'password-validated',
-        submit: 'password-submit',
-        submitted: 'password-submitted',
-        reset: 'password-reset',
-        resetted: 'password-resetted',
+        validate: 'login-validate',
+        validated: 'login-validated',
+        submit: 'login-submit',
+        submitted: 'login-submitted',
+        reset: 'login-reset',
+        resetted: 'login-resetted',
       },
-      ui: { newPassword: this.$t('general.newPassword') },
+      ui: {
+        email: this.$t('general.email'),
+        password: this.$t('general.password'),
+        forgot: this.$t('modules.users.loginForgotPassword'),
+        remember: this.$t('modules.users.loginPersist'),
+      },
+      links: { reset: this.localePath('/reset') },
       password: {
         type: 'password',
         focus: false,
         hideText: this.$t('general.hidePassword'),
         showText: this.$t('general.showPassword'),
       },
-      form: { code: this.$route.query.oobCode, newPassword: null },
+      form: { email: null, password: null, persist: false },
       server: { validated: false, valid: false, field: null, code: null, message: null },
     }
   },
 
   computed: {
+    ...mapGetters('auth', ['authenticated']),
+
     showError() {
       const { validated, valid, field } = this.server
       return validated && !valid && !field
@@ -93,7 +131,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('auth', ['confirmPasswordReset']),
+    ...mapActions('auth', ['loginWithEmailAndPassword']),
 
     errorHandler(error) {
       this.server = {
@@ -105,11 +143,16 @@ export default {
       }
 
       // determine field/form error and propagate the rest to parent
-      if (error.code === 'auth/weak-password') {
+      if (error.code === 'auth/invalid-email') {
         this.server = {
           ...this.server,
-          field: 'password',
-          message: this.$t('validation.passwordInvalid'),
+          field: 'email',
+          message: this.$t('validation.emailInvalid'),
+        }
+      } else if (['auth/user-not-found', 'auth/wrong-password', 'auth/argument-error'].includes(error.code)) {
+        this.server = {
+          ...this.server,
+          message: this.$t('validation.emailPasswordWrong'),
         }
       } else {
         this.$emit(this.events.submitted, false, this.server)
@@ -127,31 +170,27 @@ export default {
       if (!valid) return
 
       this.resetFormState()
-      this.confirmPasswordReset(this.form).then(
+      this.loginWithEmailAndPassword(this.form).then(
         (response) => this.successHandler(response),
         (error) => this.errorHandler(error)
       )
     },
 
     validateForm() {
-      const valid = this.$refs.newPasswordForm.validate()
+      const valid = this.$refs.loginForm.validate()
       this.$emit(this.events.validated, valid)
       return valid
     },
 
     async resetForm() {
       this.resetFormState()
-      this.$refs.newPasswordForm?.reset()
+      this.$refs.loginForm?.reset()
       await this.$nextTick()
       this.$emit(this.events.resetted)
     },
 
     resetFormState() {
       this.server = { validated: false, valid: false, field: null, code: null, message: null }
-    },
-
-    onFormStateChanged(states) {
-      if (states.validated) this.$emit(this.events.validated, !states.invalid)
     },
 
     /** [START] password-related methods */

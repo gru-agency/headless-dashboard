@@ -1,24 +1,24 @@
 <template>
-  <b-card v-if="shouldShowBoxState" class="px-3 shadow">
+  <b-card v-if="showError" class="p-12 shadow">
     <box-state :state="boxState.success ? 'success' : 'error'" :title="boxState.title" :body="boxState.body">
     </box-state>
   </b-card>
 
-  <b-card v-else class="p-4 shadow">
-    <b-card-title class="pt-3"> {{ ui.title }} </b-card-title>
+  <b-card v-else class="p-12 shadow">
+    <b-card-title>{{ ui.title }}</b-card-title>
 
     <b-card-sub-title class="py-3 text-secondary"> {{ ui.subtitle }} </b-card-sub-title>
 
-    <div class="py-3">
+    <div class="py-4">
       <users-reset-form @reset-submitted="onFormSubmitted"></users-reset-form>
     </div>
 
-    <div class="pb-3">
+    <div class="pb-4">
       <action-button preset="bv-continue" variant="primary" block @click="onFormSubmit"></action-button>
     </div>
 
-    <div class="pb-3 text-center">
-      <action-link :text="ui.back" :link="links.signin"></action-link>
+    <div class="text-center">
+      <action-link :text="ui.back" :link="links.login"></action-link>
     </div>
   </b-card>
 </template>
@@ -26,7 +26,6 @@
 <script>
 export default {
   name: 'Reset',
-
   layout: 'simpli',
 
   data() {
@@ -42,27 +41,25 @@ export default {
       ui: {
         title: this.$t('modules.users.resetTitle'),
         subtitle: this.$t('modules.users.resetSubtitle'),
-        back: this.$t('general.returnSignIn'),
+        back: this.$t('general.returnLogin'),
       },
-      links: { signin: this.localePath('/signin') },
+      links: { login: this.localePath('/login') },
       boxState: { success: false, title: null, body: null, actionLink: null, actionText: null },
-      serverError: { validated: false, valid: false, field: null, code: null, message: null },
+      server: { validated: false, valid: false, field: null, code: null, message: null },
     }
   },
 
   computed: {
-    shouldShowBoxState() {
-      return this.serverError.validated && !this.serverError.field
+    showError() {
+      const { validated, field } = this.server
+      return validated && !field
     },
   },
 
   methods: {
     errorHandler(error) {
-      this.boxState = { ...this.boxState, success: false }
-      this.serverError = error
-
-      // determine form/page error
-      this.boxState = { ...this.boxState, title: this.$t('general.error5xx') }
+      this.boxState = { ...this.boxState, success: false, title: this.$t('general.error5xx') }
+      this.server = error
     },
 
     successHandler(response) {

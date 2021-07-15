@@ -7,7 +7,7 @@
         <b-form-input
           id="reg-email"
           v-model="form.email"
-          :state="$utils.evaluateState($vee.state(vp), $val.state(serverError, 'email'))"
+          :state="$utils.evaluateState($vee.state(vp), $val.state(server, 'email'))"
           autocomplete="email"
           type="email"
           size="lg"
@@ -16,16 +16,16 @@
         ></b-form-input>
         <b-form-invalid-feedback>
           <span>
-            <icon preset="bv-error"></icon> {{ $vee.error(vp) || $val.error(serverError) }}
+            <icon preset="bv-error"></icon> {{ $vee.error(vp) || $val.error(server) }}
             <span v-if="accountExists">
-              <action-link :link="links.signin" :text="ui.signin" variant="primary"></action-link>.
+              <action-link :link="links.login" :text="ui.login" variant="primary"></action-link>.
             </span>
           </span>
         </b-form-invalid-feedback>
       </b-form-group>
     </validation-provider>
 
-    <validation-provider v-slot="vp" :name="ui.email" immediate rules="max:320">
+    <validation-provider v-slot="vp" :name="ui.name" immediate rules="max:320">
       <b-form-group :label="ui.name" label-for="reg-name">
         <b-form-input
           id="reg-name"
@@ -48,15 +48,15 @@
           :preset="passwordRevealable ? 'bv-eye-slash' : 'bv-eye'"
           class="input-inset right lg"
           tooltip
-          trim
           @click="onPasswordToggle()"
         >
           {{ passwordRevealable ? password.hideText : password.showText }}
         </tips-field>
+
         <b-form-input
           id="new-password"
           v-model="form.password"
-          :state="$utils.evaluateState($vee.state(vp), $val.state(serverError, 'password'))"
+          :state="$utils.evaluateState($vee.state(vp), $val.state(server, 'password'))"
           autocomplete="new-password"
           :type="password.type"
           size="lg"
@@ -65,7 +65,7 @@
           @focus="password.focus = true"
         ></b-form-input>
         <b-form-invalid-feedback>
-          <span><icon preset="bv-error"></icon> {{ $vee.error(vp) || $val.error(serverError) }}</span>
+          <span><icon preset="bv-error"></icon> {{ $vee.error(vp) || $val.error(server) }}</span>
         </b-form-invalid-feedback>
       </b-form-group>
     </validation-provider>
@@ -75,6 +75,10 @@
         {{ ui.consent }}
         <action-link :link="links.privacy" :text="ui.privacy" variant="primary"></action-link>
       </b-form-checkbox>
+    </b-form-group>
+
+    <b-form-group v-if="showError" class="mb-3">
+      <span class="text-danger">{{ server.message }}</span>
     </b-form-group>
   </validation-observer>
 </template>
@@ -101,9 +105,9 @@ export default {
         password: this.$t('general.password'),
         consent: this.$t('modules.users.registerConsent', { _brand: this.$app.brandName }),
         privacy: this.$t('general.privacyPolicy'),
-        signin: this.$t('general.signin').toLowerCase(),
+        login: this.$t('general.login').toLowerCase(),
       },
-      links: { privacy: this.localePath('/privacy'), signin: this.localePath('/signin') },
+      links: { privacy: this.localePath('/privacy'), login: this.localePath('/login') },
       password: {
         type: 'password',
         focus: false,
@@ -111,13 +115,18 @@ export default {
         showText: this.$t('general.showPassword'),
       },
       form: { email: null, name: null, password: null, emailConsent: false },
-      serverError: { validated: false, valid: false, field: null, code: null, message: null },
+      server: { validated: false, valid: false, field: null, code: null, message: null },
     }
   },
 
   computed: {
     accountExists() {
-      return this.serverError.code === 'auth/email-already-in-use'
+      return this.server.code === 'auth/email-already-in-use'
+    },
+
+    showError() {
+      const { validated, valid, field } = this.server
+      return validated && !valid && !field
     },
 
     /** [START] password-related methods */
@@ -143,52 +152,53 @@ export default {
     ...mapActions('auth', ['registerWithEmailAndPassword']),
 
     errorHandler(error) {
-      this.serverError = {
-        ...this.serverError,
+      this.server = {
+        ...this.server,
         validated: true,
         valid: false,
         code: error.code,
         message: error.message,
       }
 
-      // determine field error and propagate non-field error to parent
+      // determine field/form error and propagate the rest to parent
       if (error.code === 'auth/invalid-email') {
-        this.serverError = {
-          ...this.serverError,
+        this.server = {
+          ...this.server,
           field: 'email',
           message: this.$t('validation.emailInvalid'),
         }
       } else if (error.code === 'auth/email-already-in-use') {
-        this.serverError = {
-          ...this.serverError,
+        this.server = {
+          ...this.server,
           field: 'email',
           message: this.$t('validation.accountExists', { _brand: this.$app.brandName }),
         }
       } else if (error.code === 'auth/weak-password') {
-        this.serverError = {
-          ...this.serverError,
+        this.server = {
+          ...this.server,
           field: 'password',
           message: this.$t('validation.passwordInvalid'),
         }
-      }
-
-      if (!this.serverError.field) {
-        this.$emit(this.events.submitted, false, this.serverError)
+      } else {
+        this.$emit(this.events.submitted, false, this.server)
       }
     },
 
     successHandler(response) {
-      this.serverError = { ...this.serverError, validated: true, valid: true }
+      this.server = { ...this.server, validated: true, valid: true }
       this.$emit(this.events.submitted, true, null, response)
+      this.resetForm()
     },
 
-    async submitForm() {
+    submitForm() {
       const valid = this.validateForm()
       if (!valid) return
 
-      await this.registerWithEmailAndPassword(this.form)
-        .then((response) => this.successHandler(response))
-        .catch((error) => this.errorHandler(error))
+      this.resetFormState()
+      this.registerWithEmailAndPassword(this.form).then(
+        (response) => this.successHandler(response),
+        (error) => this.errorHandler(error)
+      )
     },
 
     validateForm() {
@@ -198,10 +208,14 @@ export default {
     },
 
     async resetForm() {
-      this.serverError = { validated: false, valid: false, field: null, code: null, message: null }
+      this.resetFormState()
       this.$refs.registrationForm?.reset()
       await this.$nextTick()
       this.$emit(this.events.resetted)
+    },
+
+    resetFormState() {
+      this.server = { validated: false, valid: false, field: null, code: null, message: null }
     },
 
     onFormStateChanged(states) {

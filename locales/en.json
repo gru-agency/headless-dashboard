@@ -14,6 +14,7 @@
     "error5xx": "There was an error. Try again later.",
     "hidePassword": "Hide password",
     "home": "Home",
+    "login": "Sign in",
     "name": "Name",
     "new": "New",
     "newPassword": "New password",
@@ -25,12 +26,12 @@
     "refresh": "Refresh",
     "required": "Required",
     "returnHome": "Return to home",
-    "returnSignIn": "Return to sign in",
+    "returnLogin": "Return to sign in",
     "save": "Save",
     "saveAndMore": "Save and more",
     "showPassword": "Show password",
-    "signin": "Sign in",
     "signout": "Sign out",
+    "signup": "Sign up",
     "success": "Success",
     "supportText": "Write and describe your issue to us at ",
     "terms": "Terms"
@@ -53,6 +54,10 @@
       "registerConsent": "Get email from {_brand} about product updates, industry news and events. If you change your mind, you can unsubscribe any time.",
       "registerBack": "Have an account?",
       "registerButton": "Create account",
+      "loginBack": "Don't have an account?",
+      "loginTitle": "Sign in to your account",
+      "loginForgotPassword": "Forgot your password?",
+      "loginPersist": "Stay signed in",
       "verifyEmailLinkInvalid": "This verify email link has expired",
       "verifyEmailRetry": "Try verify your email again",
       "verifyEmailSuccess": "You've successfully verified your email"
@@ -67,9 +72,10 @@
 
   "validation": {
     "accountExists": "An account already exists with this email address. If you'd like to create a new {_brand} account with the same email address, ",
-    "accountNotFound": "Account not found",
+    "accountNotFound": "We couldn't find that email. Please try again.",
     "accountSuspended": "Your account has been suspended",
     "emailInvalid": "The @:general.email field must be a valid email",
+    "emailPasswordWrong": "Incorrect email or password",
     "passwordInvalid": "The @:general.password field must be at least 10 characters",
     "passwordHint": "Your password needs to be at least 10 characters, include multiple words and phrases to make it more secure."
   }

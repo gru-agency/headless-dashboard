@@ -1,5 +1,4 @@
 import * as consola from 'consola'
-import { Timestamp } from '~/plugins/firebase'
 
 const state = () => ({
   authUser: null,
@@ -19,7 +18,7 @@ const mutations = {
         phoneNumber,
         firebaseId: uid,
         created: metadata?.creationTime,
-        lastSignIn: metadata?.lastSignInTime,
+        lastLogin: metadata?.lastSignInTime,
       }
     } else {
       state.authUser = null
@@ -31,155 +30,162 @@ const mutations = {
 
 const actions = {
   onAuthStateChanged({ commit }, user) {
+    const { isDev } = this.app.context
     try {
-      if (this.app.context.isDev) consola.info('onAuthStateChanged | user', user)
+      if (isDev) consola.info('auth | onAuthStateChanged | user', user)
       commit('SET', user)
     } catch (error) {
-      if (this.app.context.isDev) consola.error('onAuthStateChanged | error', error)
+      if (isDev) consola.error('auth | onAuthStateChanged | error', error)
     }
   },
 
   async registerWithEmailAndPassword({ commit, dispatch, state }, { email, password, name, emailConsent }) {
+    const { $fire, isDev } = this.app.context
     try {
-      const { user } = await this.$fire.auth.createUserWithEmailAndPassword(email, password)
-      if (this.app.context.isDev) consola.info('registerWithEmailAndPassword | user', user)
+      // create user with email/password method
+      const { user } = await $fire.auth.createUserWithEmailAndPassword(email, password)
+      if (isDev) consola.info('auth | registerWithEmailAndPassword | authUser', user)
       commit('SET', { authUser: user })
 
-      const { created, lastSignIn } = state.authUser
-      await dispatch(
-        'user/add',
-        {
-          ...state.authUser,
-          created: Timestamp.fromMillis(Date.parse(created)),
-          lastSignIn: Timestamp.fromMillis(Date.parse(lastSignIn)),
-          displayName: name,
-          emailConsent,
-        },
-        { root: true }
-      )
+      // keep a copy of user in firestore optimistically
+      const payload = { ...state.authUser, displayName: name, emailConsent }
+      await dispatch('user/add', { payload }, { root: true })
+
+      // automatically send email verification upon successful registration
+      // though can be requested manually at later time
       await dispatch('requestEmailVerification')
 
-      if (this.app.context.isDev) consola.info('registerWithEmailAndPassword', 'Successful')
-      return new Promise((resolve, reject) => resolve(state.authUser))
+      if (isDev) consola.info('auth | registerWithEmailAndPassword', 'successful')
     } catch (error) {
-      if (this.app.context.isDev) consola.error('registerWithEmailAndPassword | error', error)
-      return new Promise((resolve, reject) => reject(error))
+      // auth/email-already-in-use
+      // auth/invalid-email
+      // auth/operation-not-allowed (email/password accounts are not enabled) -- log
+      // auth/weak-password
+      if (isDev) consola.error('auth | registerWithEmailAndPassword | error', error)
+      throw error
     }
   },
 
-  async signInWithEmailAndPassword({ commit }, { email, password }) {
-    await this.$fire.auth
-      .signInWithEmailAndPassword(email, password)
-      .then(({ user }) => {
-        if (this.app.context.isDev) consola.info('signInWithEmailAndPassword | user', user)
-        commit('SET', { authUser: user })
-        return new Promise((resolve, reject) => resolve())
-      })
-      .catch((error) => {
-        // auth/invalid-email -> rely on client validation
-        // auth/user-disabled (e.g. acc locked) -> show & suggest
-        // auth/user-not-found -> dont let requestor knows
-        // auth/wrong-password -> retry
-        if (this.app.context.isDev) consola.error('signInWithEmailAndPassword | error', error)
-        return new Promise((resolve, reject) => reject(error))
-      })
+  async loginWithEmailAndPassword({ commit }, { email, password, persist }) {
+    const { $fire, isDev } = this.app.context
+    const persistence = persist ? 'local' : 'session'
+    try {
+      await $fire.auth.setPersistence(persistence)
+      const { user } = await $fire.auth.signInWithEmailAndPassword(email, password)
+      if (isDev) consola.info('auth | loginWithEmailAndPassword | authUser', user)
+      commit('SET', { authUser: user })
+
+      if (isDev) consola.info('auth | loginWithEmailAndPassword', 'successful')
+    } catch (error) {
+      // auth/invalid-email
+      // auth/user-disabled
+      // auth/user-not-found
+      // auth/wrong-password
+      if (isDev) consola.error('auth | loginWithEmailAndPassword | error', error)
+      throw error
+    }
   },
 
   async signOut({ commit }) {
+    const { $fire, isDev } = this.app.context
     try {
-      await this.$fire.auth.signOut()
+      await $fire.auth.signOut()
       commit('UNSET')
-      if (this.app.context.isDev) consola.info('auth | signOut', 'successful')
+      if (isDev) consola.info('auth | signOut', 'successful')
     } catch (error) {
-      if (this.app.context.isDev) consola.error('auth | signOut | error', error)
-      return error
+      if (isDev) consola.error('auth | signOut | error', error)
+      throw error
     }
   },
 
-  async reauthenticateWithCredential({ commit }, { email, password }) {
-    if (!this.$fire.auth.currentUser) {
-      throw new Error('auth/required-signin', 'Required sign in again')
+  async reauthenticateWithCredential({ _ }, { email, password }) {
+    const { $fire, isDev } = this.app.context
+    const cred = $fire.auth.EmailAuthProvider.credential(email, password)
+    try {
+      await $fire.auth.currentUser.reauthenticateWithCredential(cred)
+      if (isDev) consola.info('auth | reauthenticateWithCredential', 'successful')
+    } catch (error) {
+      // auth/user-mismatch
+      // auth/user-not-found
+      // auth/invalid-credential
+      // auth/invalid-email
+      // auth/wrong-password
+      // auth/invalid-verification-code (for phone auth)
+      // auth/invalid-verification-id (for phone auth)
+      if (isDev) consola.error('auth | reauthenticateWithCredential | error', error)
+      throw error
     }
-
-    const cred = this.$fire.auth.EmailAuthProvider.credential(email, password)
-    await this.$fire.auth.currentUser
-      .reauthenticateWithCredential(cred)
-      .then(({ user }) => {
-        if (this.app.context.isDev) consola.info('reauthenticateWithCredential', 'Successful')
-        return new Promise((resolve, reject) => resolve())
-      })
-      .catch((error) => {
-        if (this.app.context.isDev) consola.error('reauthenticateWithCredential | error', error)
-        return new Promise((resolve, reject) => reject(error))
-      })
   },
 
-  async updatePassword({ commit }, { newPassword }) {
-    await this.$fire.auth.currentUser
-      .updatePassword(newPassword)
-      .then(() => {
-        if (this.app.context.isDev) consola.info('updatePassword', 'Successful')
-        return new Promise((resolve, reject) => resolve())
-      })
-      .catch((error) => {
-        // auth/weak-password (< 6 chars) -> rely on client validation
-        // auth/requires-recent-login -> prompt login first
-        if (this.app.context.isDev) consola.error('updatePassword | error', error)
-        return new Promise((resolve, reject) => reject(error))
-      })
+  async updatePassword({ _ }, { newPassword }) {
+    const { $fire, isDev } = this.app.context
+    try {
+      await $fire.auth.currentUser.updatePassword(newPassword)
+      if (isDev) consola.info('auth | updatePassword', 'successful')
+    } catch (error) {
+      // auth/weak-password (less than 6 chars)
+      // auth/requires-recent-login
+      if (isDev) consola.error('auth | updatePassword | error', error)
+      throw error
+    }
   },
 
-  async requestEmailVerification({ commit }) {
-    this.$fire.auth.languageCode = this.$i18n.locale
-    await this.$fire.auth.currentUser
-      .sendEmailVerification()
-      .then(() => {
-        if (this.app.context.isDev) consola.info('requestEmailVerification', 'Successful')
-        return new Promise((resolve, reject) => resolve())
-      })
-      .catch((error) => {
-        if (this.app.context.isDev) consola.error('requestEmailVerification | error', error)
-        return new Promise((resolve, reject) => reject(error))
-      })
+  async requestEmailVerification({ _ }) {
+    const { $fire, isDev } = this.app.context
+    $fire.auth.languageCode = this.$i18n.locale
+    try {
+      await $fire.auth.currentUser.sendEmailVerification()
+      if (isDev) consola.info('auth | requestEmailVerification', 'successful')
+    } catch (error) {
+      if (isDev) consola.error('auth | requestEmailVerification | error', error)
+      throw error
+    }
   },
 
   async confirmEmail({ commit }, { code }) {
-    await this.$fire.auth
-      .applyActionCode(code)
-      .then(() => {
-        commit('SET', { authUser: this.$fire.auth.currentUser })
-        if (this.app.context.isDev) consola.info('confirmEmail', 'Successful')
-        return new Promise((resolve, reject) => resolve())
-      })
-      .catch((error) => {
-        if (this.app.context.isDev) consola.error('confirmEmail | error', error)
-        return new Promise((resolve, reject) => reject(error))
-      })
-  },
-
-  async requestPasswordReset({ commit }, { email }) {
+    const { $fire, isDev } = this.app.context
     try {
-      this.$fire.auth.languageCode = this.$i18n.locale
-      await this.$fire.auth.sendPasswordResetEmail(email)
-      if (this.app.context.isDev) consola.info('requestPasswordReset', 'Successful')
-      return new Promise((resolve, reject) => resolve())
+      await $fire.auth.applyActionCode(code)
+      commit('SET', { authUser: $fire.auth.currentUser })
+      if (isDev) consola.info('auth | confirmEmail', 'successful')
     } catch (error) {
-      if (this.app.context.isDev) consola.error('requestPasswordReset | error', error)
-      return new Promise((resolve, reject) => reject(error))
+      // auth/expired-action-code
+      // auth/invalid-action-code
+      // auth/user-disabled
+      // auth/user-not-found -- log
+      if (isDev) consola.error('auth | confirmEmail | error', error)
+      throw error
     }
   },
 
-  async confirmPasswordReset({ commit }, { code, newPassword }) {
-    await this.$fire.auth
-      .confirmPasswordReset(code, newPassword)
-      .then(() => {
-        if (this.app.context.isDev) consola.info('confirmPasswordReset', 'Successful')
-        return new Promise((resolve, reject) => resolve())
-      })
-      .catch((error) => {
-        if (this.app.context.isDev) consola.error('confirmPasswordReset | error', error)
-        return new Promise((resolve, reject) => reject(error))
-      })
+  async requestPasswordReset({ _ }, { email }) {
+    const { $fire, isDev, i18n } = this.app.context
+    $fire.auth.languageCode = i18n.locale
+    try {
+      await $fire.auth.sendPasswordResetEmail(email)
+      if (isDev) consola.info('auth | requestPasswordReset', 'successful')
+    } catch (error) {
+      // auth/invalid-email
+      // auth/user-not-found
+      if (isDev) consola.error('auth | requestPasswordReset | error', error)
+      throw error
+    }
+  },
+
+  async confirmPasswordReset({ _ }, { code, newPassword }) {
+    const { $fire, isDev } = this.app.context
+    try {
+      await $fire.auth.confirmPasswordReset(code, newPassword)
+      if (isDev) consola.info('auth | confirmPasswordReset', 'successful')
+    } catch (error) {
+      // auth/expired-action-code
+      // auth/invalid-action-code
+      // auth/user-disabled
+      // auth/user-not-found -- log
+      // auth/weak-password
+      if (isDev) consola.error('auth | confirmPasswordReset | error', error)
+      throw error
+    }
   },
 }
 
