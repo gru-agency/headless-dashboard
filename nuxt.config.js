@@ -13,7 +13,7 @@ export default {
   privateRuntimeConfig: {},
 
   publicRuntimeConfig: {
-    baseUrl: process.env.NODE_ENV === 'production' ? 'https//www.shoplex.com' : 'http://localhost:3000',
+    baseUrl: process.env.baseUrl,
     brandName: 'Shoplex',
     supportMail: 'support@shoplex.com',
   },
@@ -36,6 +36,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    { mode: 'client', src: '~/plugins/i18n.js' },
     { mode: 'client', src: '~/plugins/utils.js' },
     { mode: 'client', src: '~/plugins/vee-validate.js' },
   ],
@@ -104,11 +105,7 @@ export default {
 
   vue: { config: { devtools: true } },
 
-  bootstrapVue: {
-    css: false,
-    bvCss: false,
-    icons: false,
-  },
+  bootstrapVue: { css: false, bvCss: false, icons: false },
 
   fontawesome: {
     component: 'fa',
@@ -116,21 +113,12 @@ export default {
     suffix: false,
     useLayers: false,
     useLayersText: false,
-    icons: {
-      brands: true,
-      solid: true,
-      regular: true,
-    },
-    proIcons: {
-      solid: true,
-      light: true,
-      regular: true,
-      duotone: true,
-    },
+    icons: { brands: true, solid: true, regular: true },
+    proIcons: { solid: true, light: true, regular: true, duotone: true },
   },
 
   i18n: {
-    baseUrl: 'http://localhost:3000', // important for seo
+    baseUrl: process.env.baseUrl, // important for seo
     locales: [
       { code: 'en', iso: 'en-GB', file: 'en.json', name: 'English' },
       { code: 'ms', iso: 'ms-MY', file: 'ms.json', name: 'Malay' },
@@ -140,20 +128,10 @@ export default {
     langDir: '~/locales/',
     strategy: 'prefix',
     defaultLocale: 'en',
-    detectBrowserLanguage: {
-      alwaysRedirect: true,
-      fallbackLocale: 'en',
-      onlyOnRoot: true,
-      useCookie: true,
-    },
+    detectBrowserLanguage: { alwaysRedirect: true, fallbackLocale: 'en', onlyOnRoot: true, useCookie: true },
     seo: false, // performance concern, enable lazily
     vuex: false,
-    onLanguageSwitched: (oldLocale, newLocale) => this.$vee.switchLocale(newLocale),
-    vueI18n: {
-      fallbackLocale: 'en',
-      dateTimeFormats,
-      numberFormats,
-    },
+    vueI18n: { fallbackLocale: 'en', dateTimeFormats, numberFormats },
   },
 
   firebase: {
@@ -174,13 +152,11 @@ export default {
           subscribeManually: true,
         },
         ssr: false,
-        emulatorPort: 9099,
-        emulatorHost: 'http://localhost',
+        emulatorPort: process.env.NODE_ENV === 'development' ? 9099 : undefined,
       },
       firestore: {
         enablePersistence: { synchronizeTabs: true },
-        emulatorPort: 8080,
-        emulatorHost: 'localhost',
+        emulatorPort: process.env.NODE_ENV === 'development' ? 8080 : undefined,
       },
       functions: false,
       storage: false,
@@ -197,7 +173,7 @@ export default {
   robots: [{ UserAgent: '*', Disallow: restrictedRoutes }],
 
   sitemap: {
-    hostname: 'http://localhost:3000',
+    hostname: process.env.baseUrl,
     gzip: true,
     i18n: true,
     exclude: restrictedRoutes,
