@@ -38,6 +38,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { mode: 'client', src: '~/plugins/i18n.js' },
+    { mode: 'client', src: '~/plugins/dayjs.js' },
     { mode: 'client', src: '~/plugins/utils.js' },
     { mode: 'client', src: '~/plugins/vee-validate.js' },
   ],
@@ -123,9 +124,9 @@ export default {
   i18n: {
     baseUrl: process.env.baseUrl, // important for seo
     locales: [
-      { code: 'en', iso: 'en-GB', file: 'en.json', name: 'English' },
-      { code: 'ms', iso: 'ms-MY', file: 'ms.json', name: 'Malay' },
-      { code: 'zh', iso: 'zh-CN', file: 'zh.json', name: '简体中文' },
+      { code: 'en', iso: 'en-gb', file: 'en.json', name: 'English' },
+      { code: 'ms', iso: 'ms-my', file: 'ms.json', name: 'Malay' },
+      { code: 'zh', iso: 'zh-cn', file: 'zh.json', name: '简体中文' },
     ],
     lazy: true,
     langDir: '~/locales/',
