@@ -6,14 +6,18 @@
     "continue": "Continue",
     "continueDashboard": "Continue to Dashboard",
     "delete": "Delete",
+    "device": "Device",
     "edit": "Edit",
     "email": "Email",
     "error": "Error",
     "error404Title": "Page not found!",
     "error404Subtitle": "Sorry, but the page you were looking for could not be found.",
     "error5xx": "There was an error. Try again later.",
+    "expired": "Expired",
     "hidePassword": "Hide password",
     "home": "Home",
+    "ipAddress": "IP address",
+    "location": "Location",
     "login": "Sign in",
     "name": "Name",
     "new": "New",
@@ -34,7 +38,8 @@
     "signup": "Sign up",
     "success": "Success",
     "supportText": "Write and describe your issue to us at ",
-    "terms": "Terms"
+    "terms": "Terms",
+    "time": "Time"
   },
 
   "modules": {
@@ -58,6 +63,9 @@
       "loginTitle": "Sign in to your account",
       "loginForgotPassword": "Forgot your password?",
       "loginPersist": "Stay signed in",
+      "sessionTitle": "Login sessions",
+      "SessionSubtitle": "Places where you're logged into {_brand}",
+      "sessionCurrent": "Current session",
       "verifyEmailLinkInvalid": "This verify email link has expired",
       "verifyEmailRetry": "Try verify your email again",
       "verifyEmailSuccess": "You've successfully verified your email"

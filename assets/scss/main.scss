@@ -113,6 +113,41 @@ a.active {
   }
 }
 
+// table
+.table {
+  th,
+  td {
+    vertical-align: middle;
+    border-top: 0;
+    border-bottom: 1px solid #dee2e6 !important;
+
+  //   &.fit-content {
+  //     width: 1%;
+  //     white-space: nowrap;
+  //   }
+  }
+
+  th {
+    color: $secondary;
+    font-size: $font-size-sm;
+    text-transform: uppercase;
+  }
+
+  th:first-child,
+  td:first-child {
+    padding-left: 1.25rem;
+  }
+
+  th:last-child,
+  td:last-child {
+    padding-right: 1.25rem;
+  }
+}
+
+.table-hover tbody tr:hover {
+  cursor: pointer;
+}
+
 // form
 label {
   cursor: pointer;
