@@ -8,12 +8,7 @@
       <fa :icon="['fad', 'home-alt']" :class="iconClass"></fa> {{ home }}
     </b-nav-item>
 
-    <b-nav-item
-      :to="links.orders"
-      :active-class="activeClass"
-      :exact-active-class="activeClass"
-      class="px-2"
-    >
+    <b-nav-item :to="links.orders" :active-class="activeClass" :exact-active-class="activeClass" class="px-2">
       <fa :icon="['fad', 'ballot']" :class="iconClass"></fa> {{ orders }}
     </b-nav-item>
 
@@ -27,17 +22,13 @@
       {{ products }}
     </b-nav-item>
 
-    <b-nav-item
-      :to="links.prices"
-      :active-class="activeClass"
-      :exact-active-class="activeClass"
-      class="px-2"
-    >
+    <b-nav-item :to="links.prices" :active-class="activeClass" :exact-active-class="activeClass" class="px-2">
       <fa :icon="['fad', 'dollar-sign']" :class="iconClass"></fa> {{ prices }}
     </b-nav-item>
 
     <b-nav-item
       :to="links.settings"
+      :active="settingChild"
       :active-class="activeClass"
       :exact-active-class="activeClass"
       class="px-2"
@@ -79,6 +70,10 @@ export default {
 
     activeClass() {
       return 'active'
+    },
+
+    settingChild() {
+      return this.$route.path.includes('settings')
     },
   },
 }
