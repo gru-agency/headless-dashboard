@@ -56,6 +56,7 @@ For detailed explanation on how things work, check out the [documentation](https
   - change password reset email template base url from `localhost` to `{{ PROD_URL }}`
   - change verify email template base url from `localhost` to `{{ PROD_URL }}`
   - setup support email e.g. support@shoplex.com
+  - setup geodb account / api key
 
 ## Commit Guide
 

@@ -16,6 +16,7 @@ export default {
     baseUrl: process.env.baseUrl,
     brandName: 'Shoplex',
     supportMail: 'support@shoplex.com',
+    geoDbKey: process.env.geoDbKey,
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -104,6 +105,8 @@ export default {
   },
 
   vue: { config: { devtools: true } },
+
+  axios: { retry: true },
 
   bootstrapVue: { css: false, bvCss: false, icons: false },
 

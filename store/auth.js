@@ -8,19 +8,15 @@ const getters = {
 
 const mutations = {
   SET: (state, { authUser, claims }) => {
-    if (authUser) {
-      const { uid, email, emailVerified, phoneNumber, metadata } = authUser
-      state.authUser = {
-        email,
-        emailVerified,
-        phoneNumber,
-        firebaseId: uid,
-        created: metadata?.creationTime,
-        lastLogin: claims?.auth_time,
-        tokenExpired: claims?.exp,
-      }
-    } else {
-      state.authUser = null
+    const { uid, email, emailVerified, phoneNumber, metadata } = authUser
+    state.authUser = {
+      email,
+      emailVerified,
+      phoneNumber,
+      firebaseId: uid,
+      created: metadata?.creationTime,
+      lastLogin: claims?.auth_time,
+      tokenExpired: claims?.exp,
     }
   },
 
@@ -28,11 +24,21 @@ const mutations = {
 }
 
 const actions = {
-  onAuthStateChanged({ commit }, user) {
+  async onAuthStateChanged({ commit, dispatch }, user) {
     const { $util, isDev } = this.app.context
     try {
       if (isDev) $util.info('auth | onAuthStateChanged | user', user)
-      commit('SET', user)
+      if (user.authUser) {
+        commit('SET', user)
+      } else {
+        commit('UNSET')
+      }
+
+      if (user.claims) {
+        await dispatch('user_session/add', user.claims, { root: true })
+      } else {
+        await dispatch('user_session/clear', null, { root: true })
+      }
     } catch (error) {
       if (isDev) $util.error('auth | onAuthStateChanged | error', error)
     }

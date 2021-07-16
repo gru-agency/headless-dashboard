@@ -1,15 +1,18 @@
 import * as consola from 'consola'
 import { nanoid } from 'nanoid'
+import { name, os } from 'platform'
 
 const _util = {
   info: (message, varargs) => consola.info(message, varargs),
   error: (message, varargs) => consola.error(message, varargs),
 
+  nanoid: (length) => (length ? nanoid(length) : nanoid()),
+
   extractParentPath: (path) => {
     return path.substr(0, path.lastIndexOf('/'))
   },
 
-  nanoid: (length) => (length ? nanoid(length) : nanoid()),
+  platformDescription: () => `${name} - ${os.family}`,
 }
 
 const _validation = {
