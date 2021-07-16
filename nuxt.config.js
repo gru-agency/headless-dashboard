@@ -63,6 +63,8 @@ export default {
     '@nuxtjs/robots',
     // https://sitemap.nuxtjs.org
     '@nuxtjs/sitemap',
+    // https://axios.nuxtjs.org/setup
+    '@nuxtjs/axios',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
