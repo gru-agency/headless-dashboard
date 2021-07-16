@@ -27,7 +27,6 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { mode: 'client', src: '~/plugins/i18n.js' },
     { mode: 'client', src: '~/plugins/utils.js' },
     { mode: 'client', src: '~/plugins/firebase.js' },
     { mode: 'client', src: '~/plugins/vee-validate.js' },
@@ -139,6 +138,7 @@ export default {
     },
     seo: false, // performance concern, enable lazily
     vuex: false,
+    onLanguageSwitched: (oldLocale, newLocale) => this.$vee.switchLocale(newLocale),
     vueI18n: {
       fallbackLocale: 'en',
       dateTimeFormats,
@@ -180,7 +180,7 @@ export default {
       analytics: false,
       remoteConfig: false,
     },
-    injectModule: false,
+    injectModule: true,
     terminateDatabasesAfterGenerate: false,
   },
 
