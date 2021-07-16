@@ -34,7 +34,7 @@ export default {
 
   data() {
     return {
-      links: { supportMail: this.$app.supportMail },
+      links: { supportMail: this.$config.supportMail },
       boxState: { success: false, title: null, body: null, actionLink: null, actionText: null },
       server: { validated: false, valid: false, field: null, code: null, message: null },
     }

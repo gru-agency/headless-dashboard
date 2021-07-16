@@ -5,7 +5,7 @@
         <b-form-input
           id="rst-email"
           v-model="form.email"
-          :state="$utils.evaluateState($vee.state(vp), $val.state(server, 'email'))"
+          :state="$val.evalState($vee.state(vp), $val.state(server, 'email'))"
           autocomplete="email"
           type="email"
           size="lg"

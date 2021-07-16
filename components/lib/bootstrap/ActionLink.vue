@@ -31,11 +31,11 @@ export default {
 
   computed: {
     getVariant() {
-      return this.$ui.getTextVariant(this.variant)
+      return `text-${this.variant}`
     },
 
     getParentRoute() {
-      return this.$utils.getParentRoute(this.$route.path)
+      return this.$util.extractParentPath(this.$route.path)
     },
   },
 

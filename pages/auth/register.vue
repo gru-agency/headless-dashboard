@@ -47,7 +47,7 @@ export default {
         resetted: 'register-resetted',
       },
       ui: {
-        title: this.$t('modules.users.registerTitle', { _brand: this.$app.brandName }),
+        title: this.$t('modules.users.registerTitle', { _brand: this.$config.brandName }),
         back: this.$t('modules.users.registerBack'),
         button: this.$t('modules.users.registerButton'),
         login: this.$t('general.login'),

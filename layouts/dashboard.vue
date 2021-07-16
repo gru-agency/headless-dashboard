@@ -31,7 +31,7 @@ export default {
 
   head() {
     return {
-      title: this.$app.brandName,
+      title: this.$config.brandName,
     }
   },
 

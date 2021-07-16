@@ -7,7 +7,7 @@
         <b-form-input
           id="reg-email"
           v-model="form.email"
-          :state="$utils.evaluateState($vee.state(vp), $val.state(server, 'email'))"
+          :state="$val.evalState($vee.state(vp), $val.state(server, 'email'))"
           autocomplete="email"
           type="email"
           size="lg"
@@ -56,7 +56,7 @@
         <b-form-input
           id="new-password"
           v-model="form.password"
-          :state="$utils.evaluateState($vee.state(vp), $val.state(server, 'password'))"
+          :state="$val.evalState($vee.state(vp), $val.state(server, 'password'))"
           autocomplete="new-password"
           :type="password.type"
           size="lg"
@@ -103,7 +103,7 @@ export default {
         email: this.$t('general.email'),
         name: this.$t('general.name'),
         password: this.$t('general.password'),
-        consent: this.$t('modules.users.registerConsent', { _brand: this.$app.brandName }),
+        consent: this.$t('modules.users.registerConsent', { _brand: this.$config.brandName }),
         privacy: this.$t('general.privacyPolicy'),
         login: this.$t('general.login').toLowerCase(),
       },
@@ -171,7 +171,7 @@ export default {
         this.server = {
           ...this.server,
           field: 'email',
-          message: this.$t('validation.accountExists', { _brand: this.$app.brandName }),
+          message: this.$t('validation.accountExists', { _brand: this.$config.brandName }),
         }
       } else if (error.code === 'auth/weak-password') {
         this.server = {

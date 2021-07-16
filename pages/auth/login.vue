@@ -57,7 +57,7 @@ export default {
 
   computed: {
     supportMail() {
-      return this.$app.supportMail
+      return this.$config.supportMail
     },
 
     showError() {

@@ -4,7 +4,7 @@
       <div class="flex-grow-1"></div>
 
       <div class="align-self-start py-6 mx-4 px-12">
-        <span class="h3 font-weight-bolder"> {{ ui.brandName }} </span>
+        <span class="h3 font-weight-bolder"> {{ ui.brand.toLowerCase() }} </span>
       </div>
 
       <b-row no-gutters class="w-100 align-self-center">
@@ -28,9 +28,9 @@ export default {
 
   data() {
     return {
-      ui: { brandName: this.$app.brandName.toLowerCase() },
+      ui: { brand: this.$config.brandName },
       menus: {
-        home: { label: '© ' + this.$app.brandName, link: this.localePath('/') },
+        home: { label: `© ${this.$config.brandName}`, link: this.localePath('/') },
         contact: { label: this.$t('general.contact'), link: this.localePath('/contact') },
         privacy: { label: this.$t('general.privacy'), link: this.localePath('/privacy') },
         terms: { label: this.$t('general.terms'), link: this.localePath('/terms') },

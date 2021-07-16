@@ -17,7 +17,7 @@
         <b-form-input
           id="new-password"
           v-model="form.newPassword"
-          :state="$utils.evaluateState($vee.state(vp), $val.state(server, 'password'))"
+          :state="$val.evalState($vee.state(vp), $val.state(server, 'password'))"
           autocomplete="new-password"
           :type="password.type"
           :size="size"

@@ -1,7 +1,7 @@
 <template>
   <b-nav vertical tag="nav">
     <b-nav-text class="navbar-h d-flex align-items-center h4 font-weight-bold px-4">
-      {{ $app.brandName.toLowerCase() }}
+      {{ $config.brandName.toLowerCase() }}
     </b-nav-text>
 
     <b-nav-item :to="links.home" :exact-active-class="activeClass" class="px-2">

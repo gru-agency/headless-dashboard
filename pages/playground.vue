@@ -189,8 +189,6 @@
 </template>
 
 <script>
-import * as consola from 'consola'
-
 export default {
   name: 'Playground',
 
@@ -241,7 +239,7 @@ export default {
           message: new Date(),
         })
       } catch (e) {
-        consola.error(e)
+        this.$util.error(e)
       }
     },
 
@@ -251,7 +249,7 @@ export default {
         const doc = await ref.get()
         this.message = doc.data().message.toDate()
       } catch (e) {
-        consola.error(e)
+        this.$util.error(e)
       }
     },
   },

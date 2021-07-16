@@ -5,7 +5,7 @@
         <b-form-input
           id="sign-email"
           v-model="form.email"
-          :state="$utils.evaluateState($vee.state(vp), $val.state(server, 'email'))"
+          :state="$val.evalState($vee.state(vp), $val.state(server, 'email'))"
           autocomplete="email"
           type="email"
           size="lg"
@@ -43,7 +43,7 @@
         <b-form-input
           id="sign-password"
           v-model="form.password"
-          :state="$utils.evaluateState($vee.state(vp), $val.state(server, 'password'))"
+          :state="$val.evalState($vee.state(vp), $val.state(server, 'password'))"
           autocomplete="current-password"
           :type="password.type"
           size="lg"

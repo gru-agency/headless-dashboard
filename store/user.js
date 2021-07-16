@@ -1,7 +1,3 @@
-import * as consola from 'consola'
-import { nanoid } from 'nanoid'
-import { FieldValue, Timestamp } from '~/plugins/firebase'
-
 const COLLECTION = 'users'
 
 const state = () => ({
@@ -19,13 +15,14 @@ const mutations = {
 
 const actions = {
   async add({ commit }, { docId, payload }) {
-    const { $fire, isDev } = this.app.context
+    const { $fire, $fireModule, $util, isDev } = this.app.context
+    const { FieldValue, Timestamp } = $fireModule.firestore
     try {
-      docId = docId || nanoid()
+      docId = docId || $util.nanoid()
 
       // remove local props + globally add necessary meta props
-      const { ...dirty } = { ...payload, created: FieldValue.serverTimestamp() }
-      if (isDev) consola.info('user | add | id, dirty', docId, dirty)
+      const { lastLogin, tokenExpired, ...dirty } = { ...payload, created: FieldValue.serverTimestamp() }
+      if (isDev) $util.info('user | add | id, dirty', docId, dirty)
 
       // persist anonymous/object to firestore
       await $fire.firestore
@@ -37,17 +34,18 @@ const actions = {
       // Fallback: commit directly (losing server info, but can afford slight inaccuracy)
       commit('SET', { ...payload, id: docId, created: Timestamp.fromDate(new Date()) })
     } catch (error) {
-      if (isDev) consola.error('user | add | error', error)
+      if (isDev) $util.error('user | add | error', error)
       throw error
     }
   },
 
   async update({ commit }, { docId, payload }) {
-    const { $fire, isDev } = this.app.context
+    const { $fire, $fireModule, $util, isDev } = this.app.context
+    const { FieldValue, Timestamp } = $fireModule.firestore
     try {
       // remove local props + globally add necessary meta props
       const { id, object, ...dirty } = { ...payload, updated: FieldValue.serverTimestamp() }
-      if (isDev) consola.info('user | update | dirty', dirty)
+      if (isDev) $util.info('user | update | dirty', dirty)
 
       // persist anonymous/object to firestore
       await $fire.firestore
@@ -59,13 +57,13 @@ const actions = {
       // Fallback: commit directly (losing server info, but can afford slight inaccuracy)
       commit('SET', { ...payload, updated: Timestamp.fromDate(new Date()) })
     } catch (error) {
-      if (isDev) consola.error('user | update | error', error)
+      if (isDev) $util.error('user | update | error', error)
       throw error
     }
   },
 
   async get({ commit }, { firebaseId }) {
-    const { $fire, isDev } = this.app.context
+    const { $fire, $util, isDev } = this.app.context
     try {
       // expect unique record with firebase id
       const snapshot = await $fire.firestore
@@ -76,16 +74,16 @@ const actions = {
 
       const doc = snapshot.docs[0]
       const { id, exists, metadata } = doc
-      if (isDev) consola.info('user | get | id, exists, metadata', id, exists, metadata)
+      if (isDev) $util.info('user | get | id, exists, metadata', id, exists, metadata)
 
       // put all the information together into an object before goes to state
       const user = { ...doc.data(), id }
-      if (isDev) consola.info('user | get | user', user)
+      if (isDev) $util.info('user | get | user', user)
       commit('SET', user)
 
       return user
     } catch (error) {
-      if (isDev) consola.error('user | get | error', error)
+      if (isDev) $util.error('user | get | error', error)
       throw error
     }
   },
