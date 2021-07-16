@@ -9,6 +9,15 @@ export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
 
+  // override public config if ssr mode
+  privateRuntimeConfig: {},
+
+  publicRuntimeConfig: {
+    baseUrl: process.env.NODE_ENV === 'production' ? 'https//www.shoplex.com' : 'http://localhost:3000',
+    brandName: 'Shoplex',
+    supportMail: 'support@shoplex.com',
+  },
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'Shoplex',
@@ -28,7 +37,6 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { mode: 'client', src: '~/plugins/utils.js' },
-    { mode: 'client', src: '~/plugins/firebase.js' },
     { mode: 'client', src: '~/plugins/vee-validate.js' },
   ],
 
