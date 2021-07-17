@@ -30,8 +30,12 @@ export default {
   name: 'Dashboard',
 
   head() {
+    const i18nHead = this.$nuxtI18nHead({ addSeoAttributes: true })
     return {
       title: this.$config.brandName,
+      htmlAttrs: { ...i18nHead.htmlAttrs },
+      meta: [...i18nHead.meta],
+      link: [...i18nHead.link],
     }
   },
 

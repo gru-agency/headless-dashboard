@@ -6,6 +6,10 @@
 export default {
   name: 'Default',
 
+  head() {
+    return this.$nuxtI18nHead({ addSeoAttributes: true })
+  },
+
   mounted() {
     this.$fireAuthStore.subscribe()
   },
