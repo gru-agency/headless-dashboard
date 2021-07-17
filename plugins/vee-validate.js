@@ -3,36 +3,31 @@ import { localize, extend, setInteractionMode, ValidationProvider, ValidationObs
 import { required, email, min, max } from 'vee-validate/dist/rules'
 import en from 'vee-validate/dist/locale/en.json'
 
-async function loadLocale(code) {
-  const locale = await import(`vee-validate/dist/locale/${code}.json`)
-  localize(code, locale)
-}
-
-const util = {
-  // deprecated
-  checkState: ({ touched, dirty, validated, valid = null }) => {
-    return (touched && dirty) || validated ? valid : null
-  },
-
-  state: ({ touched, dirty, validated, valid = null }) => {
-    return (touched && dirty) || validated ? valid : null
-  },
-
-  error: (states) => states.errors[0],
-
-  switchLocale: (locale) => {
-    if (locale.startsWith('ms')) {
-      loadLocale('ms_MY')
-    } else if (locale.startsWith('zh')) {
-      loadLocale('zh_CN')
-    } else {
-      loadLocale('en')
-    }
-  },
-}
-
 export default (_, inject) => {
-  inject('vee', util)
+  async function loadLocale(code) {
+    const locale = await import(`vee-validate/dist/locale/${code}.json`)
+    localize(code, locale)
+  }
+
+  const _util = {
+    state: ({ touched, dirty, validated, valid = null }) => {
+      return (touched && dirty) || validated ? valid : null
+    },
+
+    error: (states) => states.errors[0],
+
+    switchLocale: (locale) => {
+      if (locale.startsWith('ms')) {
+        loadLocale('ms_MY')
+      } else if (locale.startsWith('zh')) {
+        loadLocale('zh_CN')
+      } else {
+        loadLocale('en')
+      }
+    },
+  }
+
+  inject('vee', _util)
 }
 
 // default to en
@@ -49,7 +44,8 @@ extend('hint_pw', {
     return value.length >= args.length
   },
   params: ['length'],
-  message: 'Your password needs to be at least 10 characters, include multiple words and phrases to make it more secure.'
+  message:
+    'Your password needs to be at least 10 characters, include multiple words and phrases to make it more secure.',
 })
 
 // less offensive mode

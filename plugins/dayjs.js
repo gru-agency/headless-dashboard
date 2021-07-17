@@ -6,20 +6,22 @@ import 'dayjs/locale/zh'
 
 dayjs.extend(relativeTime)
 
-const util = {
-  init: () => dayjs,
-
-  switchLocale: (locale) => {
-    if (locale.startsWith('ms')) {
-      dayjs.locale('ms')
-    } else if (locale.startsWith('zh')) {
-      dayjs.locale('zh')
-    } else {
-      dayjs.locale('en')
-    }
-  },
-}
-
 export default (_, inject) => {
-  inject('dayjs', util)
+  const _dayjs = dayjs
+
+  const _util = {
+    factory: _dayjs,
+
+    switchLocale: (locale) => {
+      if (locale.startsWith('ms')) {
+        _dayjs.locale('ms')
+      } else if (locale.startsWith('zh')) {
+        _dayjs.locale('zh')
+      } else {
+        _dayjs.locale('en')
+      }
+    },
+  }
+
+  inject('dayjs', _util)
 }

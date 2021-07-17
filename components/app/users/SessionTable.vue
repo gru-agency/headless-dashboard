@@ -4,7 +4,7 @@
 
     <b-table-lite :items="all" :fields="fields" responsive class="mb-0">
       <template #cell(time)="{ value }">
-        {{ $dayjs.init().unix(value).fromNow() }}
+        {{ $dayjs.factory.unix(value).fromNow() }}
       </template>
 
       <template #cell(status)="item">

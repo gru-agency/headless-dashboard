@@ -77,7 +77,7 @@
       </b-col>
       <b-col cols="4" class="mt-4">
         <b-card header="dayjs">
-          {{ $dayjs.init()('1999-01-01').fromNow() }}
+          {{ $dayjs.factory('1999-01-01').fromNow() }}
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">

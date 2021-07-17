@@ -133,7 +133,7 @@ export default {
     langDir: '~/locales/',
     strategy: 'prefix',
     defaultLocale: 'en',
-    detectBrowserLanguage: { alwaysRedirect: true, fallbackLocale: 'en', onlyOnRoot: true, useCookie: true },
+    detectBrowserLanguage: { alwaysRedirect: false, fallbackLocale: 'en', onlyOnRoot: true, useCookie: true },
     seo: false, // performance concern, enable lazily
     vuex: false,
     vueI18n: { fallbackLocale: 'en', dateTimeFormats, numberFormats },
