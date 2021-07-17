@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import { localize, extend, setInteractionMode, ValidationProvider, ValidationObserver } from 'vee-validate'
 import { required, email, min, max } from 'vee-validate/dist/rules'
-import en from 'vee-validate/dist/locale/en.json'
 
-export default (_, inject) => {
+export default ({ store }, inject) => {
   async function loadLocale(code) {
     const locale = await import(`vee-validate/dist/locale/${code}.json`)
     localize(code, locale)
@@ -27,11 +26,20 @@ export default (_, inject) => {
     },
   }
 
+  // iife: self-init locale setting
+  // note: place this after all handy utils loaded
+  ;(() => {
+    const browser = store.$i18n.getBrowserLocale()
+    const cookie = store.$i18n.getLocaleCookie()
+
+    // priority: cookie > browser > default(en)
+    const finalLocale = cookie || browser || 'en'
+
+    _util.switchLocale(finalLocale)
+  })()
+
   inject('vee', _util)
 }
-
-// default to en
-localize('en', en)
 
 extend('required', required)
 extend('email', email)
