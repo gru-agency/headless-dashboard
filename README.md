@@ -10,6 +10,9 @@ $ brew install node@14
 
 # yarn as preferred package manager
 $ npm install --global yarn
+
+# also install firebase emulator
+# https://firebase.google.com/docs/emulator-suite/install_and_configure
 ```
 
 2. Setup VSCode with following plugins
@@ -17,11 +20,9 @@ $ npm install --global yarn
 - vetur (must have)
 - auto close tag
 - auto rename tag
-- i18n Ally
-- json5 syntax
-- vue snippets
+- vue vscode snippets
 
-3. Setup Chrome browser plugins
+1. Setup Chrome browser plugins
 
 - Vue Devtools
 
