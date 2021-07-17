@@ -114,12 +114,13 @@ a.active {
 }
 
 // table
-.table {
+.table-responsive > .table {
   th,
   td {
     vertical-align: middle;
     border-top: 0;
     border-bottom: 1px solid #dee2e6 !important;
+    white-space: nowrap;
 
   //   &.fit-content {
   //     width: 1%;
