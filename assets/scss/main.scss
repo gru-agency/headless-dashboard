@@ -97,19 +97,22 @@ $navbar-height: 64px;
 }
 
 // link
-a.active {
-  color: $primary;
-  font-weight: 500;
+a {
+  &.nuxt-link-active, 
+  &.nuxt-link-exact-active {
+    color: $primary;
+    font-weight: 500;
 
-  // fontawesome theme
-  > .fa-gru {
-    --fa-secondary-opacity: 0.4;
-    --fa-primary-color: #6610f2;
-    --fa-secondary-color: #6610f2;
-  }
+    // fontawesome theme
+    > .fa-gru {
+      --fa-secondary-opacity: 0.4;
+      --fa-primary-color: #6610f2;
+      --fa-secondary-color: #6610f2;
+    }
 
-  &:hover {
-    color: darken($primary, 15%);
+    &:hover {
+      color: darken($primary, 15%);
+    }
   }
 }
 

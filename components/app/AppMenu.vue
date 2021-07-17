@@ -4,45 +4,24 @@
       {{ $config.brandName.toLowerCase() }}
     </b-nav-text>
 
-    <b-nav-item :to="localePath(links.home)" :exact-active-class="activeClass" class="px-2">
+    <b-nav-item :to="localePath(links.home)" exact class="px-2">
       <fa :icon="['fad', 'home-alt']" :class="iconClass"></fa> {{ home }}
     </b-nav-item>
 
-    <b-nav-item
-      :to="localePath(links.orders)"
-      :active-class="activeClass"
-      :exact-active-class="activeClass"
-      class="px-2"
-    >
+    <b-nav-item :to="localePath(links.orders)" class="px-2">
       <fa :icon="['fad', 'ballot']" :class="iconClass"></fa> {{ orders }}
     </b-nav-item>
 
-    <b-nav-item
-      :to="localePath(links.products)"
-      :active-class="activeClass"
-      :exact-active-class="activeClass"
-      class="px-2"
-    >
+    <b-nav-item :to="localePath(links.products)" class="px-2">
       <fa :icon="['fad', 'box']" :class="iconClass"></fa>
       {{ products }}
     </b-nav-item>
 
-    <b-nav-item
-      :to="localePath(links.prices)"
-      :active-class="activeClass"
-      :exact-active-class="activeClass"
-      class="px-2"
-    >
+    <b-nav-item :to="localePath(links.prices)" class="px-2">
       <fa :icon="['fad', 'dollar-sign']" :class="iconClass"></fa> {{ prices }}
     </b-nav-item>
 
-    <b-nav-item
-      :to="localePath(links.settings)"
-      :active="settingChild"
-      :active-class="activeClass"
-      :exact-active-class="activeClass"
-      class="px-2"
-    >
+    <b-nav-item :to="localePath(links.settings)" class="px-2">
       <fa :icon="['fad', 'cog']" :class="iconClass"></fa> {{ settings }}
     </b-nav-item>
   </b-nav>
@@ -76,14 +55,6 @@ export default {
 
     iconPaddingClass() {
       return 'mr-2'
-    },
-
-    activeClass() {
-      return 'active'
-    },
-
-    settingChild() {
-      return this.$route.path.includes('settings')
     },
   },
 }
