@@ -241,7 +241,7 @@ export default {
           message: new Date(),
         })
       } catch (e) {
-        this.$util.error(e)
+        this.$log.error(e)
       }
     },
 
@@ -251,7 +251,7 @@ export default {
         const doc = await ref.get()
         this.message = doc.data().message.toDate()
       } catch (e) {
-        this.$util.error(e)
+        this.$log.error(e)
       }
     },
   },

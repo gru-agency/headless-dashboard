@@ -15,14 +15,14 @@ const mutations = {
 
 const actions = {
   async add({ commit }, { docId, payload }) {
-    const { $fire, $fireModule, $util, isDev } = this.app.context
+    const { $fire, $fireModule, $log, $util } = this.app.context
     const { FieldValue, Timestamp } = $fireModule.firestore
     try {
       docId = docId || $util.nanoid()
 
       // remove local props + globally add necessary meta props
       const { lastLogin, tokenExpired, ...dirty } = { ...payload, created: FieldValue.serverTimestamp() }
-      if (isDev) $util.info('user | add | id, dirty', docId, dirty)
+      $log.debug('user | add | id, dirty', docId, dirty)
 
       // persist anonymous/object to firestore
       await $fire.firestore
@@ -33,19 +33,21 @@ const actions = {
       // Proper: fetch data from server
       // Fallback: commit directly (losing server info, but can afford slight inaccuracy)
       commit('SET', { ...payload, id: docId, created: Timestamp.fromDate(new Date()) })
+
+      $log.success('user | add', 'success')
     } catch (error) {
-      if (isDev) $util.error('user | add | error', error)
+      $log.error('user | add | error', error)
       throw error
     }
   },
 
   async update({ commit }, { docId, payload }) {
-    const { $fire, $fireModule, $util, isDev } = this.app.context
+    const { $fire, $fireModule, $log } = this.app.context
     const { FieldValue, Timestamp } = $fireModule.firestore
     try {
       // remove local props + globally add necessary meta props
       const { id, object, ...dirty } = { ...payload, updated: FieldValue.serverTimestamp() }
-      if (isDev) $util.info('user | update | dirty', dirty)
+      $log.debug('user | update | dirty', dirty)
 
       // persist anonymous/object to firestore
       await $fire.firestore
@@ -56,14 +58,16 @@ const actions = {
       // Proper: fetch data from server
       // Fallback: commit directly (losing server info, but can afford slight inaccuracy)
       commit('SET', { ...payload, updated: Timestamp.fromDate(new Date()) })
+
+      $log.success('user | update', 'success')
     } catch (error) {
-      if (isDev) $util.error('user | update | error', error)
+      $log.error('user | update | error', error)
       throw error
     }
   },
 
   async get({ commit }, { firebaseId }) {
-    const { $fire, $util, isDev } = this.app.context
+    const { $fire, $log } = this.app.context
     try {
       // expect unique record with firebase id
       const snapshot = await $fire.firestore
@@ -74,16 +78,16 @@ const actions = {
 
       const doc = snapshot.docs[0]
       const { id, exists, metadata } = doc
-      if (isDev) $util.info('user | get | id, exists, metadata', id, exists, metadata)
+      $log.debug('user | get | id, exists, metadata', id, exists, metadata)
 
       // put all the information together into an object before goes to state
       const user = { ...doc.data(), id }
-      if (isDev) $util.info('user | get | user', user)
+      $log.debug('user | get | user', user)
       commit('SET', user)
 
       return user
     } catch (error) {
-      if (isDev) $util.error('user | get | error', error)
+      $log.error('user | get | error', error)
       throw error
     }
   },

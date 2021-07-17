@@ -40,6 +40,7 @@ export default {
     { mode: 'client', src: '~/plugins/i18n.js' },
     { mode: 'client', src: '~/plugins/dayjs.js' },
     { mode: 'client', src: '~/plugins/utils.js' },
+    { mode: 'client', src: '~/plugins/consola.js' },
     { mode: 'client', src: '~/plugins/vee-validate.js' },
   ],
 

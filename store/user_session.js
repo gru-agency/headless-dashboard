@@ -19,19 +19,19 @@ const mutations = {
 
 const actions = {
   async add({ commit, state }, claims) {
-    const { $config, $util, isDev } = this.app.context
+    const { $config, $log, $util } = this.app.context
     try {
       const currentIp4 = await this.$axios.$get('https://api.ipify.org')
-      if (isDev) $util.info('user_session | addSession | ipv4', currentIp4)
+      $log.debug('user_session | addSession | ipv4', currentIp4)
 
       const cache = state.caches.find((el) => el.ipv4 === currentIp4)
-      if (isDev) $util.info('user_session | addSession | cache', cache)
+      $log.debug('user_session | addSession | cache', cache)
 
       // only fetch if cache miss
       let geodb
       if (!cache) {
         const _geodb = await this.$axios.$get(`https://geolocation-db.com/json/${$config.geoDbKey}`)
-        if (isDev) $util.info('user_session | addSession | geodb', _geodb)
+        $log.debug('user_session | addSession | geodb', _geodb)
         geodb = { ipv4: _geodb.IPv4, country: _geodb.country_name, source: 'geodb' }
       }
 
@@ -39,7 +39,7 @@ const actions = {
       const geolocation = cache || geodb
       if (geolocation) {
         commit('SET_CACHE', geolocation)
-        if (isDev) $util.info('user_session | addSession | caches', state.caches)
+        $log.debug('user_session | addSession | caches', state.caches)
       }
 
       commit('SET_SESSION', {
@@ -48,17 +48,19 @@ const actions = {
         time: claims.iat,
         device: $util.platformDescription(),
       })
-      if (isDev) $util.info('user_session | addSession | sessions', state.all)
+      $log.debug('user_session | addSession | sessions', state.all)
+      
+      $log.success('user_session | addSession', 'successful')
     } catch (error) {
-      if (isDev) $util.error('user_session | addSession | error', error)
+      $log.error('user_session | addSession | error', error)
       throw error
     }
   },
 
   clear({ commit }) {
-    const { $util, isDev } = this.app.context
+    const { $log } = this.app.context
     commit('CLEAR_SESSION')
-    if (isDev) $util.info('user_session | clear', 'successful')
+    $log.success('user_session | clear', 'successful')
   },
 }
 
