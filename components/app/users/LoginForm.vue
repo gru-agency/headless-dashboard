@@ -24,7 +24,7 @@
           {{ ui.password }}
           <action-link
             :text="ui.forgot"
-            :link="links.reset"
+            :link="localePath(links.reset)"
             variant="primary"
             class="float-right"
           ></action-link>
@@ -91,7 +91,7 @@ export default {
         forgot: this.$t('modules.users.loginForgotPassword'),
         remember: this.$t('modules.users.loginPersist'),
       },
-      links: { reset: this.localePath('/reset') },
+      links: { reset: { name: 'auth-reset' } },
       password: {
         type: 'password',
         focus: false,

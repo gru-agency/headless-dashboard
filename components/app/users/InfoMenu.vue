@@ -7,7 +7,7 @@
     <b-dd-text text-class="font-weight-normal">{{ userName }}</b-dd-text>
     <b-dd-text text-class="font-weight-normal small text-secondary">{{ userRole }}</b-dd-text>
     <b-dd-divider></b-dd-divider>
-    <b-dd-item :to="links.users" link-class="text-primary">{{ ui.profile }}</b-dd-item>
+    <b-dd-item :to="localePath(links.users)" link-class="text-primary">{{ ui.profile }}</b-dd-item>
     <b-dd-item link-class="text-primary" @click.prevent="onSignOut">{{ ui.signout }}</b-dd-item>
   </b-nav-item-dropdown>
 </template>
@@ -25,7 +25,7 @@ export default {
         profile: this.$t('general.profile'),
         signout: this.$t('general.signout'),
       },
-      links: { users: this.localePath('/dashboard/users'), login: this.localePath('/login') },
+      links: { users: { name: 'dashboard-users' }, login: { name: 'auth-login' } },
     }
   },
 
@@ -62,7 +62,7 @@ export default {
 
     async onSignOut() {
       await this.signOut()
-      this.$router.push(this.links.login)
+      this.$router.push(this.localePath(this.links.login))
     },
   },
 }

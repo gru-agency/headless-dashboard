@@ -13,5 +13,7 @@ export default {
   data() {
     return {}
   },
+
+  mounted() {console.log(this.$nuxt)},
 }
 </script>

@@ -18,7 +18,7 @@
           <span>
             <icon preset="bv-error"></icon> {{ $vee.error(vp) || $val.error(server) }}
             <span v-if="accountExists">
-              <action-link :link="links.login" :text="ui.login" variant="primary"></action-link>.
+              <action-link :link="localePath(links.login)" :text="ui.login" variant="primary"></action-link>.
             </span>
           </span>
         </b-form-invalid-feedback>
@@ -73,7 +73,7 @@
     <b-form-group label-for="reg-consent" class="small text-secondary">
       <b-form-checkbox id="reg-consent" v-model="form.emailConsent" size="sm">
         {{ ui.consent }}
-        <action-link :link="links.privacy" :text="ui.privacy" variant="primary"></action-link>
+        <action-link :link="localePath(links.privacy)" :text="ui.privacy" variant="primary"></action-link>
       </b-form-checkbox>
     </b-form-group>
 
@@ -107,7 +107,7 @@ export default {
         privacy: this.$t('general.privacyPolicy'),
         login: this.$t('general.login').toLowerCase(),
       },
-      links: { privacy: this.localePath('/privacy'), login: this.localePath('/login') },
+      links: { privacy: { name: 'privacy' }, login: { name: 'auth-login' } },
       password: {
         type: 'password',
         focus: false,

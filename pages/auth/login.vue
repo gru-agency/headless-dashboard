@@ -24,7 +24,7 @@
 
     <div class="text-secondary text-center">
       {{ ui.back }}
-      <action-link :text="ui.signup" :link="links.signup" variant="primary"></action-link>
+      <action-link :text="ui.signup" :link="localePath(links.signup)" variant="primary"></action-link>
     </div>
   </b-card>
 </template>
@@ -49,7 +49,7 @@ export default {
         back: this.$t('modules.users.loginBack'),
         signup: this.$t('general.signup'),
       },
-      links: { signup: this.localePath('/register'), dashboard: this.localePath('/dashboard') },
+      links: { signup: { name: 'auth-register' }, dashboard: { name: 'dashboard' } },
       boxState: { success: false, title: null, body: null, actionLink: null, actionText: null },
       server: { validated: false, valid: false, field: null, code: null, message: null },
     }
@@ -84,7 +84,7 @@ export default {
     },
 
     successHandler(response) {
-      this.$router.push(this.links.dashboard)
+      this.$router.push(this.localePath(this.links.dashboard))
     },
 
     onFormSubmitted(success, error, response) {

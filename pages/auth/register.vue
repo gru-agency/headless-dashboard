@@ -26,7 +26,7 @@
 
     <div class="text-center text-secondary">
       {{ ui.back }}
-      <action-link :text="ui.login" :link="links.login" variant="primary"></action-link>
+      <action-link :text="ui.login" :link="localePath(links.login)" variant="primary"></action-link>
     </div>
   </b-card>
 </template>
@@ -52,7 +52,7 @@ export default {
         button: this.$t('modules.users.registerButton'),
         login: this.$t('general.login'),
       },
-      links: { login: this.localePath('/login'), dashboard: this.localePath('/dashboard') },
+      links: { login: { name: 'auth-login' }, dashboard: { name: 'dashboard' } },
       boxState: { success: false, title: null, body: null, actionLink: null, actionText: null },
       server: { validated: false, valid: false, field: null, code: null, message: null },
       buttonDisabled: true,
@@ -76,7 +76,7 @@ export default {
     },
 
     successHandler(response) {
-      this.$router.push(this.links.dashboard)
+      this.$router.push(this.localePath(this.links.dashboard))
     },
 
     onFormSubmitted(success, error, response) {

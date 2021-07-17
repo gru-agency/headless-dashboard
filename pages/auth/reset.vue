@@ -18,7 +18,7 @@
     </div>
 
     <div class="text-center">
-      <action-link :text="ui.back" :link="links.login"></action-link>
+      <action-link :text="ui.back" :link="localePath(links.login)"></action-link>
     </div>
   </b-card>
 </template>
@@ -43,7 +43,7 @@ export default {
         subtitle: this.$t('modules.users.resetSubtitle'),
         back: this.$t('general.returnLogin'),
       },
-      links: { login: this.localePath('/login') },
+      links: { login: { name: 'auth-login' } },
       boxState: { success: false, title: null, body: null, actionLink: null, actionText: null },
       server: { validated: false, valid: false, field: null, code: null, message: null },
     }
