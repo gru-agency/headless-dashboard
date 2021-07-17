@@ -1,6 +1,7 @@
 <template>
   <div class="py-10 px-5">
-    <users-session-table></users-session-table>
+    <users-language-card class="mb-10"></users-language-card>
+    <users-session-table class="mb-10"></users-session-table>
   </div>
 </template>
 

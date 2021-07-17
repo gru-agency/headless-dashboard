@@ -3,8 +3,8 @@ import { nanoid } from 'nanoid'
 import { name, os } from 'platform'
 
 const _util = {
-  info: (message, varargs) => consola.info(message, varargs),
-  error: (message, varargs) => consola.error(message, varargs),
+  info: (message, ...args) => consola.info(message, ...args),
+  error: (message, ...args) => consola.error(message, ...args),
 
   nanoid: (length) => (length ? nanoid(length) : nanoid()),
 
