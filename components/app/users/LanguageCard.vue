@@ -52,7 +52,8 @@ export default {
     switchLocale() {
       let _lang = this.selected
       if (!this.selected) _lang = this.$i18n.getBrowserLocale()
-      this.$i18n.setLocale(_lang)
+      this.$i18n.setLocaleCookie(_lang)
+      this.$router.push(this.switchLocalePath(_lang))
     },
   },
 }
