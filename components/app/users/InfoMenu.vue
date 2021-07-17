@@ -25,7 +25,7 @@ export default {
         profile: this.$t('general.profile'),
         signout: this.$t('general.signout'),
       },
-      links: { users: { name: 'dashboard-users' }, login: { name: 'auth-login' } },
+      links: { users: { name: 'dashboard-settings-user' }, login: { name: 'auth-login' } },
     }
   },
 

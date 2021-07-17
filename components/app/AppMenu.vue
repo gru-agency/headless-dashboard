@@ -43,7 +43,7 @@ export default {
         orders: { name: 'dashboard-orders' },
         prices: { name: 'dashboard-prices' },
         products: { name: 'dashboard-products' },
-        settings: { name: 'dashboard-settings' },
+        settings: { name: 'dashboard-settings-user' },
       },
     }
   },
