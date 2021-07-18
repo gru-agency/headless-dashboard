@@ -54,7 +54,7 @@ $spacers: map-merge($spacers, $custom-spacers);
 // @import '~bootstrap/scss/pagination';
 @import '~bootstrap/scss/badge';
 // @import '~bootstrap/scss/jumbotron';
-// @import '~bootstrap/scss/alert';
+@import '~bootstrap/scss/alert';
 // @import '~bootstrap/scss/progress';
 @import '~bootstrap/scss/media';
 @import '~bootstrap/scss/list-group';
@@ -153,8 +153,9 @@ a {
 }
 
 // form
-label {
+label, legend {
   cursor: pointer;
+  font-weight: $headings-font-weight;
 }
 
 .form-group {
@@ -173,6 +174,19 @@ label {
     + input.form-control-lg {
       padding-right: 2.5rem;
     }
+  }
+}
+
+.form-control-plaintext {
+  @media (min-width: map-get($grid-breakpoints, 'md')) {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  &:focus-visible {
+    -webkit-outline: none;
+    -moz-outline: none;
+    outline: none;
   }
 }
 

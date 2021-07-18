@@ -1,5 +1,6 @@
 <template>
   <div class="py-10 px-5">
+    <users-profile-form class="mb-10"></users-profile-form>
     <users-language-card class="mb-10"></users-language-card>
     <users-email-card class="mb-10"></users-email-card>
     <users-session-table class="mb-10"></users-session-table>
@@ -10,9 +11,5 @@
 export default {
   name: 'User',
   layout: 'dashboard',
-
-  data() {
-    return {}
-  },
 }
 </script>
