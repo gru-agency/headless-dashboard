@@ -13,14 +13,16 @@
     </box-header>
 
     <b-card-body>
-      <b-col cols="12" lg="6">
-        <b-form-select v-model="selected">
-          <b-form-select-option :value="null">{{ ui.autoDetect }}</b-form-select-option>
-          <b-select-option v-for="lang in $i18n.locales" :key="lang.code" :value="lang.code">
-            {{ lang.name }}
-          </b-select-option>
-        </b-form-select>
-      </b-col>
+      <b-row>
+        <b-col cols="12" lg="6">
+          <b-form-select v-model="selected">
+            <b-form-select-option :value="null">{{ ui.autoDetect }}</b-form-select-option>
+            <b-select-option v-for="lang in $i18n.locales" :key="lang.code" :value="lang.code">
+              {{ lang.name }}
+            </b-select-option>
+          </b-form-select>
+        </b-col>
+      </b-row>
     </b-card-body>
   </b-card>
 </template>
