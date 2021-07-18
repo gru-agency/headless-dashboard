@@ -10,6 +10,8 @@ export default ({ _ }, inject) => {
     extractParentPath: (path) => {
       return path.substr(0, path.lastIndexOf('/'))
     },
+
+    stringify: (msg) => JSON.stringify(msg),
   }
 
   const _validation = {
