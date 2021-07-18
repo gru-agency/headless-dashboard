@@ -50,7 +50,7 @@ export default {
 
   props: {
     titleText: { type: String, default: undefined },
-    titleTag: { type: String, default: undefined },
+    titleTag: { type: String, default: 'h5' },
     subtitleText: { type: String, default: undefined },
     subtitleTag: { type: String, default: 'h6' },
     subtitleVariant: { type: String, default: 'muted' },
