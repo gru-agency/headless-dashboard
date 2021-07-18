@@ -58,6 +58,7 @@ For detailed explanation on how things work, check out the [documentation](https
   - change verify email template base url from `localhost` to `{{ PROD_URL }}`
   - setup support email e.g. support@shoplex.com
   - setup geodb account / api key
+  - credential management. either vault or ssr
 
 ## Commit Guide
 
