@@ -49,6 +49,10 @@
     "prices": { "title": "Prices" },
     "settings": { "title": "Settings" },
     "users": {
+      "emailTitle": "Email preferences",
+      "emailSubtitle": "Choose what messages you’d like to receive for your {_brand} account",
+      "emailGetStartedTitle": "Getting started",
+      "emailGetStartedSubtitle": "Receive helpful tips when you try out new {_brand} products",
       "resetPasswordLinkInvalid": "This password reset link has expired",
       "resetPasswordRetry": "Try reset your password again",
       "resetPasswordSuccess": "You've successfully changed your password",
