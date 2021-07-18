@@ -75,7 +75,9 @@
           class="mb-0"
         >
           <b-form-input v-if="readonly" value="••••••••••" :plaintext="uneditable"></b-form-input>
-          <action-button v-else :text="ui.changePassword" size="sm" @click="showModal"></action-button>
+          <div v-else class="h-100 d-flex align-items-center">
+            <action-button :text="ui.changePassword" size="sm" @click="showModal"></action-button>
+          </div>
         </b-form-group>
       </validation-observer>
     </b-card-body>
