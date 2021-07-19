@@ -76,7 +76,9 @@
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card header="Reserve"> </b-card>
+        <b-card header="dayjs">
+          {{ $dayjs.factory('1999-01-01').fromNow() }}
+        </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
         <b-card header="Toast">
@@ -189,8 +191,6 @@
 </template>
 
 <script>
-import * as consola from 'consola'
-
 export default {
   name: 'Playground',
 
@@ -241,7 +241,7 @@ export default {
           message: new Date(),
         })
       } catch (e) {
-        consola.error(e)
+        this.$log.error(e)
       }
     },
 
@@ -251,7 +251,7 @@ export default {
         const doc = await ref.get()
         this.message = doc.data().message.toDate()
       } catch (e) {
-        consola.error(e)
+        this.$log.error(e)
       }
     },
   },

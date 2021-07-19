@@ -7,8 +7,8 @@
         <b-form-input
           id="reg-email"
           v-model="form.email"
-          :state="$utils.evaluateState($vee.state(vp), $val.state(server, 'email'))"
-          autocomplete="email"
+          :state="$val.evalState($vee.state(vp), $val.state(server, 'email'))"
+          autocomplete="username email"
           type="email"
           size="lg"
           trim
@@ -18,7 +18,7 @@
           <span>
             <icon preset="bv-error"></icon> {{ $vee.error(vp) || $val.error(server) }}
             <span v-if="accountExists">
-              <action-link :link="links.login" :text="ui.login" variant="primary"></action-link>.
+              <action-link :link="localePath(links.login)" :text="ui.login" variant="primary"></action-link>.
             </span>
           </span>
         </b-form-invalid-feedback>
@@ -56,7 +56,7 @@
         <b-form-input
           id="new-password"
           v-model="form.password"
-          :state="$utils.evaluateState($vee.state(vp), $val.state(server, 'password'))"
+          :state="$val.evalState($vee.state(vp), $val.state(server, 'password'))"
           autocomplete="new-password"
           :type="password.type"
           size="lg"
@@ -73,13 +73,13 @@
     <b-form-group label-for="reg-consent" class="small text-secondary">
       <b-form-checkbox id="reg-consent" v-model="form.emailConsent" size="sm">
         {{ ui.consent }}
-        <action-link :link="links.privacy" :text="ui.privacy" variant="primary"></action-link>
+        <action-link :link="localePath(links.privacy)" :text="ui.privacy" variant="primary"></action-link>
       </b-form-checkbox>
     </b-form-group>
 
-    <b-form-group v-if="showError" class="mb-3">
-      <span class="text-danger">{{ server.message }}</span>
-    </b-form-group>
+    <b-alert :show="showError" variant="danger">
+      <icon preset="bv-error" class="mr-2"></icon> {{ server.message }}
+    </b-alert>
   </validation-observer>
 </template>
 
@@ -103,11 +103,11 @@ export default {
         email: this.$t('general.email'),
         name: this.$t('general.name'),
         password: this.$t('general.password'),
-        consent: this.$t('modules.users.registerConsent', { _brand: this.$app.brandName }),
+        consent: this.$t('modules.users.registerConsent', { _brand: this.$config.brandName }),
         privacy: this.$t('general.privacyPolicy'),
         login: this.$t('general.login').toLowerCase(),
       },
-      links: { privacy: this.localePath('/privacy'), login: this.localePath('/login') },
+      links: { privacy: { name: 'privacy' }, login: { name: 'auth-login' } },
       password: {
         type: 'password',
         focus: false,
@@ -171,7 +171,7 @@ export default {
         this.server = {
           ...this.server,
           field: 'email',
-          message: this.$t('validation.accountExists', { _brand: this.$app.brandName }),
+          message: this.$t('validation.accountExists', { _brand: this.$config.brandName }),
         }
       } else if (error.code === 'auth/weak-password') {
         this.server = {

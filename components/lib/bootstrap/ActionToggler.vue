@@ -24,11 +24,11 @@ export default {
 
   computed: {
     getTarget() {
-      return this.target ? '#'.concat(this.target) : '#'
+      return this.target ? `#${this.target}` : '#'
     },
 
     getVariant() {
-      return this.$ui.getTextVariant(this.variant)
+      return `text-${this.variant}`
     },
   },
 }

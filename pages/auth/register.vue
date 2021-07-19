@@ -26,7 +26,7 @@
 
     <div class="text-center text-secondary">
       {{ ui.back }}
-      <action-link :text="ui.login" :link="links.login" variant="primary"></action-link>
+      <action-link :text="ui.login" :link="localePath(links.login)" variant="primary"></action-link>
     </div>
   </b-card>
 </template>
@@ -47,12 +47,12 @@ export default {
         resetted: 'register-resetted',
       },
       ui: {
-        title: this.$t('modules.users.registerTitle', { _brand: this.$app.brandName }),
+        title: this.$t('modules.users.registerTitle', { _brand: this.$config.brandName }),
         back: this.$t('modules.users.registerBack'),
         button: this.$t('modules.users.registerButton'),
         login: this.$t('general.login'),
       },
-      links: { login: this.localePath('/login'), dashboard: this.localePath('/dashboard') },
+      links: { login: { name: 'auth-login' }, dashboard: { name: 'dashboard' } },
       boxState: { success: false, title: null, body: null, actionLink: null, actionText: null },
       server: { validated: false, valid: false, field: null, code: null, message: null },
       buttonDisabled: true,
@@ -68,15 +68,12 @@ export default {
 
   methods: {
     errorHandler(error) {
-      this.boxState.success = false
+      this.boxState = { ...this.boxState, success: false, title: this.$t('general.error5xx') }
       this.server = error
-
-      // determine terminal error
-      this.boxState = { ...this.boxState, title: this.$t('general.error5xx') }
     },
 
     successHandler(response) {
-      this.$router.push(this.links.dashboard)
+      this.$router.push(this.localePath(this.links.dashboard))
     },
 
     onFormSubmitted(success, error, response) {

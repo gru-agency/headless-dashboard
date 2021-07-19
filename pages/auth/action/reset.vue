@@ -59,6 +59,7 @@ export default {
         resetted: 'password-resetted',
       },
       ui: { title: this.$t('modules.users.resetTitle') },
+      links: { reset: { name: 'auth-reset' }, dashboard: { name: 'dashboard' } },
       boxState: { success: false, title: null, body: null, actionLink: null, actionText: null },
       server: { validated: false, valid: false, field: null, code: null, message: null },
       buttonDisabled: true,
@@ -67,7 +68,7 @@ export default {
 
   computed: {
     supportMail() {
-      return this.$app.supportMail
+      return this.$config.supportMail
     },
 
     showError() {
@@ -95,7 +96,7 @@ export default {
           ...this.boxState,
           title: this.$t('modules.users.resetPasswordLinkInvalid'),
           actionText: this.$t('modules.users.resetPasswordRetry'),
-          actionLink: this.localePath('/reset'),
+          actionLink: this.localePath(this.links.reset),
         }
       } else if (error.code === 'auth/user-disabled') {
         this.boxState = {
@@ -113,7 +114,7 @@ export default {
         ...this.boxState,
         success: true,
         title: this.$t('modules.users.resetPasswordSuccess'),
-        actionLink: this.localePath('/dashboard'),
+        actionLink: this.localePath(this.links.dashboard),
         actionText: this.$t('general.continueDashboard'),
       }
     },

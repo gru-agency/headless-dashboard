@@ -1,19 +1,24 @@
 {
   "general": {
     "administrator": "Administrator",
+    "autoDetect": "Auto-detect",
     "cancel": "Cancel",
     "contact": "Contact",
     "continue": "Continue",
     "continueDashboard": "Continue to Dashboard",
     "delete": "Delete",
+    "device": "Device",
     "edit": "Edit",
     "email": "Email",
     "error": "Error",
     "error404Title": "Page not found!",
     "error404Subtitle": "Sorry, but the page you were looking for could not be found.",
-    "error5xx": "There was an error. Try again later.",
+    "error5xx": "An unknown error has occurred.",
+    "expired": "Expired",
     "hidePassword": "Hide password",
     "home": "Home",
+    "ipAddress": "IP address",
+    "location": "Location",
     "login": "Sign in",
     "name": "Name",
     "new": "New",
@@ -34,7 +39,8 @@
     "signup": "Sign up",
     "success": "Success",
     "supportText": "Write and describe your issue to us at ",
-    "terms": "Terms"
+    "terms": "Terms",
+    "time": "Time"
   },
 
   "modules": {
@@ -43,7 +49,14 @@
     "prices": { "title": "Prices" },
     "settings": { "title": "Settings" },
     "users": {
+      "changePasswordTitle":"Change password",
+      "emailTitle": "Email preferences",
+      "emailSubtitle": "Choose what messages you’d like to receive for your {_brand} account",
+      "emailGetStartedTitle": "Getting started",
+      "emailGetStartedSubtitle": "Receive helpful tips when you try out new {_brand} products",
       "resetPasswordLinkInvalid": "This password reset link has expired",
+      "reauthenticateTitle": "Re-authenticate",
+      "reauthenticateSubtitle":"Please confirm your password to continue.",
       "resetPasswordRetry": "Try reset your password again",
       "resetPasswordSuccess": "You've successfully changed your password",
       "resetTitle": "Reset your password",
@@ -58,9 +71,16 @@
       "loginTitle": "Sign in to your account",
       "loginForgotPassword": "Forgot your password?",
       "loginPersist": "Stay signed in",
+      "profileChangePassword":"Change password",
+      "sessionTitle": "Login sessions",
+      "SessionSubtitle": "Places where you're logged into {_brand}",
+      "sessionCurrent": "Current session",
+      "languageTitle": "Language",
+      "languageSubtitle": "Select a preferred language for your Dashboard, including date, time and number formatting",
       "verifyEmailLinkInvalid": "This verify email link has expired",
       "verifyEmailRetry": "Try verify your email again",
       "verifyEmailSuccess": "You've successfully verified your email"
+
     }
   },
 
@@ -77,6 +97,7 @@
     "emailInvalid": "The @:general.email field must be a valid email",
     "emailPasswordWrong": "Incorrect email or password",
     "passwordInvalid": "The @:general.password field must be at least 10 characters",
-    "passwordHint": "Your password needs to be at least 10 characters, include multiple words and phrases to make it more secure."
+    "passwordHint": "Your password needs to be at least 10 characters, include multiple words and phrases to make it more secure.",
+    "reauthenticationRequired":"Please log in again to complete this action"
   }
 }

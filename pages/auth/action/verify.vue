@@ -34,7 +34,11 @@ export default {
 
   data() {
     return {
-      links: { supportMail: this.$app.supportMail },
+      links: {
+        supportMail: this.$config.supportMail,
+        users: { name: 'dashboard-users' },
+        dashboard: { name: 'dashboard' },
+      },
       boxState: { success: false, title: null, body: null, actionLink: null, actionText: null },
       server: { validated: false, valid: false, field: null, code: null, message: null },
     }
@@ -76,7 +80,7 @@ export default {
           ...this.boxState,
           title: this.$t('modules.users.verifyEmailLinkInvalid'),
           actionText: this.$t('modules.users.verifyEmailRetry'),
-          actionLink: this.localePath('/dashboard/users'),
+          actionLink: this.localePath(this.links.users),
         }
       } else if (error.code === 'auth/user-disabled') {
         this.boxState = {
@@ -94,7 +98,7 @@ export default {
         ...this.boxState,
         success: true,
         title: this.$t('modules.users.verifyEmailSuccess'),
-        actionLink: this.localePath('/dashboard'),
+        actionLink: this.localePath(this.links.dashboard),
         actionText: this.$t('general.continueDashboard'),
       }
       this.server = { ...this.server, validated: true, valid: true }

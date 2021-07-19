@@ -1,12 +1,12 @@
 <template>
   <validation-observer ref="loginForm" tag="form">
-    <validation-provider v-slot="vp" :name="ui.email" rules="">
+    <validation-provider v-if="forLogin" v-slot="vp" :name="ui.email" rules="">
       <b-form-group :label="ui.email" label-for="sign-email">
         <b-form-input
           id="sign-email"
           v-model="form.email"
-          :state="$utils.evaluateState($vee.state(vp), $val.state(server, 'email'))"
-          autocomplete="email"
+          :state="$val.evalState($vee.state(vp), $val.state(server, 'email'))"
+          autocomplete="username email"
           type="email"
           size="lg"
           trim
@@ -23,8 +23,9 @@
         <template #label>
           {{ ui.password }}
           <action-link
+            v-if="forLogin"
             :text="ui.forgot"
-            :link="links.reset"
+            :link="localePath(links.reset)"
             variant="primary"
             class="float-right"
           ></action-link>
@@ -43,7 +44,7 @@
         <b-form-input
           id="sign-password"
           v-model="form.password"
-          :state="$utils.evaluateState($vee.state(vp), $val.state(server, 'password'))"
+          :state="$val.evalState($vee.state(vp), $val.state(server, 'password'))"
           autocomplete="current-password"
           :type="password.type"
           size="lg"
@@ -57,23 +58,25 @@
       </b-form-group>
     </validation-provider>
 
-    <b-form-group label-for="sign-remember" class="small text-secondary">
+    <b-form-group v-if="forLogin" label-for="sign-remember" class="small text-secondary">
       <b-form-checkbox id="sign-remember" v-model="form.persist" size="sm">
         {{ ui.remember }}
       </b-form-checkbox>
     </b-form-group>
 
-    <b-form-group v-if="showError" class="mb-3">
-      <span class="text-danger"><icon preset="bv-error"></icon> {{ server.message }}</span>
-    </b-form-group>
+    <b-alert :show="showError" variant="danger">
+      <icon preset="bv-error" class="mr-2"></icon> {{ server.message }}
+    </b-alert>
   </validation-observer>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'LoginForm',
+
+  props: { intent: { type: String, default: 'login' } },
 
   data() {
     return {
@@ -91,7 +94,7 @@ export default {
         forgot: this.$t('modules.users.loginForgotPassword'),
         remember: this.$t('modules.users.loginPersist'),
       },
-      links: { reset: this.localePath('/reset') },
+      links: { reset: { name: 'auth-reset' } },
       password: {
         type: 'password',
         focus: false,
@@ -105,10 +108,19 @@ export default {
 
   computed: {
     ...mapGetters('auth', ['authenticated']),
+    ...mapState('user', ['user']),
 
     showError() {
       const { validated, valid, field } = this.server
       return validated && !valid && !field
+    },
+
+    forLogin() {
+      return this.intent === 'login'
+    },
+
+    forReAuth() {
+      return this.intent === 'reauth'
     },
 
     /** [START] password-related methods */
@@ -122,6 +134,9 @@ export default {
     this.$nuxt.$on(this.events.validate, this.validateForm)
     this.$nuxt.$on(this.events.submit, this.submitForm)
     this.$nuxt.$on(this.events.reset, this.resetForm)
+
+    // pre-populate email for re-auth
+    if (this.forReAuth) this.form.email = this.user.email
   },
 
   beforeDestroy() {
@@ -131,7 +146,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('auth', ['loginWithEmailAndPassword']),
+    ...mapActions('auth', ['loginWithEmailAndPassword', 'reauthenticateWithCredential']),
 
     errorHandler(error) {
       this.server = {
@@ -170,10 +185,17 @@ export default {
       if (!valid) return
 
       this.resetFormState()
-      this.loginWithEmailAndPassword(this.form).then(
-        (response) => this.successHandler(response),
-        (error) => this.errorHandler(error)
-      )
+      if (this.forLogin) {
+        this.loginWithEmailAndPassword(this.form).then(
+          (response) => this.successHandler(response),
+          (error) => this.errorHandler(error)
+        )
+      } else {
+        this.reauthenticateWithCredential(this.form).then(
+          (response) => this.successHandler(response),
+          (error) => this.errorHandler(error)
+        )
+      }
     },
 
     validateForm() {

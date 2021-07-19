@@ -46,6 +46,11 @@ export default {
         'bv-success': { icon: ['fad', 'check-double'] },
         'bv-loading': { icon: ['fad', 'spinner'] },
         'bv-person': { icon: ['fad', 'user-alt'] },
+        'bv-home': { icon: ['fad', 'home-alt'] },
+        'bv-order': { icon: ['fad', 'ballot'] },
+        'bv-product': { icon: ['fad', 'box'] },
+        'bv-price': { icon: ['fad', 'dollar-sign'] },
+        'bv-setting': { icon: ['fad', 'cog'] },
       },
     }
   },

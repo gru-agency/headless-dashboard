@@ -15,7 +15,10 @@
 
     <div class="d-flex justify-content-between align-items-center">
       <div>
-        <b-card-title :title-tag="titleTag" :class="{ 'mb-0': !subtitleText }">
+        <b-card-title
+          :title-tag="smartTitleTag"
+          :class="{ 'mb-0': !subtitleText, 'font-weight-bolder': true }"
+        >
           <slot name="title"> {{ titleText }} </slot>
         </b-card-title>
         <b-card-sub-title
@@ -50,7 +53,7 @@ export default {
 
   props: {
     titleText: { type: String, default: undefined },
-    titleTag: { type: String, default: 'h3' },
+    titleTag: { type: String, default: undefined },
     subtitleText: { type: String, default: undefined },
     subtitleTag: { type: String, default: 'h6' },
     subtitleVariant: { type: String, default: 'muted' },
@@ -65,6 +68,12 @@ export default {
     parentLink: { type: Boolean, default: false },
     parentLinkText: { type: String, default: undefined },
     parentLinkVariant: { type: String, default: undefined },
+  },
+
+  computed: {
+    smartTitleTag() {
+      return this.titleTag || (this.subtitleText ? 'h5' : 'h3')
+    },
   },
 
   methods: {

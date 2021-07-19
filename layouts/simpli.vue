@@ -4,7 +4,7 @@
       <div class="flex-grow-1"></div>
 
       <div class="align-self-start py-6 mx-4 px-12">
-        <span class="h3 font-weight-bolder"> {{ ui.brandName }} </span>
+        <span class="h3 font-weight-bolder"> {{ ui.brand.toLowerCase() }} </span>
       </div>
 
       <b-row no-gutters class="w-100 align-self-center">
@@ -12,8 +12,8 @@
       </b-row>
 
       <ul class="align-self-start py-6 mx-4 px-12 list-unstyled">
-        <b-link v-for="item in menus" :key="item.label" :href="item.link" class="pr-2">
-          {{ item.label }}
+        <b-link v-for="menu in menus" :key="menu.label" :href="localePath(menu.link)" class="pr-2">
+          {{ menu.label }}
         </b-link>
       </ul>
 
@@ -28,14 +28,18 @@ export default {
 
   data() {
     return {
-      ui: { brandName: this.$app.brandName.toLowerCase() },
+      ui: { brand: this.$config.brandName },
       menus: {
-        home: { label: '© ' + this.$app.brandName, link: this.localePath('/') },
-        contact: { label: this.$t('general.contact'), link: this.localePath('/contact') },
-        privacy: { label: this.$t('general.privacy'), link: this.localePath('/privacy') },
-        terms: { label: this.$t('general.terms'), link: this.localePath('/terms') },
+        home: { label: `© ${this.$config.brandName}`, link: { name: 'index' } },
+        contact: { label: this.$t('general.contact'), link: { name: 'contact' } },
+        privacy: { label: this.$t('general.privacy'), link: { name: 'privacy' } },
+        terms: { label: this.$t('general.terms'), link: { name: 'terms' } },
       },
     }
+  },
+
+  head() {
+    return this.$nuxtI18nHead({ addSeoAttributes: true })
   },
 }
 </script>

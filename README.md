@@ -10,6 +10,9 @@ $ brew install node@14
 
 # yarn as preferred package manager
 $ npm install --global yarn
+
+# also install firebase emulator
+# https://firebase.google.com/docs/emulator-suite/install_and_configure
 ```
 
 2. Setup VSCode with following plugins
@@ -17,11 +20,9 @@ $ npm install --global yarn
 - vetur (must have)
 - auto close tag
 - auto rename tag
-- i18n Ally
-- json5 syntax
-- vue snippets
+- vue vscode snippets
 
-3. Setup Chrome browser plugins
+1. Setup Chrome browser plugins
 
 - Vue Devtools
 
@@ -56,6 +57,8 @@ For detailed explanation on how things work, check out the [documentation](https
   - change password reset email template base url from `localhost` to `{{ PROD_URL }}`
   - change verify email template base url from `localhost` to `{{ PROD_URL }}`
   - setup support email e.g. support@shoplex.com
+  - setup geodb account / api key
+  - credential management. either vault or ssr
 
 ## Commit Guide
 

@@ -22,6 +22,9 @@
         </b-container>
       </main>
     </b-container>
+
+    <!-- shared components -->
+    <users-reauthentication-modal></users-reauthentication-modal>
   </div>
 </template>
 
@@ -30,8 +33,12 @@ export default {
   name: 'Dashboard',
 
   head() {
+    const i18nHead = this.$nuxtI18nHead({ addSeoAttributes: true })
     return {
-      title: this.$app.brandName,
+      title: this.$config.brandName,
+      htmlAttrs: { ...i18nHead.htmlAttrs },
+      meta: [...i18nHead.meta],
+      link: [...i18nHead.link],
     }
   },
 
