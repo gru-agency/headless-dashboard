@@ -9,7 +9,7 @@ const getters = {}
 const mutations = {
   SET: (state, payload) => {
     payload.object = 'user'
-    state.user = payload
+    state.user = { ...state.user, ...payload }
   },
 }
 
@@ -81,7 +81,7 @@ const actions = {
 
       const doc = snapshot.docs[0]
       const { id, exists, metadata } = doc
-      $log.debug(`user | get | id: ${id}, exists: ${exists}, metadata: ${metadata}`)
+      $log.debug(`user | get | id: ${id}, exists: ${exists}, metadata: ${$util.stringify(metadata)}`)
 
       // put all the information together into an object before goes to state
       const user = { ...doc.data(), id }
