@@ -57,7 +57,7 @@ export default {
         this.$router.push(
           this.localePath({
             path: this.interpretPath,
-            query: { mode: this.mode, oobCode: this.$route.query.oobCode },
+            query: { mode: this.mode, oobCode: this.$route.query.oobCode, email: this.$route.query.email },
           })
         )
       }

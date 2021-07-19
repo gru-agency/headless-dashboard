@@ -2,6 +2,9 @@
   <validation-observer ref="newPasswordForm" v-slot="vo" tag="form">
     <vee-broadcaster :states="vo" @states="onFormStateChanged"></vee-broadcaster>
 
+    <!-- support password manager https://goo.gl/9p2vKq -->
+    <input type="email" autocomplete="username email" :value="userEmail" class="d-none" />
+
     <validation-provider v-slot="vp" :name="ui.newPassword" slim mode="aggressive" rules="hint_pw:10|max:128">
       <b-form-group :label="ui.newPassword" label-for="new-password" class="position-relative">
         <tips-field
@@ -21,6 +24,7 @@
           autocomplete="new-password"
           :type="password.type"
           :size="size"
+          autofocus
           trim
           @blur="password.focus = false"
           @focus="password.focus = true"
@@ -38,7 +42,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'NewPasswordForm',
@@ -76,6 +80,8 @@ export default {
   },
 
   computed: {
+    ...mapState('user', ['user']),
+
     showError() {
       const { validated, valid, field } = this.server
       return validated && !valid && !field
@@ -87,6 +93,14 @@ export default {
 
     forChange() {
       return this.intent === 'change'
+    },
+
+    emailQueryParam() {
+      return this.$route.query.email
+    },
+
+    userEmail() {
+      return this.forReset ? this.emailQueryParam : this.user?.email
     },
 
     /** [START] password-related methods */

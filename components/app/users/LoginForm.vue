@@ -6,7 +6,7 @@
           id="sign-email"
           v-model="form.email"
           :state="$val.evalState($vee.state(vp), $val.state(server, 'email'))"
-          autocomplete="email"
+          autocomplete="username email"
           type="email"
           size="lg"
           trim
