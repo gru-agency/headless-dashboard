@@ -49,6 +49,7 @@
     "prices": { "title": "Prices" },
     "settings": { "title": "Settings" },
     "users": {
+      "changePasswordTitle":"Change password",
       "emailTitle": "Email preferences",
       "emailSubtitle": "Choose what messages you’d like to receive for your {_brand} account",
       "emailGetStartedTitle": "Getting started",
@@ -96,6 +97,7 @@
     "emailInvalid": "The @:general.email field must be a valid email",
     "emailPasswordWrong": "Incorrect email or password",
     "passwordInvalid": "The @:general.password field must be at least 10 characters",
-    "passwordHint": "Your password needs to be at least 10 characters, include multiple words and phrases to make it more secure."
+    "passwordHint": "Your password needs to be at least 10 characters, include multiple words and phrases to make it more secure.",
+    "reauthenticationRequired":"Please log in again to complete this action"
   }
 }

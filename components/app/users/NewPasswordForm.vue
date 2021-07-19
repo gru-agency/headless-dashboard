@@ -31,9 +31,9 @@
       </b-form-group>
     </validation-provider>
 
-    <b-form-group v-if="showError" class="mb-3">
-      <span class="text-danger"><icon preset="bv-error"></icon> {{ server.message }}</span>
-    </b-form-group>
+    <b-alert :show="showError" variant="danger">
+      <icon preset="bv-error" class="mr-2"></icon> {{ server.message }}
+    </b-alert>
   </validation-observer>
 </template>
 
@@ -43,7 +43,10 @@ import { mapActions } from 'vuex'
 export default {
   name: 'NewPasswordForm',
 
-  props: { size: { type: String, default: undefined } },
+  props: {
+    size: { type: String, default: undefined },
+    intent: { type: String, default: 'reset' },
+  },
 
   data() {
     return {
@@ -54,6 +57,11 @@ export default {
         submitted: 'password-submitted',
         reset: 'password-reset',
         resetted: 'password-resetted',
+        reauth: {
+          success: 'reauth-success',
+          cancel: 'reauth-cancel',
+          error: 'reauth-error',
+        },
       },
       ui: { newPassword: this.$t('general.newPassword') },
       password: {
@@ -73,6 +81,14 @@ export default {
       return validated && !valid && !field
     },
 
+    forReset() {
+      return this.intent === 'reset'
+    },
+
+    forChange() {
+      return this.intent === 'change'
+    },
+
     /** [START] password-related methods */
     passwordRevealable() {
       return this.password.type === 'text'
@@ -84,16 +100,18 @@ export default {
     this.$nuxt.$on(this.events.validate, this.validateForm)
     this.$nuxt.$on(this.events.submit, this.submitForm)
     this.$nuxt.$on(this.events.reset, this.resetForm)
+    this.$nuxt.$on(this.events.reauth.cancel, this.onReAuthCancel)
   },
 
   beforeDestroy() {
     this.$nuxt.$off(this.events.validate)
     this.$nuxt.$off(this.events.submit)
     this.$nuxt.$off(this.events.reset)
+    this.$nuxt.$on(this.events.reauth.cancel)
   },
 
   methods: {
-    ...mapActions('auth', ['confirmPasswordReset']),
+    ...mapActions('auth', ['confirmPasswordReset', 'updatePassword']),
 
     errorHandler(error) {
       this.server = {
@@ -111,7 +129,20 @@ export default {
           field: 'password',
           message: this.$t('validation.passwordInvalid'),
         }
+      } else if (error.code === 'auth/requires-recent-login') {
+        // intentionally hide the error message
+        this.server = { ...this.server, validated: false, message: null }
+        this.$nextTick(() => this.$bvModal.show('reauth-modal'))
+      } else if (error.code === 'auth/cancel-reauthentication') {
+        this.server = {
+          ...this.server,
+          message: this.$t('validation.reauthenticationRequired'),
+        }
       } else {
+        this.server = {
+          ...this.server,
+          message: this.$t('general.error5xx'),
+        }
         this.$emit(this.events.submitted, false, this.server)
       }
     },
@@ -127,10 +158,17 @@ export default {
       if (!valid) return
 
       this.resetFormState()
-      this.confirmPasswordReset(this.form).then(
-        (response) => this.successHandler(response),
-        (error) => this.errorHandler(error)
-      )
+      if (this.forReset) {
+        this.confirmPasswordReset(this.form).then(
+          (response) => this.successHandler(response),
+          (error) => this.errorHandler(error)
+        )
+      } else {
+        this.updatePassword(this.form).then(
+          (response) => this.successHandler(response),
+          (error) => this.errorHandler(error)
+        )
+      }
     },
 
     validateForm() {
@@ -152,6 +190,10 @@ export default {
 
     onFormStateChanged(states) {
       if (states.validated) this.$emit(this.events.validated, !states.invalid)
+    },
+
+    onReAuthCancel() {
+      this.errorHandler({ code: 'auth/cancel-reauthentication' })
     },
 
     /** [START] password-related methods */

@@ -76,11 +76,17 @@
         >
           <b-form-input v-if="readonly" value="••••••••••" :plaintext="uneditable"></b-form-input>
           <div v-else class="h-100 d-flex align-items-center">
-            <action-button :text="ui.changePassword" size="sm" @click="showModal"></action-button>
+            <action-button
+              v-b-modal.change-password-modal
+              :text="ui.changePassword"
+              size="sm"
+            ></action-button>
           </div>
         </b-form-group>
       </validation-observer>
     </b-card-body>
+
+    <users-change-password-modal></users-change-password-modal>
   </b-card>
 </template>
 
@@ -181,10 +187,6 @@ export default {
 
     onFormEdit() {
       this.readonly = false
-    },
-
-    showModal() {
-      // todo
     },
   },
 }
