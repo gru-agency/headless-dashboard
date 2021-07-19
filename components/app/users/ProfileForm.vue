@@ -52,7 +52,7 @@
             <b-form-input
               id="pro-name"
               v-model="form.name"
-              :state="$vee.state(vp)"
+              :state="readonly ? null : $vee.state(vp)"
               :plaintext="readonly"
               autocomplete="name"
               trim
