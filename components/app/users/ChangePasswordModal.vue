@@ -42,7 +42,6 @@ export default {
         },
       },
       ui: { title: this.$t('modules.users.changePasswordTitle'), cancel: this.$t('general.cancel') },
-      reauthenticated: false,
       okDisabled: true,
     }
   },
@@ -78,7 +77,6 @@ export default {
     },
 
     onReAuthSuccess() {
-      this.reauthenticated = true
       this.onModalOk()
     },
   },

@@ -18,9 +18,9 @@
       </b-form-group>
     </validation-provider>
 
-    <b-form-group v-if="showError" class="mb-3">
-      <span class="text-danger"><icon preset="bv-error"></icon> {{ server.message }}</span>
-    </b-form-group>
+    <b-alert :show="showError" variant="danger">
+      <icon preset="bv-error" class="mr-2"></icon> {{ server.message }}
+    </b-alert>
   </validation-observer>
 </template>
 

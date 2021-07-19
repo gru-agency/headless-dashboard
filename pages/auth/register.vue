@@ -68,11 +68,8 @@ export default {
 
   methods: {
     errorHandler(error) {
-      this.boxState.success = false
+      this.boxState = { ...this.boxState, success: false, title: this.$t('general.error5xx') }
       this.server = error
-
-      // determine terminal error
-      this.boxState = { ...this.boxState, title: this.$t('general.error5xx') }
     },
 
     successHandler(response) {
