@@ -54,6 +54,8 @@
       "emailGetStartedTitle": "Getting started",
       "emailGetStartedSubtitle": "Receive helpful tips when you try out new {_brand} products",
       "resetPasswordLinkInvalid": "This password reset link has expired",
+      "reauthenticateTitle": "Re-authenticate",
+      "reauthenticateSubtitle":"Please confirm your password to continue.",
       "resetPasswordRetry": "Try reset your password again",
       "resetPasswordSuccess": "You've successfully changed your password",
       "resetTitle": "Reset your password",
@@ -77,6 +79,7 @@
       "verifyEmailLinkInvalid": "This verify email link has expired",
       "verifyEmailRetry": "Try verify your email again",
       "verifyEmailSuccess": "You've successfully verified your email"
+
     }
   },
 

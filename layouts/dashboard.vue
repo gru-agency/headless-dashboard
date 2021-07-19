@@ -22,6 +22,9 @@
         </b-container>
       </main>
     </b-container>
+
+    <!-- shared components -->
+    <users-reauthentication-modal></users-reauthentication-modal>
   </div>
 </template>
 

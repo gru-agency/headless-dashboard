@@ -104,16 +104,16 @@ const actions = {
   },
 
   async reauthenticateWithCredential({ _ }, { email, password }) {
-    const { $fire, $log } = this.app.context
-    const cred = $fire.auth.EmailAuthProvider.credential(email, password)
+    const { $fire, $fireModule, $log } = this.app.context
+    const cred = $fireModule.auth.EmailAuthProvider.credential(email, password)
     try {
       await $fire.auth.currentUser.reauthenticateWithCredential(cred)
       $log.success('auth | reauthenticateWithCredential', 'successful')
     } catch (error) {
-      // auth/user-mismatch
-      // auth/user-not-found
-      // auth/invalid-credential
-      // auth/invalid-email
+      // auth/user-mismatch -- log
+      // auth/user-not-found -- log
+      // auth/invalid-credential -- log
+      // auth/invalid-email -- log
       // auth/wrong-password
       // auth/invalid-verification-code (for phone auth)
       // auth/invalid-verification-id (for phone auth)
@@ -136,8 +136,8 @@ const actions = {
   },
 
   async requestEmailVerification({ _ }) {
-    const { $fire, $log, $i18n } = this.app.context
-    $fire.auth.languageCode = $i18n.locale
+    const { $fire, $log, i18n } = this.app.context
+    $fire.auth.languageCode = i18n.locale
     try {
       await $fire.auth.currentUser.sendEmailVerification()
       $log.success('auth | requestEmailVerification', 'successful')
