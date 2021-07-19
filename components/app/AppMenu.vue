@@ -5,24 +5,23 @@
     </b-nav-text>
 
     <b-nav-item :to="localePath(links.home)" exact class="px-2">
-      <fa :icon="['fad', 'home-alt']" :class="iconClass"></fa> {{ home }}
+      <icon preset="bv-home" :class="iconClass"></icon> {{ home }}
     </b-nav-item>
 
     <b-nav-item :to="localePath(links.orders)" class="px-2">
-      <fa :icon="['fad', 'ballot']" :class="iconClass"></fa> {{ orders }}
+      <icon preset="bv-order" :class="iconClass"></icon> {{ orders }}
     </b-nav-item>
 
     <b-nav-item :to="localePath(links.products)" class="px-2">
-      <fa :icon="['fad', 'box']" :class="iconClass"></fa>
-      {{ products }}
+      <icon preset="bv-product" :class="iconClass"></icon> {{ products }}
     </b-nav-item>
 
     <b-nav-item :to="localePath(links.prices)" class="px-2">
-      <fa :icon="['fad', 'dollar-sign']" :class="iconClass"></fa> {{ prices }}
+      <icon preset="bv-price" :class="iconClass"></icon> {{ prices }}
     </b-nav-item>
 
     <b-nav-item :to="localePath(links.settings)" class="px-2">
-      <fa :icon="['fad', 'cog']" :class="iconClass"></fa> {{ settings }}
+      <icon preset="bv-setting" :class="iconClass"></icon> {{ settings }}
     </b-nav-item>
   </b-nav>
 </template>
@@ -51,10 +50,6 @@ export default {
   computed: {
     iconClass() {
       return 'mr-2 fa-fw fa-gru'
-    },
-
-    iconPaddingClass() {
-      return 'mr-2'
     },
   },
 }
