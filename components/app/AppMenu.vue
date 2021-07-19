@@ -1,6 +1,6 @@
 <template>
   <b-nav vertical tag="nav">
-    <b-nav-text class="navbar-h d-flex align-items-center h4 font-weight-bold px-4">
+    <b-nav-text class="navbar-h d-flex align-items-center h4 font-weight-bold px-6">
       {{ $config.brandName.toLowerCase() }}
     </b-nav-text>
 
