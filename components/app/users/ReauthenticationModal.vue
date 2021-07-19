@@ -8,10 +8,9 @@
     cancel-variant="light"
     button-size="sm"
     centered
-    no-stacking
     hide-header-close
-    @cancel="onReAuthCancel"
-    @ok.prevent="onReAuthOk"
+    @cancel="onModalCancel"
+    @ok.prevent="onModalOk"
   >
     <b-card-body>
       <b-card-sub-title class="pb-6 text-secondary"> {{ ui.subtitle }} </b-card-sub-title>
@@ -28,8 +27,8 @@ export default {
     return {
       events: {
         reauth: {
-          cancel: 'reauth-cancel',
           success: 'reauth-success',
+          cancel: 'reauth-cancel',
           error: 'reauth-error',
         },
         login: { submit: 'login-submit' },
@@ -53,11 +52,11 @@ export default {
       }
     },
 
-    onReAuthCancel() {
+    onModalCancel() {
       this.$nuxt.$emit(this.events.reauth.cancel)
     },
 
-    onReAuthOk() {
+    onModalOk() {
       this.$nuxt.$emit(this.events.login.submit)
     },
   },
