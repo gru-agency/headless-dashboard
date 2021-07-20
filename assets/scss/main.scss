@@ -73,26 +73,36 @@ $spacers: map-merge($spacers, $custom-spacers);
 // @import 'app/bs-custom.scss';
 
 // custom variables
-$navbar-height: 64px;
+$navbar-height: 57px;
+$sidenav-width: 16rem;
 
-// navbar
-.navbar-h {
-  height: $navbar-height;
+// main content setup
+.main-content {
+  height: calc(100vh - #{$navbar-height});
+  margin-top: $navbar-height;
 }
 
-.navbar-collapse {
-  flex: none;
-}
-
-// sidebar
-.cb-sidebar {
-  width: 100%;
-  position: absolute;
-  top: $navbar-height;
+.main-content-body {
+  margin-left: 0;
 
   @media (min-width: map-get($grid-breakpoints, 'lg')) {
-    width: 18rem;
-    position: static;
+    margin-left: $sidenav-width;
+  }
+}
+
+.main-content-nav {
+  width: calc(100% - #{$grid-gutter-width});
+  position: absolute;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: calc(100vh - #{$navbar-height});
+  z-index: $zindex-dropdown;
+  box-shadow: $box-shadow;
+
+  @media (min-width: map-get($grid-breakpoints, 'lg')) {
+    width: $sidenav-width;
+    position: fixed;
+    box-shadow: none;
   }
 }
 

@@ -1,7 +1,14 @@
 <template>
-  <b-nav-item-dropdown right no-caret class="z-alert">
+  <b-nav-item-dropdown
+    v-b-tooltip.hover.bottom
+    :title="ui.profile"
+    right
+    no-caret
+    menu-class="position-absolute"
+    :toggle-class="{ 'nuxt-link-exact-active': exactLink, 'px-0': true }"
+  >
     <template #button-content>
-      <tips-field preset="bv-person" placement="bottom" tooltip> {{ ui.profile }} </tips-field>
+      <icon preset="bv-person" class="fa-gru"></icon>
     </template>
 
     <b-dd-text text-class="font-weight-normal">{{ userName }}</b-dd-text>
@@ -45,6 +52,10 @@ export default {
 
     userRole() {
       return this.ui.administrator
+    },
+
+    exactLink() {
+      return this.localePath(this.links.users) === this.$route.path
     },
   },
 
