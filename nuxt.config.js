@@ -106,6 +106,8 @@ export default {
     },
   },
 
+  generate: { dir: 'public' },
+
   vue: { config: { devtools: true } },
 
   axios: { retry: true },

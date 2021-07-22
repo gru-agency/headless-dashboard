@@ -70,6 +70,7 @@ typings/
 
 # Nuxt generate
 dist
+public
 
 # vuepress build output
 .vuepress/dist
@@ -91,3 +92,6 @@ sw.*
 
 # yarn 2 - ignore until official using it
 .yarn
+
+# firebase cache
+.firebase/*.cache
