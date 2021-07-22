@@ -22,7 +22,7 @@ $ npm install --global yarn
 - auto rename tag
 - vue vscode snippets
 
-1. Setup Chrome browser plugins
+3. Setup Chrome browser plugins
 
 - Vue Devtools
 
@@ -50,15 +50,6 @@ $ ls node_modules | wc -l && du -sh node_modules
 ```
 
 For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
-
-## Production Checklist
-- firebase auth
-  - enable email/password sign-in methods
-  - change password reset email template base url from `localhost` to `{{ PROD_URL }}`
-  - change verify email template base url from `localhost` to `{{ PROD_URL }}`
-  - setup support email e.g. support@shoplex.com
-  - setup geodb account / api key
-  - credential management. either vault or ssr
 
 ## Commit Guide
 
