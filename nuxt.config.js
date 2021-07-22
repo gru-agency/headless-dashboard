@@ -16,7 +16,7 @@ export default {
     baseUrl: process.env.baseUrl,
     brandName: 'Shoplex',
     supportMail: 'support@shoplex.com',
-    geoDbKey: process.env.geoDbKey,
+    gdb: process.env.geoDbKey,
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -69,6 +69,8 @@ export default {
     '@nuxtjs/sitemap',
     // https://axios.nuxtjs.org/setup
     '@nuxtjs/axios',
+    // https://github.com/harlan-zw/nuxt-build-optimisations
+    'nuxt-build-optimisations',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -106,11 +108,17 @@ export default {
     },
   },
 
+  generate: { dir: 'public' },
+
   vue: { config: { devtools: true } },
 
   axios: { retry: true },
 
   bootstrapVue: { css: false, bvCss: false, icons: false },
+
+  buildOptimisations: {
+    profile: process.env.NODE_ENV === 'development' ? 'risky' : 'experimental',
+  },
 
   fontawesome: {
     component: 'fa',
@@ -120,23 +128,6 @@ export default {
     useLayersText: false,
     icons: { brands: true, solid: true, regular: true },
     proIcons: { solid: true, light: true, regular: true, duotone: true },
-  },
-
-  i18n: {
-    baseUrl: process.env.baseUrl, // important for seo
-    locales: [
-      { code: 'en', iso: 'en-gb', file: 'en.json', name: 'English' },
-      { code: 'ms', iso: 'ms-my', file: 'ms.json', name: 'Malay' },
-      { code: 'zh', iso: 'zh-cn', file: 'zh.json', name: '简体中文' },
-    ],
-    lazy: true,
-    langDir: '~/locales/',
-    strategy: 'prefix',
-    defaultLocale: 'en',
-    detectBrowserLanguage: { alwaysRedirect: false, fallbackLocale: 'en', onlyOnRoot: true, useCookie: true },
-    seo: false, // performance concern, enable lazily
-    vuex: false,
-    vueI18n: { fallbackLocale: 'en', dateTimeFormats, numberFormats },
   },
 
   firebase: {
@@ -173,6 +164,23 @@ export default {
     },
     injectModule: true,
     terminateDatabasesAfterGenerate: false,
+  },
+
+  i18n: {
+    baseUrl: process.env.baseUrl, // important for seo
+    locales: [
+      { code: 'en', iso: 'en-gb', file: 'en.json', name: 'English' },
+      { code: 'ms', iso: 'ms-my', file: 'ms.json', name: 'Malay' },
+      { code: 'zh', iso: 'zh-cn', file: 'zh.json', name: '简体中文' },
+    ],
+    lazy: true,
+    langDir: '~/locales/',
+    strategy: 'prefix',
+    defaultLocale: 'en',
+    detectBrowserLanguage: { alwaysRedirect: false, fallbackLocale: 'en', onlyOnRoot: true, useCookie: true },
+    seo: false, // performance concern, enable lazily
+    vuex: false,
+    vueI18n: { fallbackLocale: 'en', dateTimeFormats, numberFormats },
   },
 
   robots: [{ UserAgent: '*', Disallow: restrictedRoutes }],
