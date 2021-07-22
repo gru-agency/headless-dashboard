@@ -30,7 +30,7 @@ const actions = {
       // only fetch if cache miss
       let geodb
       if (!cache) {
-        const _geodb = await this.$axios.$get(`https://geolocation-db.com/json/${$config.geoDbKey}`)
+        const _geodb = await this.$axios.$get(`https://geolocation-db.com/json/${$config.gdb}`)
         $log.debug('user_session | addSession | geodb', _geodb)
         geodb = { ipv4: _geodb.IPv4, country: _geodb.country_name, source: 'geodb' }
       }
