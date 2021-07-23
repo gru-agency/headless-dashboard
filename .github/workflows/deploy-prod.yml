@@ -9,6 +9,9 @@ name: Deploy to Firebase Hosting Live channel on merge
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    env:
+      BASE_URL: https://ecommerce-30.web.app
+      GEO_DB: ${{ secrets.GEO_DB }}
     steps:
       - uses: actions/checkout@v2
       - run: yarn install --frozen-lockfile && yarn generate

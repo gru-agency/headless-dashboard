@@ -10,9 +10,12 @@ jobs:
   build_and_preview:
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
     runs-on: ubuntu-latest
+    env:
+      BASE_URL: https://preview.web.app
+      GEO_DB: ${{ secrets.GEO_DB }}
     steps:
       - uses: actions/checkout@v2
-      - run: yarn install --frozen-lockfile && yarn generate
+      - run:  yarn install --frozen-lockfile && yarn generate
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
