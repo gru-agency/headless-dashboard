@@ -167,7 +167,7 @@ export default {
   },
 
   i18n: {
-    baseUrl: this.publicRuntimeConfig.baseUrl, // important for seo
+    baseUrl: process.env.BASE_URL, // important for seo
     locales: [
       { code: 'en', iso: 'en-gb', file: 'en.json', name: 'English' },
       { code: 'ms', iso: 'ms-my', file: 'ms.json', name: 'Malay' },
@@ -186,7 +186,7 @@ export default {
   robots: [{ UserAgent: '*', Disallow: restrictedRoutes }],
 
   sitemap: {
-    hostname: this.publicRuntimeConfig.baseUrl,
+    hostname: process.env.BASE_URL,
     gzip: true,
     i18n: true,
     exclude: restrictedRoutes,
