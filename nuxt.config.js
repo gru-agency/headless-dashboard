@@ -13,10 +13,10 @@ export default {
   privateRuntimeConfig: {},
 
   publicRuntimeConfig: {
-    baseUrl: process.env.baseUrl,
+    baseUrl: process.env.BASE_URL,
     brandName: 'Shoplex',
     supportMail: 'support@shoplex.com',
-    gdb: process.env.geoDbKey,
+    gdb: process.env.GEO_DB,
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -167,7 +167,7 @@ export default {
   },
 
   i18n: {
-    baseUrl: process.env.baseUrl, // important for seo
+    baseUrl: process.env.BASE_URL, // important for seo
     locales: [
       { code: 'en', iso: 'en-gb', file: 'en.json', name: 'English' },
       { code: 'ms', iso: 'ms-my', file: 'ms.json', name: 'Malay' },
@@ -186,7 +186,7 @@ export default {
   robots: [{ UserAgent: '*', Disallow: restrictedRoutes }],
 
   sitemap: {
-    hostname: process.env.baseUrl,
+    hostname: process.env.BASE_URL,
     gzip: true,
     i18n: true,
     exclude: restrictedRoutes,
