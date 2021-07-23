@@ -65,10 +65,8 @@ export default {
     },
   },
 
-  watch: {
-    getStarted(newValue) {
-      this.form.emailConsent = newValue
-    },
+  mounted() {
+    this.form.emailConsent = this.getStarted
   },
 
   methods: {
