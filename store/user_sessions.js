@@ -22,25 +22,22 @@ const actions = {
     const { $config, $log, $util } = this.app.context
     try {
       const currentIp4 = await this.$axios.$get('https://api.ipify.org')
-      $log.debug('user_session | addSession | ipv4', currentIp4)
+      $log.debug('user_sessions | addSession | ipv4', currentIp4)
 
       const cache = state.caches.find((el) => el.ipv4 === currentIp4)
-      $log.debug('user_session | addSession | cache', cache)
+      $log.debug(`user_sessions | addSession | caches: ${$util.stringify(state.caches)}`)
 
       // only fetch if cache miss
       let geodb
       if (!cache) {
         const _geodb = await this.$axios.$get(`https://geolocation-db.com/json/${$config.gdb}`)
-        $log.debug('user_session | addSession | geodb', _geodb)
+        $log.debug(`user_sessions | addSession | geodb: ${$util.stringify(_geodb)}`)
         geodb = { ipv4: _geodb.IPv4, country: _geodb.country_name, source: 'geodb' }
       }
 
       // cache locally to reduce call
       const geolocation = cache || geodb
-      if (geolocation) {
-        commit('SET_CACHE', geolocation)
-        $log.debug('user_session | addSession | caches', state.caches)
-      }
+      if (geolocation) commit('SET_CACHE', geolocation)
 
       commit('SET_SESSION', {
         location: geolocation?.country,
@@ -48,11 +45,11 @@ const actions = {
         time: claims.iat,
         device: $util.platformDescription(),
       })
-      $log.debug('user_session | addSession | sessions', state.all)
+      $log.debug(`user_sessions | addSession | sessions: ${$util.stringify(state.all)}`)
       
-      $log.success('user_session | addSession', 'successful')
+      $log.success('user_sessions | addSession', 'successful')
     } catch (error) {
-      $log.error('user_session | addSession | error', error)
+      $log.error('user_sessions | addSession | error', error)
       throw error
     }
   },
@@ -60,7 +57,7 @@ const actions = {
   clear({ commit }) {
     const { $log } = this.app.context
     commit('CLEAR_SESSION')
-    $log.success('user_session | clear', 'successful')
+    $log.success('user_sessions | clear', 'successful')
   },
 }
 

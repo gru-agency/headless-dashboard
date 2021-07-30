@@ -35,9 +35,9 @@ const actions = {
       }
 
       if (user.claims) {
-        await dispatch('user_session/add', user.claims, { root: true })
+        await dispatch('user_sessions/add', user.claims, { root: true })
       } else {
-        await dispatch('user_session/clear', null, { root: true })
+        await dispatch('user_sessions/clear', null, { root: true })
       }
     } catch (error) {
       $log.error('auth | onAuthStateChanged | error', error)
