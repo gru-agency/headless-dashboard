@@ -9,15 +9,21 @@
     <ul class="list-inline mb-0">
       <slot name="right">
         <li class="list-inline-item">
-          <action-button size="sm" :disabled="!canPrevious" @click="$emit('prev')">
-            {{ prevText }}
-          </action-button>
+          <action-button
+            size="sm"
+            preset="bv-prev"
+            :disabled="!canPrevious"
+            @click="$emit('prev')"
+          ></action-button>
         </li>
 
         <li class="list-inline-item">
-          <action-button size="sm" :disabled="!lazyMode && !canNext" @click="$emit('next')">
-            {{ nextText }}
-          </action-button>
+          <action-button
+            size="sm"
+            preset="bv-next"
+            :disabled="!lazyMode && !canNext"
+            @click="$emit('next')"
+          ></action-button>
         </li>
       </slot>
     </ul>
@@ -35,13 +41,6 @@ export default {
     perPage: { type: [String, Number], default: 10 },
     noCaption: { type: Boolean, default: false },
     forceNext: { type: Boolean, default: false },
-  },
-
-  data() {
-    return {
-      nextText: this.$t('general.next'),
-      prevText: this.$t('general.previous'),
-    }
   },
 
   computed: {

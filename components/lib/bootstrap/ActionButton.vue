@@ -35,6 +35,8 @@ export default {
       presets: {
         'bv-new': { text: this.$t('general.new'), icon: ['fas', 'plus'] },
         'bv-edit': { text: this.$t('general.edit'), icon: ['fad', 'pencil'] },
+        'bv-next': { text: this.$t('general.next'), icon: undefined },
+        'bv-prev': { text: this.$t('general.previous'), icon: undefined },
         'bv-save': { text: this.$t('general.save'), icon: undefined },
         'bv-cancel': { text: this.$t('general.cancel'), icon: undefined },
         'bv-refresh': { text: this.$t('general.refresh'), icon: undefined },
