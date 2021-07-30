@@ -1,43 +1,45 @@
 <template>
-  <b-card-body class="text-center p-sm-4">
-    <slot name="icon">
-      <b-card-text>
-        <icon v-if="isLoading" :preset="getPresetIcon" size="2x" pulse></icon>
-        <span v-else>
-          <b-avatar v-if="iconHolder" size="3rem" variant="light" rounded>
-            <icon :icon="icon" :preset="getPresetIcon" :class="getIconClass"></icon>
-          </b-avatar>
-          <icon v-else :icon="icon" :preset="getPresetIcon" :class="getIconClass" size="2x"></icon>
-        </span>
-      </b-card-text>
-    </slot>
+  <b-card-body class="row justify-content-center p-sm-4" :class="{ 'h-half-screen': fixedHeight }">
+    <div class="align-self-center">
+      <slot name="icon">
+        <b-card-text class="mb-8">
+          <icon v-if="isLoading" :preset="getPresetIcon" size="2x" pulse></icon>
+          <span v-else>
+            <b-avatar v-if="iconHolder" size="3rem" variant="light" class="shadow-sm" rounded>
+              <icon :icon="icon" :preset="getPresetIcon" :class="getIconClass" size="2x"></icon>
+            </b-avatar>
+            <icon v-else :icon="icon" :preset="getPresetIcon" :class="getIconClass" size="2x"></icon>
+          </span>
+        </b-card-text>
+      </slot>
 
-    <slot name="title">
-      <b-card-title v-if="title">{{ title }}</b-card-title>
-    </slot>
+      <slot name="title">
+        <b-card-title v-if="getTitle">{{ getTitle }}</b-card-title>
+      </slot>
 
-    <slot name="subtitle">
-      <b-card-text v-if="subtitle">{{ subtitle }}</b-card-text>
-    </slot>
+      <slot name="subtitle">
+        <b-card-text v-if="subtitle">{{ subtitle }}</b-card-text>
+      </slot>
 
-    <slot name="body">
-      <b-card-text class="text-secondary">{{ body }}</b-card-text>
-    </slot>
+      <slot name="body">
+        <b-card-text class="text-secondary">{{ getBody }}</b-card-text>
+      </slot>
 
-    <slot name="action">
-      <action-button
-        v-if="shouldShowButton"
-        :preset="getPresetAction"
-        :variant="btnVariant"
-        :text="btnText"
-        :link="btnLink"
-        :size="btnSize"
-        :disabled="btnDisabled"
-        :link-append="btnLinkAppend"
-        :prefetch="btnLink ? true : false"
-        @click="sendEvents"
-      ></action-button>
-    </slot>
+      <slot name="action">
+        <action-button
+          v-if="shouldShowButton"
+          :preset="getPresetAction"
+          :variant="btnVariant"
+          :text="btnText"
+          :link="btnLink"
+          :size="btnSize"
+          :disabled="btnDisabled"
+          :link-append="btnLinkAppend"
+          :prefetch="btnLink ? true : false"
+          @click="sendEvents"
+        ></action-button>
+      </slot>
+    </div>
   </b-card-body>
 </template>
 
@@ -65,25 +67,35 @@ export default {
     state: { type: String, default: undefined },
     subtitle: { type: String, default: undefined },
     iconHolder: { type: Boolean, default: false },
+    fixedHeight: { type: Boolean, default: false },
+    iconPreset: { type: String, default: undefined },
   },
 
   data() {
-    return {}
+    return {
+      searchTitle: this.$t('general.noResultTitle'),
+      searchSubtitle: this.$t('general.noResultSubtitle'),
+    }
   },
 
   computed: {
     getPresetIcon() {
-      return this.icon
-        ? undefined
-        : this.isLoading
-        ? 'bv-loading'
-        : this.isEmpty
-        ? 'bv-empty'
-        : this.isError
-        ? 'bv-error'
-        : this.isSuccess
-        ? 'bv-success'
-        : undefined
+      if (this.iconPreset) return this.iconPreset
+
+      switch (this.state) {
+        case 'loading':
+          return 'bv-loading'
+        case 'empty':
+          return 'bv-empty'
+        case 'error':
+          return 'bv-error'
+        case 'success':
+          return 'bv-success'
+        case 'search':
+          return 'bv-search'
+        default:
+          return undefined
+      }
     },
 
     getPresetIconVariant() {
@@ -116,6 +128,14 @@ export default {
 
     shouldShowButton() {
       return !this.btnHide && (this.btnText || this.getPresetAction)
+    },
+
+    getTitle() {
+      return this.state === 'search' ? this.searchTitle : this.title
+    },
+
+    getBody() {
+      return this.state === 'search' ? this.searchSubtitle : this.subtitle
     },
   },
 
