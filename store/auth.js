@@ -27,7 +27,7 @@ const actions = {
   async onAuthStateChanged({ commit, dispatch }, user) {
     const { $log } = this.app.context
     try {
-      $log.debug('auth | onAuthStateChanged | user', user)
+      $log.trace('auth.onAuthStateChanged', 'user=%o', user)
       if (user.authUser) {
         commit('SET', user)
       } else {
@@ -35,12 +35,12 @@ const actions = {
       }
 
       if (user.claims) {
-        await dispatch('user_session/add', user.claims, { root: true })
+        await dispatch('user_sessions/add', user.claims, { root: true })
       } else {
-        await dispatch('user_session/clear', null, { root: true })
+        await dispatch('user_sessions/clear', null, { root: true })
       }
     } catch (error) {
-      $log.error('auth | onAuthStateChanged | error', error)
+      $log.error('auth.onAuthStateChanged', '%o', error)
     }
   },
 
@@ -49,24 +49,24 @@ const actions = {
     try {
       // create user with email/password method
       const { user } = await $fire.auth.createUserWithEmailAndPassword(email, password)
-      $log.debug('auth | registerWithEmailAndPassword | authUser', user)
+      $log.trace('auth.registerWithEmailAndPassword', 'user=%o', user)
       commit('SET', { authUser: user })
 
       // keep a copy of user in firestore optimistically
       const payload = { ...state.authUser, displayName: name, emailConsent }
-      await dispatch('user/add', { payload }, { root: true })
+      await dispatch('user/create', { payload }, { root: true })
 
       // automatically send email verification upon successful registration
       // though can be requested manually at later time
       await dispatch('requestEmailVerification')
 
-      $log.success('auth | registerWithEmailAndPassword', 'successful')
+      $log.success('auth.registerWithEmailAndPassword', 'success')
     } catch (error) {
       // auth/email-already-in-use
       // auth/invalid-email
       // auth/operation-not-allowed (email/password accounts are not enabled) -- log
       // auth/weak-password
-      $log.error('auth | registerWithEmailAndPassword | error', error)
+      $log.error('auth.registerWithEmailAndPassword', '%o', error)
       throw error
     }
   },
@@ -77,16 +77,16 @@ const actions = {
     try {
       await $fire.auth.setPersistence(persistence)
       const { user } = await $fire.auth.signInWithEmailAndPassword(email, password)
-      $log.debug('auth | loginWithEmailAndPassword | authUser', user)
+      $log.trace('auth.loginWithEmailAndPassword', 'user=%o', user)
       commit('SET', { authUser: user })
 
-      $log.success('auth | loginWithEmailAndPassword', 'successful')
+      $log.success('auth.loginWithEmailAndPassword', 'success')
     } catch (error) {
       // auth/invalid-email
       // auth/user-disabled
       // auth/user-not-found
       // auth/wrong-password
-      $log.error('auth | loginWithEmailAndPassword | error', error)
+      $log.error('auth.loginWithEmailAndPassword', '%o', error)
       throw error
     }
   },
@@ -96,9 +96,9 @@ const actions = {
     try {
       await $fire.auth.signOut()
       commit('UNSET')
-      $log.success('auth | signOut', 'successful')
+      $log.success('auth.signout', 'success')
     } catch (error) {
-      $log.error('auth | signOut | error', error)
+      $log.error('auth.signout', '%o', error)
       throw error
     }
   },
@@ -108,7 +108,7 @@ const actions = {
     const cred = $fireModule.auth.EmailAuthProvider.credential(email, password)
     try {
       await $fire.auth.currentUser.reauthenticateWithCredential(cred)
-      $log.success('auth | reauthenticateWithCredential', 'successful')
+      $log.success('auth.reauthenticateWithCredential', 'success')
     } catch (error) {
       // auth/user-mismatch -- log
       // auth/user-not-found -- log
@@ -117,7 +117,7 @@ const actions = {
       // auth/wrong-password
       // auth/invalid-verification-code (for phone auth)
       // auth/invalid-verification-id (for phone auth)
-      $log.error('auth | reauthenticateWithCredential | error', error)
+      $log.error('auth.reauthenticateWithCredential', '%o', error)
       throw error
     }
   },
@@ -126,11 +126,11 @@ const actions = {
     const { $fire, $log } = this.app.context
     try {
       await $fire.auth.currentUser.updatePassword(newPassword)
-      $log.success('auth | updatePassword', 'successful')
+      $log.success('auth.updatePassword', 'success')
     } catch (error) {
       // auth/weak-password (less than 6 chars)
       // auth/requires-recent-login
-      $log.error('auth | updatePassword | error', error)
+      $log.error('auth.updatePassword', '%o', error)
       throw error
     }
   },
@@ -140,9 +140,9 @@ const actions = {
     $fire.auth.languageCode = i18n.locale
     try {
       await $fire.auth.currentUser.sendEmailVerification()
-      $log.success('auth | requestEmailVerification', 'successful')
+      $log.success('auth.requestEmailVerification', 'success')
     } catch (error) {
-      $log.error('auth | requestEmailVerification | error', error)
+      $log.error('auth.requestEmailVerification', '%o', error)
       throw error
     }
   },
@@ -152,13 +152,13 @@ const actions = {
     try {
       await $fire.auth.applyActionCode(code)
       commit('SET', { authUser: $fire.auth.currentUser })
-      $log.success('auth | confirmEmail', 'successful')
+      $log.success('auth.confirmEmail', 'success')
     } catch (error) {
       // auth/expired-action-code
       // auth/invalid-action-code
       // auth/user-disabled
       // auth/user-not-found -- log
-      $log.error('auth | confirmEmail | error', error)
+      $log.error('auth.confirmEmail', '%o', error)
       throw error
     }
   },
@@ -168,11 +168,11 @@ const actions = {
     $fire.auth.languageCode = $i18n.locale
     try {
       await $fire.auth.sendPasswordResetEmail(email)
-      $log.success('auth | requestPasswordReset', 'successful')
+      $log.success('auth.requestPasswordReset', 'success')
     } catch (error) {
       // auth/invalid-email
       // auth/user-not-found
-      $log.error('auth | requestPasswordReset | error', error)
+      $log.error('auth.requestPasswordReset', '%o', error)
       throw error
     }
   },
@@ -181,14 +181,14 @@ const actions = {
     const { $fire, $log } = this.app.context
     try {
       await $fire.auth.confirmPasswordReset(code, newPassword)
-      $log.success('auth | confirmPasswordReset', 'successful')
+      $log.success('auth.confirmPasswordReset', 'success')
     } catch (error) {
       // auth/expired-action-code
       // auth/invalid-action-code
       // auth/user-disabled
       // auth/user-not-found -- log
       // auth/weak-password
-      $log.error('auth | confirmPasswordReset | error', error)
+      $log.error('auth.confirmPasswordReset', '%o', error)
       throw error
     }
   },

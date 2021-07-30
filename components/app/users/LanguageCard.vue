@@ -1,5 +1,5 @@
 <template>
-  <b-card no-body>
+  <b-card class="border-0" no-body>
     <box-header :title-text="ui.title" :subtitle-text="ui.subtitle">
       <template #right>
         <action-button

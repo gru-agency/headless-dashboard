@@ -1,5 +1,5 @@
 <template>
-  <b-card no-body>
+  <b-card class="border-0" no-body>
     <box-header :title-text="ui.profile">
       <template #right>
         <div v-if="readonly">
@@ -134,10 +134,8 @@ export default {
     },
   },
 
-  watch: {
-    userName(newValue) {
-      this.form.name = newValue
-    },
+  mounted() {
+    this.form.name = this.userName
   },
 
   methods: {

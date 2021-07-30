@@ -1,5 +1,5 @@
 <template>
-  <b-card no-body>
+  <b-card class="border-0" no-body>
     <box-header :title-text="ui.title" :subtitle-text="ui.subtitle"> </box-header>
 
     <b-list-group flush>
@@ -13,7 +13,7 @@
       </b-list-group-item>
     </b-list-group>
 
-    <b-card-footer>
+    <b-card-footer class="border-top">
       <div class="d-flex justify-content-end">
         <action-button preset="bv-cancel" size="sm" class="mr-2" @click="restore"></action-button>
         <action-button
@@ -65,10 +65,8 @@ export default {
     },
   },
 
-  watch: {
-    getStarted(newValue) {
-      this.form.emailConsent = newValue
-    },
+  mounted() {
+    this.form.emailConsent = this.getStarted
   },
 
   methods: {

@@ -1,5 +1,5 @@
 <template>
-  <div class="py-10 px-5">
+  <div>
     <users-profile-form class="mb-10"></users-profile-form>
     <users-language-card class="mb-10"></users-language-card>
     <users-email-card class="mb-10"></users-email-card>

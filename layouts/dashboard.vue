@@ -2,7 +2,7 @@
   <div>
     <b-navbar toggleable="lg" type="light" fixed="top" class="bg-light border-bottom px-0">
       <b-container fluid="2xl">
-        <b-row no-gutters class="w-100 justify-content-between px-4 pr-lg-0">
+        <b-row no-gutters class="w-100 justify-content-between px-4">
           <b-navbar-brand class="font-weight-bold d-none d-lg-inline-block">
             {{ $config.brandName.toLowerCase() }}
           </b-navbar-brand>
@@ -31,7 +31,7 @@
         <app-menu></app-menu>
       </b-collapse>
 
-      <main class="main-content-body flex-grow-1 py-8">
+      <main class="main-content-body flex-grow-1 px-lg-4 py-8">
         <nuxt></nuxt>
       </main>
     </b-container>

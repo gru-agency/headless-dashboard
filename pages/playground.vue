@@ -1,6 +1,6 @@
 <template>
   <b-container>
-    <b-row class="py-3 mb-5">
+    <b-row class="py-10 mb-5">
       <b-col cols="4" class="mt-4">
         <b-card header="ActionToggler">
           <action-toggler target="collapsible" text="More" icon-right></action-toggler>
@@ -184,7 +184,12 @@
         </b-card>
       </b-col>
       <b-col cols="4" class="mt-4">
-        <b-card header="Reserved"> </b-card>
+        <b-card header="BoxState - Search empty">
+          <box-state state="search"></box-state>
+        </b-card>
+      </b-col>
+      <b-col cols="4" class="mt-4">
+        <b-card header="Table Footer"><table-caption></table-caption></b-card>
       </b-col>
     </b-row>
   </b-container>
@@ -241,7 +246,7 @@ export default {
           message: new Date(),
         })
       } catch (e) {
-        this.$log.error(e)
+        this.$log.error('playground', '%o', e)
       }
     },
 
@@ -251,7 +256,7 @@ export default {
         const doc = await ref.get()
         this.message = doc.data().message.toDate()
       } catch (e) {
-        this.$log.error(e)
+        this.$log.error('playground', '%o',e)
       }
     },
   },

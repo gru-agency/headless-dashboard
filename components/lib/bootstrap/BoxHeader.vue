@@ -7,9 +7,9 @@
     <div v-if="parentLink" class="d-flex justify-content-between align-items-center mb-2">
       <action-link
         :text="parentLinkText"
-        :icon="['fad', 'long-arrow-left']"
         :variant="parentLinkVariant || 'secondary'"
         :link-to-parent="parentLink"
+        icon-preset="bv-back"
       ></action-link>
     </div>
 

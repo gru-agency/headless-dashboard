@@ -1,17 +1,16 @@
-import { nanoid } from 'nanoid'
+import { customAlphabet } from 'nanoid'
+import { alphanumeric } from 'nanoid-dictionary'
 import { name, os } from 'platform'
 
 export default ({ _ }, inject) => {
   const _util = {
-    nanoid: (length) => (length ? nanoid(length) : nanoid()),
+    nanoid: (length) => customAlphabet(alphanumeric, length || 21)(),
 
     platformDescription: () => `${name} - ${os.family}`,
 
     extractParentPath: (path) => {
       return path.substr(0, path.lastIndexOf('/'))
     },
-
-    stringify: (msg) => JSON.stringify(msg),
   }
 
   const _validation = {

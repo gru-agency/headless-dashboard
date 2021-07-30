@@ -7,7 +7,7 @@
     :prefetch="linkToParent || link ? true : false"
     @click.prevent="sendEvents"
   >
-    <icon :icon="icon"></icon>
+    <icon :icon="icon" :preset="iconPreset"></icon>
 
     <span v-if="text ? true : false">
       <slot>{{ text }}</slot>
@@ -27,6 +27,7 @@ export default {
     linkAppend: { type: Boolean, default: false },
     linkToParent: { type: Boolean, default: false },
     icon: { type: Array, default: () => null },
+    iconPreset: { type: String, default: undefined },
   },
 
   computed: {

@@ -27,8 +27,8 @@
     "@babel/eslint-parser": "^7.14.7",
     "@babel/preset-env": "^7.12.17",
     "@babel/runtime-corejs3": "^7.14.7",
-    "@commitlint/cli": "^12.1.4",
-    "@commitlint/config-conventional": "^12.1.4",
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
     "@fortawesome/free-regular-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
@@ -42,9 +42,9 @@
     "@nuxtjs/stylelint-module": "^4.0.0",
     "@vue/composition-api": "^1.0.0-rc.12",
     "bootstrap-vue": "^2.21.2",
-    "consola": "^2.15.3",
     "core-js": "^3.15.2",
     "dayjs": "^1.10.6",
+    "debug": "^4.3.2",
     "eslint": "^7.29.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-nuxt": "^2.0.0",
@@ -53,6 +53,7 @@
     "husky": "^7.0.0",
     "lint-staged": "^11.0.0",
     "nanoid": "^3.1.23",
+    "nanoid-dictionary": "^4.3.0",
     "nuxt-build-optimisations": "^1.0.5",
     "nuxt-i18n": "^6.27.2",
     "obit-fa-pro-duotone": "5.15.3",
@@ -70,7 +71,6 @@
     "vee-validate": "^3.4.10",
     "vue": "^2.6.14",
     "vue-currency-input": "^2.0.0",
-    "vuexfire": "^3.2.5",
     "webpack": "^4.46.0"
   }
 }

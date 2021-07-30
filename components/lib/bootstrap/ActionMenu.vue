@@ -9,7 +9,7 @@
     no-caret
     right
   >
-    <template #button-content> <icon :icon="['far', 'ellipsis-h']"></icon> </template>
+    <template #button-content> <icon preset="bv-more-v"></icon> </template>
 
     <slot>
       <b-dd-item
@@ -21,8 +21,22 @@
         :prefetch="editLink ? true : false"
         @click.prevent="sendEvents('edit')"
       >
-        <icon :icon="['fad', 'pencil']" class="mr-2"></icon>
-        {{ editText || def.edit }}
+        <icon preset="bv-edit" class="mr-2"></icon>
+        {{ editText || defaultText.edit }}
+      </b-dd-item>
+
+      <b-dd-item v-if="!noArchive" :id="getId('archive')" @click.prevent="sendEvents('archive')">
+        <icon preset="bv-archive" class="mr-2"></icon>
+        {{ archiveText || defaultText.archive }}
+
+        <b-popover :target="getId('archive')" triggers="hover" placement="left">
+          <slot name="archive">{{ defaultText.archiveTips }}</slot>
+        </b-popover>
+      </b-dd-item>
+
+      <b-dd-item v-if="!noUnarchive" @click.prevent="sendEvents('unarchive')">
+        <icon preset="bv-unarchive" class="mr-2"></icon>
+        {{ unarchiveText || defaultText.unarchive }}
       </b-dd-item>
 
       <b-dd-divider v-if="!deleteHide"></b-dd-divider>
@@ -34,8 +48,8 @@
         :append="deleteLinkAppend"
         @click.prevent="sendEvents('delete')"
       >
-        <icon :icon="['fad', 'trash']" class="mr-2"></icon>
-        {{ deleteText || def.delete }}
+        <icon preset="bv-delete" class="mr-2"></icon>
+        {{ deleteText || defaultText.delete }}
       </b-dd-item>
     </slot>
   </b-dd>
@@ -64,13 +78,21 @@ export default {
     deleteHide: { type: Boolean, default: false },
     deleteDisabled: { type: Boolean, default: false },
     deleteLinkAppend: { type: Boolean, default: false },
+    archiveText: { type: String, default: undefined },
+    noArchive: { type: Boolean, default: false },
+    unarchiveText: { type: String, default: undefined },
+    noUnarchive: { type: Boolean, default: false },
+    primaryKey: { type: String, default: undefined },
   },
 
   data() {
     return {
-      def: {
+      defaultText: {
         delete: this.$t('general.delete'),
         edit: this.$t('general.edit'),
+        archive: this.$t('general.archive'),
+        archiveTips: this.$t('general.archiveTips'),
+        unarchive: this.$t('general.unarchive'),
       },
     }
   },
@@ -78,6 +100,10 @@ export default {
   methods: {
     sendEvents(event) {
       this.$emit(event)
+    },
+
+    getId(name) {
+      return this.primaryKey + '-' + name
     },
   },
 }
