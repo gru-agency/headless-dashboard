@@ -21,7 +21,7 @@
         :prefetch="editLink ? true : false"
         @click.prevent="sendEvents('edit')"
       >
-        <icon :icon="['fad', 'pencil']" class="mr-2"></icon>
+        <icon preset="bv-edit" class="mr-2"></icon>
         {{ editText || defaultText.edit }}
       </b-dd-item>
 
@@ -48,7 +48,7 @@
         :append="deleteLinkAppend"
         @click.prevent="sendEvents('delete')"
       >
-        <icon :icon="['fad', 'trash']" class="mr-2"></icon>
+        <icon preset="bv-delete" class="mr-2"></icon>
         {{ deleteText || defaultText.delete }}
       </b-dd-item>
     </slot>

@@ -41,6 +41,7 @@ export default {
   data() {
     return {
       presets: {
+        // duotone
         'bv-empty': { icon: ['fad', 'empty-set'] },
         'bv-error': { icon: ['fad', 'exclamation-triangle'] },
         'bv-success': { icon: ['fad', 'check-double'] },
@@ -51,6 +52,15 @@ export default {
         'bv-product': { icon: ['fad', 'box'] },
         'bv-price': { icon: ['fad', 'dollar-sign'] },
         'bv-setting': { icon: ['fad', 'cog'] },
+        'bv-search': { icon: ['fad', 'search'] },
+        'bv-archive': { icon: ['fad', 'inbox-in'] },
+        'bv-unarchive': { icon: ['fad', 'inbox-out'] },
+        'bv-back': { icon: ['fad', 'long-arrow-left'] },
+        'bv-edit': { icon: ['fad', 'pencil'] },
+        'bv-delete': { icon: ['fad', 'trash'] },
+
+        // regular
+        'bv-more-v': { icon: ['far', 'ellipsis-v'] },
       },
     }
   },
