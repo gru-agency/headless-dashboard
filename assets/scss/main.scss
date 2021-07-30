@@ -56,15 +56,15 @@ $spacers: map-merge($spacers, $custom-spacers);
 // @import '~bootstrap/scss/jumbotron';
 @import '~bootstrap/scss/alert';
 // @import '~bootstrap/scss/progress';
-@import '~bootstrap/scss/media';
+// @import '~bootstrap/scss/media';
 @import '~bootstrap/scss/list-group';
-@import '~bootstrap/scss/close';
+// @import '~bootstrap/scss/close';
 @import '~bootstrap/scss/toasts';
 @import '~bootstrap/scss/modal';
 @import '~bootstrap/scss/tooltip';
 @import '~bootstrap/scss/popover';
 // @import '~bootstrap/scss/carousel';
-@import '~bootstrap/scss/spinners';
+// @import '~bootstrap/scss/spinners';
 @import '~bootstrap/scss/utilities';
 @import '~bootstrap/scss/print';
 @import '~bootstrap-vue/src/index.scss';
@@ -123,6 +123,20 @@ a {
     &:hover {
       color: darken($primary, 15%);
     }
+  }
+}
+
+// tabs
+.nav-tabs {
+  .nav-link {
+    margin-bottom: 0;
+    border: none;
+  }
+
+  .nav-link.active,
+  .nav-item.show .nav-link {
+    border-bottom: 1px solid $primary;
+    font-weight: 500;
   }
 }
 
@@ -223,4 +237,28 @@ label, legend {
 
 .-z-1 {
   z-index: -1;
+}
+
+.h-half-screen {
+  height: 50vh;
+}
+
+.w-5p {
+  width: 5%;
+}
+
+.w-10p {
+  width: 10%;
+}
+
+.w-15p {
+  width: 15%;
+}
+
+.w-20p {
+  width: 20%;
+}
+
+.w-25p {
+  width: 25%;
 }

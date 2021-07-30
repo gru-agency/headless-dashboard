@@ -31,7 +31,7 @@
         <app-menu></app-menu>
       </b-collapse>
 
-      <main class="main-content-body flex-grow-1 px-4 py-8">
+      <main class="main-content-body flex-grow-1 px-lg-4 py-8">
         <nuxt></nuxt>
       </main>
     </b-container>

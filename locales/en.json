@@ -1,11 +1,15 @@
 {
   "general": {
+    "active": "Active",
     "administrator": "Administrator",
+    "archive": "Archive",
+    "archiveTips": "Set as archived. Archived item cannot be exported to Portal, but will still work for Portal that already have it set.",
     "autoDetect": "Auto-detect",
     "cancel": "Cancel",
     "contact": "Contact",
     "continue": "Continue",
     "continueDashboard": "Continue to Dashboard",
+    "created": "Created",
     "delete": "Delete",
     "device": "Device",
     "edit": "Edit",
@@ -22,9 +26,13 @@
     "login": "Sign in",
     "name": "Name",
     "new": "New",
+    "next": "Next",
     "newPassword": "New password",
+    "noResultTitle": "No results found",
+    "noResultSubtitle": "There aren't any results for that query",
     "optional": "Optional",
     "password": "Password",
+    "previous": "Prev",
     "privacy": "Privacy",
     "privacyPolicy": "Privacy Policy",
     "profile": "Profile",
@@ -40,7 +48,9 @@
     "success": "Success",
     "supportText": "Write and describe your issue to us at ",
     "terms": "Terms",
-    "time": "Time"
+    "time": "Time",
+    "unarchive": "Unarchive",
+    "updated": "Updated"
   },
 
   "modules": {
@@ -49,14 +59,14 @@
     "prices": { "title": "Prices" },
     "settings": { "title": "Settings" },
     "users": {
-      "changePasswordTitle":"Change password",
+      "changePasswordTitle": "Change password",
       "emailTitle": "Email preferences",
       "emailSubtitle": "Choose what messages you’d like to receive for your {_brand} account",
       "emailGetStartedTitle": "Getting started",
       "emailGetStartedSubtitle": "Receive helpful tips when you try out new {_brand} products",
       "resetPasswordLinkInvalid": "This password reset link has expired",
       "reauthenticateTitle": "Re-authenticate",
-      "reauthenticateSubtitle":"Please confirm your password to continue.",
+      "reauthenticateSubtitle": "Please confirm your password to continue.",
       "resetPasswordRetry": "Try reset your password again",
       "resetPasswordSuccess": "You've successfully changed your password",
       "resetTitle": "Reset your password",
@@ -71,7 +81,7 @@
       "loginTitle": "Sign in to your account",
       "loginForgotPassword": "Forgot your password?",
       "loginPersist": "Stay signed in",
-      "profileChangePassword":"Change password",
+      "profileChangePassword": "Change password",
       "sessionTitle": "Login sessions",
       "SessionSubtitle": "Places where you're logged into {_brand}",
       "sessionCurrent": "Current session",
@@ -80,7 +90,6 @@
       "verifyEmailLinkInvalid": "This verify email link has expired",
       "verifyEmailRetry": "Try verify your email again",
       "verifyEmailSuccess": "You've successfully verified your email"
-
     }
   },
 
@@ -98,6 +107,6 @@
     "emailPasswordWrong": "Incorrect email or password",
     "passwordInvalid": "The @:general.password field must be at least 10 characters",
     "passwordHint": "Your password needs to be at least 10 characters, include multiple words and phrases to make it more secure.",
-    "reauthenticationRequired":"Please log in again to complete this action"
+    "reauthenticationRequired": "Please log in again to complete this action"
   }
 }
