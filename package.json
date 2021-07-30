@@ -70,7 +70,6 @@
     "vee-validate": "^3.4.10",
     "vue": "^2.6.14",
     "vue-currency-input": "^2.0.0",
-    "vuexfire": "^3.2.5",
     "webpack": "^4.46.0"
   }
 }
