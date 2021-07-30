@@ -48,6 +48,12 @@ export default {
     }
   },
 
+  head() {
+    return {
+      title: this.$t('seo.products', { _brand: this.$config.brandName }),
+    }
+  },
+
   computed: {
     ...mapState('user', ['user']),
     ...mapGetters('products', ['findActiveByOwner', 'findArchiveByOwner', 'findCache']),

@@ -55,7 +55,7 @@
 
   "modules": {
     "orders": { "title": "Orders" },
-    "products": { "title": "Products" },
+    "products": { "title": "Products", "createFormTitle": "Add a new product" },
     "prices": { "title": "Prices" },
     "settings": { "title": "Settings" },
     "users": {
@@ -97,7 +97,9 @@
     "tableResults": "No result | {n} result | {n} results"
   },
 
-  "seo": {},
+  "seo": {
+    "products": "Products - {_brand}"
+  },
 
   "validation": {
     "accountExists": "An account already exists with this email address. If you'd like to create a new {_brand} account with the same email address, ",
