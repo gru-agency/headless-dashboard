@@ -22,16 +22,16 @@ const actions = {
     const { $config, $log, $util } = this.app.context
     try {
       const currentIp4 = await this.$axios.$get('https://api.ipify.org')
-      $log.debug('user_sessions | addSession | ipv4', currentIp4)
+      $log.trace('user_sessions.add', 'ipv4=%s', currentIp4)
 
       const cache = state.caches.find((el) => el.ipv4 === currentIp4)
-      $log.debug(`user_sessions | addSession | caches: ${$util.stringify(state.caches)}`)
+      $log.trace('user_sessions.add', 'caches=%o', cache)
 
       // only fetch if cache miss
       let geodb
       if (!cache) {
         const _geodb = await this.$axios.$get(`https://geolocation-db.com/json/${$config.gdb}`)
-        $log.debug(`user_sessions | addSession | geodb: ${$util.stringify(_geodb)}`)
+        $log.trace('user_sessions.add', 'geodb=%o', _geodb)
         geodb = { ipv4: _geodb.IPv4, country: _geodb.country_name, source: 'geodb' }
       }
 
@@ -39,17 +39,18 @@ const actions = {
       const geolocation = cache || geodb
       if (geolocation) commit('SET_CACHE', geolocation)
 
-      commit('SET_SESSION', {
+      const payload = {
         location: geolocation?.country,
         ip: geolocation?.ipv4,
         time: claims.iat,
         device: $util.platformDescription(),
-      })
-      $log.debug(`user_sessions | addSession | sessions: ${$util.stringify(state.all)}`)
-      
-      $log.success('user_sessions | addSession', 'successful')
+      }
+      commit('SET_SESSION', payload)
+      $log.trace('user_sessions.add', 'payload=%o', payload)
+
+      $log.success('user_sessions.add', 'success')
     } catch (error) {
-      $log.error('user_sessions | addSession | error', error)
+      $log.error('user_sessions.add', '%o', error)
       throw error
     }
   },
@@ -57,7 +58,7 @@ const actions = {
   clear({ commit }) {
     const { $log } = this.app.context
     commit('CLEAR_SESSION')
-    $log.success('user_sessions | clear', 'successful')
+    $log.success('user_sessions.clear', 'success')
   },
 }
 

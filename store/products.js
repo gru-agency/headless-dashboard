@@ -107,7 +107,7 @@ const actions = {
         created: FieldValue.serverTimestamp(),
         updated: FieldValue.serverTimestamp(),
       }
-      $log.debug(`products | create | id: ${documentId}, dirty: ${JSON.stringify(dirty)}`)
+      $log.trace('products.create', 'id=%s, dirty=%o', documentId, dirty)
 
       // persist anonymous/object to firestore
       await $fire.firestore
@@ -117,9 +117,9 @@ const actions = {
 
       // fetch immediately
       await dispatch('retrieve', { documentId })
-      $log.success(`products | create | success`)
+      $log.success('products.create', 'success')
     } catch (error) {
-      $log.error(`products | create | error: ${error}`)
+      $log.error('products.create', '%o', error)
       throw error
     }
   },
@@ -130,7 +130,7 @@ const actions = {
     try {
       // remove local props + globally add necessary meta props
       const { id, object, ...dirty } = { ...payload, updated: FieldValue.serverTimestamp() }
-      $log.debug(`products | update | id: ${documentId}, dirty: ${JSON.stringify(dirty)}`)
+      $log.trace('products.update', 'id=%s, dirty=%o', documentId, dirty)
 
       // persist anonymous/object to firestore
       await $fire.firestore
@@ -140,9 +140,9 @@ const actions = {
 
       // fetch immediately
       await dispatch('retrieve', { documentId })
-      $log.success(`products | update | success`)
+      $log.success('products.update', 'success')
     } catch (error) {
-      $log.error(`products | update | error: ${error}`)
+      $log.error('products.update', '%o', error)
       throw error
     }
   },
@@ -152,9 +152,9 @@ const actions = {
     try {
       await $fire.firestore.collection(COLLECTION).doc(documentId).delete()
       commit('DELETE', documentId)
-      $log.success(`products | delete | success`)
+      $log.success('products.delete', 'success')
     } catch (error) {
-      $log.error(`products | delete | error: ${error}`)
+      $log.error('products.delete', '%o', error)
       throw error
     }
   },
@@ -168,28 +168,26 @@ const actions = {
       // expecting work on repeated call from 'Next' pagination
       const _fromCache = await _ref.get({ source: 'cache' })
       const { id, exists, metadata } = _fromCache
-      $log.debug(`products | retrieve | id: ${id}, exists: ${exists}, metadata: ${JSON.stringify(metadata)}`)
+      $log.trace('products.retrieve', 'id=%s, exists=%s, metadata=%o', id, exists, metadata)
 
       // fallback to server when found nothing on cache
       let _fromServer
       if (!exists) {
         _fromServer = await _ref.get({ source: 'server' })
         const { id, exists, metadata } = _fromServer
-        $log.debug(
-          `products | retrieve | id: ${id}, exists: ${exists}, metadata: ${JSON.stringify(metadata)}`
-        )
+        $log.trace('products.retrieve', 'id=%s, exists=%s, metadata=%o', id, exists, metadata)
       }
 
       // put all the information together into an object before goes to state
       const results = _fromServer || _fromCache
       const product = { ...results.data(), id, object: 'product' }
-      $log.debug(`products | retrieve | product: ${JSON.stringify(product)}`)
+      $log.trace('products.retrieve', 'product=%o', product)
       commit('UPSERT', product)
 
-      $log.success(`products | retrieve | success`)
+      $log.success('products.retrieve', 'success')
       return product
     } catch (error) {
-      $log.error(`products | retrieve | error: ${error}`)
+      $log.error('products.retrieve', '%o', error)
       throw error
     }
   },
@@ -215,10 +213,13 @@ const actions = {
       // expecting work on repeated call from 'Next' pagination
       const _fromCache = await _query.get({ source: 'cache' })
       const { empty, size, metadata, query } = _fromCache
-      $log.debug(
-        `products | list | empty: ${empty}, size: ${size}, 
-        source: ${metadata.fromCache ? 'cache' : 'server'}, 
-        query: ${query._delegate?._query?.T?.h}`
+      $log.trace(
+        'products.list',
+        'empty=%s, size=%d, source=%s, query=%s',
+        empty,
+        size,
+        metadata.fromCache ? 'cache' : 'server',
+        query._delegate?._query?.T?.h
       )
 
       // fallback to server when found nothing on cache
@@ -226,15 +227,19 @@ const actions = {
       if (empty) {
         _fromServer = await _query.get({ source: 'server' })
         const { empty, size, metadata, query } = _fromServer
-        $log.debug(
-          `products | list | empty: ${empty}, size: ${size}, 
-          source: ${metadata.fromCache ? 'cache' : 'server'}, 
-          query: ${query._delegate?._query?.T?.h}`
+        $log.trace(
+          'products.list',
+          'empty=%s, size=%d, source=%s, query=%s',
+          empty,
+          size,
+          metadata.fromCache ? 'cache' : 'server',
+          query._delegate?._query?.T?.h
         )
       }
 
       // cache regardless of result
       const cache = { owner: account, timestamp: Timestamp.fromDate(new Date()), hash: equalQ.hash }
+      $log.trace('products.list', 'cache=%o', cache)
       commit('SET_CACHE', cache)
 
       const results = _fromServer || _fromCache
@@ -244,10 +249,10 @@ const actions = {
         commit('UPSERT', product)
       })
 
-      $log.success(`products | list | success`)
+      $log.success('products.list', 'success')
       return results.docs
     } catch (error) {
-      $log.error(`products | list | error: ${error}`)
+      $log.error('products.list', '%o', error)
       throw error
     }
   },
@@ -272,10 +277,13 @@ const actions = {
       // expecting work on repeated call from 'Next' pagination
       const _fromCache = await _query.get({ source: 'cache' })
       const { empty, size, metadata, query } = _fromCache
-      $log.debug(
-        `products | paginate | empty: ${empty}, size: ${size}, 
-        source: ${metadata.fromCache ? 'cache' : 'server'}, 
-        query: ${query._delegate?._query?.T?.h}`
+      $log.trace(
+        'products.paginate',
+        'empty=%s, size=%d, source=%s, query=%s',
+        empty,
+        size,
+        metadata.fromCache ? 'cache' : 'server',
+        query._delegate?._query?.T?.h
       )
 
       // fallback to server when found nothing on cache
@@ -283,10 +291,13 @@ const actions = {
       if (empty) {
         _fromServer = await _query.get({ source: 'server' })
         const { empty, size, metadata, query } = _fromServer
-        $log.debug(
-          `products | paginate | empty: ${empty}, size: ${size}, 
-          source: ${metadata.fromCache ? 'cache' : 'server'}, 
-          query: ${query._delegate?._query?.T?.h}`
+        $log.trace(
+          'products.paginate',
+          'empty=%s, size=%d, source=%s, query=%s',
+          empty,
+          size,
+          metadata.fromCache ? 'cache' : 'server',
+          query._delegate?._query?.T?.h
         )
       }
 
@@ -297,10 +308,10 @@ const actions = {
         commit('UPSERT', product)
       })
 
-      $log.success(`products | paginate | success`)
+      $log.success('products.paginate', 'success')
       return results.docs
     } catch (error) {
-      $log.error(`products | paginate | error: ${error}`)
+      $log.error('products.paginate', '%o', error)
       throw error
     }
   },

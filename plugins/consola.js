@@ -1,27 +1,30 @@
-import consola from 'consola'
+import debug from 'debug'
+;(() => {
+  if (process.browser) localStorage.setItem('debug', 'udb:*')
+})()
 
 export default ({ isDev }, inject) => {
-  const _logger = consola
-
-  const _util = {
-    factory: _logger,
-
-    debug: (message, ...args) => {
-      if (isDev) _logger.info(message, ...args)
+  const logger = {
+    success: (module, message, ...args) => {
+      if (isDev) debug(`udb:${module} [SUCCESS]`)(message, ...args)
     },
 
-    info: (message, ...args) => {
-      if (isDev) _logger.info(message, ...args)
+    trace: (module, message, ...args) => {
+      if (isDev) debug(`udb:${module} [TRACE]`)(message, ...args)
     },
 
-    success: (message, ...args) => {
-      if (isDev) _logger.success(message, ...args)
+    info: (module, message, ...args) => {
+      if (isDev) debug(`udb:${module} [INFO]`)(message, ...args)
     },
 
-    error: (message, ...args) => {
-      if (isDev) _logger.error(message, ...args)
+    warn: (module, message, ...args) => {
+      if (isDev) debug(`udb:${module} [WARN]`)(message, ...args)
+    },
+
+    error: (module, message, ...args) => {
+      if (isDev) debug(`udb:${module} [ERROR]`)(message, ...args)
     },
   }
 
-  inject('log', _util)
+  inject('log', logger)
 }

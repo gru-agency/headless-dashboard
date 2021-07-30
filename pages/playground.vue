@@ -246,7 +246,7 @@ export default {
           message: new Date(),
         })
       } catch (e) {
-        this.$log.error(e)
+        this.$log.error('playground', '%o', e)
       }
     },
 
@@ -256,7 +256,7 @@ export default {
         const doc = await ref.get()
         this.message = doc.data().message.toDate()
       } catch (e) {
-        this.$log.error(e)
+        this.$log.error('playground', '%o',e)
       }
     },
   },
