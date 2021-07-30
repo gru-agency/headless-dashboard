@@ -48,10 +48,6 @@ export default {
   name: 'BoxState',
 
   props: {
-    empty: { type: Boolean, default: false },
-    error: { type: Boolean, default: false },
-    success: { type: Boolean, default: false },
-    loading: { type: Boolean, default: false },
     title: { type: String, default: undefined },
     body: { type: String, default: undefined },
     btnText: { type: String, default: undefined },
@@ -111,19 +107,19 @@ export default {
     },
 
     isLoading() {
-      return this.state === 'loading' || this.loading
+      return this.state === 'loading'
     },
 
     isEmpty() {
-      return this.state === 'empty' || this.empty
+      return this.state === 'empty' 
     },
 
     isError() {
-      return this.state === 'error' || this.error
+      return this.state === 'error' 
     },
 
     isSuccess() {
-      return this.state === 'success' || this.success
+      return this.state === 'success'
     },
 
     shouldShowButton() {
