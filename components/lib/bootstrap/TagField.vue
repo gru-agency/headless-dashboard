@@ -15,6 +15,8 @@ export default {
   data() {
     return {
       presets: {
+        'bv-active': { text: this.$t('general.active') },
+        'bv-archive': { text: this.$t('general.archive') },
         'bv-optional': { text: this.$t('general.optional') },
         'bv-required': { text: this.$t('general.required') },
       },

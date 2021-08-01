@@ -205,7 +205,7 @@ export default {
     return {
       // TextField
       text: 'normal text field',
-      date: new Date().getTime(),
+      date: new Date(),
       money: 123456789,
 
       // image field
