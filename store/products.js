@@ -43,7 +43,10 @@ const mutations = {
     const index = state.all.findIndex((el) => el.id === payload.id)
     const current = state.all.find((el) => el.id === payload.id)
     // since update only on subset, override current with subset changes
-    if (index >= 0) state.all.splice(index, 1, { ...current, ...payload })
+    if (index >= 0) {
+      state.all.splice(index, 1)
+      state.all.unshift({ ...current, ...payload })
+    }
   },
 
   /**
@@ -51,8 +54,10 @@ const mutations = {
    */
   UPSERT(state, payload) {
     const index = state.all.findIndex((el) => el.id === payload.id)
-    if (index >= 0) state.all.splice(index, 1, payload)
-    else {
+    if (index >= 0) {
+      state.all.splice(index, 1)
+      state.all.unshift(payload)
+    } else {
       const { $dayjs } = this.app.context
       const _index = state.all.findIndex((el) => {
         return $dayjs.factory(payload.updated.toDate()).isAfter($dayjs.factory(el.updated.toDate()))
@@ -93,7 +98,7 @@ const mutations = {
 }
 
 const actions = {
-  async create({ dispatch }, { account, documentId, payload }) {
+  async create({ dispatch }, { documentId, payload, account }) {
     const { $fire, $fireModule, $log, $util } = this.app.context
     const { FieldValue } = $fireModule.firestore
     try {
@@ -116,8 +121,9 @@ const actions = {
         .set({ ...dirty })
 
       // fetch immediately
-      await dispatch('retrieve', { documentId })
+      const product = await dispatch('retrieve', { documentId })
       $log.success('products.create', 'success')
+      return product
     } catch (error) {
       $log.error('products.create', '%o', error)
       throw error
@@ -139,8 +145,9 @@ const actions = {
         .update({ ...dirty })
 
       // fetch immediately
-      await dispatch('retrieve', { documentId })
+      const product = await dispatch('retrieve', { documentId })
       $log.success('products.update', 'success')
+      return product
     } catch (error) {
       $log.error('products.update', '%o', error)
       throw error
