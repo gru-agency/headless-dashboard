@@ -76,7 +76,7 @@ export default {
     ...mapGetters('products', ['findByProduct']),
 
     account() {
-      return this.user?.account?.id
+      return this.user?.account.id
     },
 
     product() {

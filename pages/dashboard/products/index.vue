@@ -59,7 +59,7 @@ export default {
     ...mapGetters('products', ['findActiveByOwner', 'findArchiveByOwner', 'findCache']),
 
     account() {
-      return this.user?.account?.id
+      return this.user?.account.id
     },
 
     activeTab() {
