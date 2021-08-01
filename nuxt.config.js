@@ -87,6 +87,10 @@ export default {
         return [['@nuxt/babel-preset-app', { corejs: { version: 3 } }]]
       },
     },
+
+    loaders: {
+      vue: { compiler: require('vue-template-babel-compiler') },
+    },
   },
 
   alias: {

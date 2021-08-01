@@ -71,6 +71,7 @@
     "vee-validate": "^3.4.10",
     "vue": "^2.6.14",
     "vue-currency-input": "^2.0.0",
+    "vue-template-babel-compiler": "^1.0.0",
     "webpack": "^4.46.0"
   }
 }
