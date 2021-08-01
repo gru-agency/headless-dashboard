@@ -11,6 +11,7 @@
     "continueDashboard": "Continue to Dashboard",
     "created": "Created",
     "delete": "Delete",
+    "description": "Description",
     "device": "Device",
     "edit": "Edit",
     "email": "Email",
@@ -55,7 +56,13 @@
 
   "modules": {
     "orders": { "title": "Orders" },
-    "products": { "title": "Products", "createFormTitle": "Add a new product" },
+    "products": {
+      "createFormTitle": "Add a new product",
+      "editFormTitle": "Edit product",
+      "title": "Products",
+      "descriptionTips": "Product descriptions appear at checkout.",
+      "nameTips": "Products are the goods or services you sell. If you sell subscriptions, you might call them 'plans'. Product names are visible to customers at checkout, in receipts, and invoices."
+    },
     "prices": { "title": "Prices" },
     "settings": { "title": "Settings" },
     "users": {
