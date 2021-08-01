@@ -12,7 +12,7 @@ export default {
 
   props: {
     text: { type: String, default: undefined },
-    date: { type: [Number, String], default: undefined },
+    date: { type: Date, default: undefined },
     money: { type: [Number, String], default: undefined },
     currency: { type: String, default: undefined },
     locale: { type: String, default: undefined },
