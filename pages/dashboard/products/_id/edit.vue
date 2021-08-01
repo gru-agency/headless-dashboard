@@ -44,6 +44,7 @@
 <script>
 export default {
   name: 'Create',
+  layout: 'default',
 
   data() {
     return {
