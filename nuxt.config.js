@@ -82,14 +82,8 @@ export default {
     transpile: ['vue-currency-input', 'vee-validate/dist/rules'],
 
     babel: {
+      corejs: 3,
       compact: true,
-      presets() {
-        return [['@nuxt/babel-preset-app', { corejs: { version: 3 } }]]
-      },
-    },
-
-    loaders: {
-      vue: { compiler: require('vue-template-babel-compiler') },
     },
   },
 
