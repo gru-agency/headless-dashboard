@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2](https://github.com/gru-agency/headless-dashboard/compare/v0.1.1...v0.1.2) (2021-08-02)
+
+
+### Features
+
+* **ActionMenu:** add archive + unarchive options ([a8c5402](https://github.com/gru-agency/headless-dashboard/commit/a8c5402b6c989fe671206fa01f56a253c21e019c))
+* add next/prev preset options ([344f54a](https://github.com/gru-agency/headless-dashboard/commit/344f54a1b3b0ffdfa566c92c804358c103290620))
+* **BoxState:** add search option, center-center layout, use preset icon ([f2e1cb0](https://github.com/gru-agency/headless-dashboard/commit/f2e1cb0c015233643876318f5930ccb958922774))
+* **BoxState:** remove unused props ([afaf8be](https://github.com/gru-agency/headless-dashboard/commit/afaf8be28ad659c6d16cfff2843a4a5f42ff0ed6))
+* **component:** add TableCaption component ([20c8c94](https://github.com/gru-agency/headless-dashboard/commit/20c8c94d09d9180d44daf240da371387cf09a701))
+* **icons:** add close icon ([811f2d8](https://github.com/gru-agency/headless-dashboard/commit/811f2d8d7b11dda15fda8feec6c62c4d1157612a))
+* **logger:** migrate logger to debug from consola ([fc8d836](https://github.com/gru-agency/headless-dashboard/commit/fc8d8360ddb261606592dd53ba6afa3fa129270f))
+* **products:** add create/edit product ([fcb2c0a](https://github.com/gru-agency/headless-dashboard/commit/fcb2c0aea4c22a56bb0e2718fdf588288548810f))
+* **products:** add product info page ([80d5d4b](https://github.com/gru-agency/headless-dashboard/commit/80d5d4b44a0013cbb0defdea39383ab56aa51a51))
+* **products:** add product listing ([4ad3be5](https://github.com/gru-agency/headless-dashboard/commit/4ad3be536e3702154165ae60be9f89eb9dab2005))
+* **seo:** add head title for product page ([8ced872](https://github.com/gru-agency/headless-dashboard/commit/8ced872d2534e5ac0a25c6a01eb02c7037ca055f))
+* use icon preset instead of custom icon ([1d8f16d](https://github.com/gru-agency/headless-dashboard/commit/1d8f16d632f7fd07e0985a58fce6ea1092440c9a))
+* **user:** automatically fetch user right after logged in ([713bb81](https://github.com/gru-agency/headless-dashboard/commit/713bb812ce732c185fc6c488ea0031660dc330ca))
+* **util:** remove stringify util function ([feed829](https://github.com/gru-agency/headless-dashboard/commit/feed8297e38b93432109948f5fb5f0301e409d30))
+
+
+### Bug Fixes
+
+* fix wrong data type check on text field component ([6e8ab02](https://github.com/gru-agency/headless-dashboard/commit/6e8ab028bfd68561a76d963b960aa945dc08aac7))
+* fix wrong data type check on text field component ([2d4336a](https://github.com/gru-agency/headless-dashboard/commit/2d4336a8e870d0026faf5444af5e9a6bbed7c64a))
+* **id:** allow alphanumeric only on ID generation ([344413e](https://github.com/gru-agency/headless-dashboard/commit/344413e1664f212e8603eca46b75080f0dc65e1d))
+* **nuxt:** revert using corejs prop in nuxt build property ([0cfe38f](https://github.com/gru-agency/headless-dashboard/commit/0cfe38f8a2f8aa1e0c159f3525f996d2b667c65b))
+* **products:** fix missing layout by adding default layout ([418d33d](https://github.com/gru-agency/headless-dashboard/commit/418d33d155e581528eb25f4def7ff826de4c331a))
+* **products:** fix unsorted data during update ([74e3f07](https://github.com/gru-agency/headless-dashboard/commit/74e3f075faec0cfe959767cdd322fc769a593fb1))
+* remove unnecessary optional check on account ([1c5d542](https://github.com/gru-agency/headless-dashboard/commit/1c5d542de0796ddce484a4c66294cef78451d325))
+* **user:** fix missing initial value on email consent ([b4b0e75](https://github.com/gru-agency/headless-dashboard/commit/b4b0e7549626825ca3cbbb0dbe9ca0c07631d4e6))
+* **user:** fix missing object on account prop + remove account getter ([80b3fc7](https://github.com/gru-agency/headless-dashboard/commit/80b3fc757e837d65e8859975a86eee7f4cfa37c6))
+* **user:** missing initial value on display name ([db5ae7c](https://github.com/gru-agency/headless-dashboard/commit/db5ae7ce4467421d15b5ed3bdcf1d283e7a14778))
+* **user:** remove using optional chaining in template ([bca565f](https://github.com/gru-agency/headless-dashboard/commit/bca565f7e5d8171820f2cb44a8a9ed26aab36e41))
+
 ### 0.1.1 (2021-07-23)
 
 
