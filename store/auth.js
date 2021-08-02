@@ -71,7 +71,7 @@ const actions = {
     }
   },
 
-  async loginWithEmailAndPassword({ commit }, { email, password, persist }) {
+  async loginWithEmailAndPassword({ commit, dispatch }, { email, password, persist }) {
     const { $fire, $log } = this.app.context
     const persistence = persist ? 'local' : 'session'
     try {
@@ -79,6 +79,9 @@ const actions = {
       const { user } = await $fire.auth.signInWithEmailAndPassword(email, password)
       $log.trace('auth.loginWithEmailAndPassword', 'user=%o', user)
       commit('SET', { authUser: user })
+
+      // immediately fetch user from store
+      await dispatch('user/retrieve', { firebaseId: user.uid }, { root: true })
 
       $log.success('auth.loginWithEmailAndPassword', 'success')
     } catch (error) {

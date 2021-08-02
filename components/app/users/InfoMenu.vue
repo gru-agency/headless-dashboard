@@ -64,10 +64,7 @@ export default {
     ...mapActions('user', ['retrieve']),
 
     fetchUser() {
-      if (!this.authUser) {
-        // todo authUser is null
-        return
-      }
+      if (!this.authUser) return
       this.retrieve(this.authUser)
     },
 

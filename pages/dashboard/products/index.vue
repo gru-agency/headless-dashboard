@@ -83,16 +83,6 @@ export default {
     },
   },
 
-  watch: {
-    /**
-     * Fetch data when account ID is ready. Particularly useful when
-     * refresh page, where waiting auth state changed to fetch user.
-     */
-    account(_new, _old) {
-      if (!_old && _new) this.fetchData()
-    },
-  },
-
   mounted() {
     this.fetchData()
   },
