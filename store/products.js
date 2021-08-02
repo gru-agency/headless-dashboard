@@ -172,7 +172,6 @@ const actions = {
       const _ref = $fire.firestore.collection(COLLECTION).doc(documentId)
 
       // hit cache first
-      // expecting work on repeated call from 'Next' pagination
       const _fromCache = await _ref.get({ source: 'cache' })
       const { id, exists, metadata } = _fromCache
       $log.trace('products.retrieve', 'id=%s, exists=%s, metadata=%o', id, exists, metadata)

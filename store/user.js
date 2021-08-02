@@ -7,17 +7,13 @@ const state = () => ({
 const getters = {}
 
 const mutations = {
-  SET: (state, payload) => {
-    payload.object = 'user'
-    payload.account.object = 'account'
-    state.user = { ...state.user, ...payload }
-  },
+  SET: (state, payload) => (state.user = payload),
 }
 
 const actions = {
-  async create({ commit }, { documentId, payload }) {
+  async create({ dispatch }, { documentId, payload }) {
     const { $fire, $fireModule, $log, $util } = this.app.context
-    const { FieldValue, Timestamp } = $fireModule.firestore
+    const { FieldValue } = $fireModule.firestore
     try {
       documentId = documentId || $util.nanoid()
 
@@ -35,20 +31,19 @@ const actions = {
         .doc(documentId)
         .set({ ...dirty })
 
-      // Proper: fetch data from server
-      // Fallback: commit directly (losing server info, but can afford slight inaccuracy)
-      commit('SET', { ...payload, id: documentId, created: Timestamp.fromDate(new Date()) })
-
+      // fetch immediately
+      const user = await dispatch('retrieve', { firebaseId: payload.firebaseId })
       $log.success('user.create', 'success')
+      return user
     } catch (error) {
       $log.error('user.create', '%o', error)
       throw error
     }
   },
 
-  async update({ commit }, { documentId, payload }) {
+  async update({ dispatch }, { documentId, payload }) {
     const { $fire, $fireModule, $log } = this.app.context
-    const { FieldValue, Timestamp } = $fireModule.firestore
+    const { FieldValue } = $fireModule.firestore
     try {
       // remove local props + globally add necessary meta props
       const { id, object, ...dirty } = { ...payload, updated: FieldValue.serverTimestamp() }
@@ -60,39 +55,62 @@ const actions = {
         .doc(documentId)
         .update({ ...dirty })
 
-      // Proper: fetch data from server
-      // Fallback: commit directly (losing server info, but can afford slight inaccuracy)
-      commit('SET', { ...payload, id: documentId, updated: Timestamp.fromDate(new Date()) })
-
+      // fetch immediately
+      const user = await dispatch('retrieve', { firebaseId: payload.firebaseId })
       $log.success('user.update', 'success')
+      return user
     } catch (error) {
       $log.error('user.update', '%o', error)
       throw error
     }
   },
 
-  async get({ commit }, { firebaseId }) {
+  async retrieve({ commit }, { firebaseId }) {
     const { $fire, $log } = this.app.context
     try {
-      // expect unique record with firebase id
-      const snapshot = await $fire.firestore
-        .collection(COLLECTION)
-        .where('firebaseId', '==', firebaseId)
-        .limit(1)
-        .get()
+      const _ref = $fire.firestore.collection(COLLECTION).where('firebaseId', '==', firebaseId).limit(1)
 
-      const doc = snapshot.docs[0]
-      const { id, exists, metadata } = doc
-      $log.trace('user.get', 'id=%s, exists=%s, metadata=%o', id, exists, metadata)
+      // hit cache first
+      const _fromCache = await _ref.get({ source: 'cache' })
+      const { empty, size, metadata, query } = _fromCache
+      $log.trace(
+        'user.retrieve',
+        'empty=%s, size=%d, source=%s, query=%s',
+        empty,
+        size,
+        metadata.fromCache ? 'cache' : 'server',
+        query._delegate?._query?.T?.h
+      )
+
+      // fallback to server when found nothing on cache
+      let _fromServer
+      if (empty) {
+        _fromServer = await _ref.get({ source: 'server' })
+        const { empty, size, metadata, query } = _fromServer
+        $log.trace(
+          'user.retrieve',
+          'empty=%s, size=%d, source=%s, query=%s',
+          empty,
+          size,
+          metadata.fromCache ? 'cache' : 'server',
+          query._delegate?._query?.T?.h
+        )
+      }
 
       // put all the information together into an object before goes to state
-      const user = { ...doc.data(), id }
-      $log.trace('user.get', 'user=%o', user)
-      commit('SET', user)
+      const results = _fromServer || _fromCache
+      if (!results.empty) {
+        const doc = results.docs[0]
+        const account = { ...doc.data().account, object: 'account' }
+        const user = { ...doc.data(), id: doc.id, account, object: 'user' }
+        $log.trace('user.retrieve', 'user=%o', user)
+        commit('SET', user)
 
-      return user
+        $log.success('user.retrieve', 'success')
+        return user
+      }
     } catch (error) {
-      $log.error('user.get', '%o', error)
+      $log.error('user.retrieve', '%o', error)
       throw error
     }
   },

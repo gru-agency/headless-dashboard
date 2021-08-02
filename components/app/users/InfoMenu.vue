@@ -61,14 +61,14 @@ export default {
 
   methods: {
     ...mapActions('auth', ['signOut']),
-    ...mapActions('user', ['get']),
+    ...mapActions('user', ['retrieve']),
 
     fetchUser() {
       if (!this.authUser) {
         // todo authUser is null
         return
       }
-      this.get(this.authUser)
+      this.retrieve(this.authUser)
     },
 
     async onSignOut() {
