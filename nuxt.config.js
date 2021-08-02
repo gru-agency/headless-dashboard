@@ -82,8 +82,8 @@ export default {
     transpile: ['vue-currency-input', 'vee-validate/dist/rules'],
 
     babel: {
-      corejs: 3,
       compact: true,
+      presets: [['@nuxt/babel-preset-app', { corejs: { version: '3.16.0' }, useBuiltIns: 'entry' }]],
     },
   },
 
