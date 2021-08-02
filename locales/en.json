@@ -11,6 +11,7 @@
     "continueDashboard": "Continue to Dashboard",
     "created": "Created",
     "delete": "Delete",
+    "description": "Description",
     "device": "Device",
     "edit": "Edit",
     "email": "Email",
@@ -21,6 +22,7 @@
     "expired": "Expired",
     "hidePassword": "Hide password",
     "home": "Home",
+    "images": "Images",
     "ipAddress": "IP address",
     "location": "Location",
     "login": "Sign in",
@@ -46,6 +48,7 @@
     "signout": "Sign out",
     "signup": "Sign up",
     "success": "Success",
+    "status": "Status",
     "supportText": "Write and describe your issue to us at ",
     "terms": "Terms",
     "time": "Time",
@@ -55,7 +58,13 @@
 
   "modules": {
     "orders": { "title": "Orders" },
-    "products": { "title": "Products" },
+    "products": {
+      "createFormTitle": "Add a new product",
+      "editFormTitle": "Edit product",
+      "title": "Products",
+      "descriptionTips": "Product descriptions appear at checkout.",
+      "nameTips": "Products are the goods or services you sell. If you sell subscriptions, you might call them 'plans'. Product names are visible to customers at checkout, in receipts, and invoices."
+    },
     "prices": { "title": "Prices" },
     "settings": { "title": "Settings" },
     "users": {
@@ -97,7 +106,9 @@
     "tableResults": "No result | {n} result | {n} results"
   },
 
-  "seo": {},
+  "seo": {
+    "products": "Products - {_brand}"
+  },
 
   "validation": {
     "accountExists": "An account already exists with this email address. If you'd like to create a new {_brand} account with the same email address, ",

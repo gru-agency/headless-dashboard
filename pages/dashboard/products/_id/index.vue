@@ -1,9 +1,16 @@
 <template>
-  <div>id</div>
+  <products-info-card></products-info-card>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
+<script>
+export default {
+  name: 'Index',
+  layout: 'dashboard',
 
-export default Vue.extend({})
+  head() {
+    return {
+      title: this.$t('seo.products', { _brand: this.$config.brandName }),
+    }
+  },
+}
 </script>

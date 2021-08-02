@@ -48,12 +48,18 @@ export default {
     }
   },
 
+  head() {
+    return {
+      title: this.$t('seo.products', { _brand: this.$config.brandName }),
+    }
+  },
+
   computed: {
     ...mapState('user', ['user']),
     ...mapGetters('products', ['findActiveByOwner', 'findArchiveByOwner', 'findCache']),
 
     account() {
-      return this.user?.account?.id
+      return this.user?.account.id
     },
 
     activeTab() {
@@ -74,16 +80,6 @@ export default {
 
     fetchControl() {
       return (this.activeTab && !this.activeFetch) || (this.archiveTab && !this.archiveFetch)
-    },
-  },
-
-  watch: {
-    /**
-     * Fetch data when account ID is ready. Particularly useful when
-     * refresh page, where waiting auth state changed to fetch user.
-     */
-    account(_new, _old) {
-      if (!_old && _new) this.fetchData()
     },
   },
 

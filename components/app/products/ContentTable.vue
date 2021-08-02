@@ -35,8 +35,7 @@
           delete-hide
           @archive="archive(item)"
           @unarchive="unarchive(item)"
-        >
-        </action-menu>
+        ></action-menu>
       </template>
 
       <template #empty>

@@ -39,8 +39,8 @@ export default {
   plugins: [
     { mode: 'client', src: '~/plugins/i18n.js' },
     { mode: 'client', src: '~/plugins/dayjs.js' },
+    { mode: 'client', src: '~/plugins/debug.js' },
     { mode: 'client', src: '~/plugins/utils.js' },
-    { mode: 'client', src: '~/plugins/consola.js' },
     { mode: 'client', src: '~/plugins/vee-validate.js' },
   ],
 
@@ -83,9 +83,7 @@ export default {
 
     babel: {
       compact: true,
-      presets() {
-        return [['@nuxt/babel-preset-app', { corejs: { version: 3 } }]]
-      },
+      presets: [['@nuxt/babel-preset-app', { corejs: { version: '3.16.0' }, useBuiltIns: 'entry' }]],
     },
   },
 
