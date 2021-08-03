@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.1](https://github.com/gru-agency/headless-dashboard/compare/v0.2.0...v0.2.1) (2021-08-03)
+
+
+### Bug Fixes
+
+* fix wrong release version ([9a906e1](https://github.com/gru-agency/headless-dashboard/commit/9a906e16f83e38a64619a4e593ecbf279839aa2b))
+* **log:** change logger to consola + improve logging format ([c094051](https://github.com/gru-agency/headless-dashboard/commit/c09405176f4b73d4992bbead33b857269c4165d5))
+
+### [0.1.2](https://github.com/gru-agency/headless-dashboard/compare/v0.1.1...v0.1.2) (2021-08-02)
+
 ## [0.2.0](https://github.com/gru-agency/headless-dashboard/compare/v0.1.1...v0.2.0) (2021-08-02)
 
 
