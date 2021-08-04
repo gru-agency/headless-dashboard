@@ -112,7 +112,7 @@ const actions = {
         created: FieldValue.serverTimestamp(),
         updated: FieldValue.serverTimestamp(),
       }
-      $log.trace('products.create', 'id=%s, dirty=%o', documentId, dirty)
+      $log.tag('products').debug('[create] Creating %s with %o', documentId, dirty)
 
       // persist anonymous/object to firestore
       await $fire.firestore
@@ -122,10 +122,10 @@ const actions = {
 
       // fetch immediately
       const product = await dispatch('retrieve', { documentId })
-      $log.success('products.create', 'success')
+      $log.tag('products').success('[create]')
       return product
     } catch (error) {
-      $log.error('products.create', '%o', error)
+      $log.tag('products').error('[create]', error)
       throw error
     }
   },
@@ -136,7 +136,7 @@ const actions = {
     try {
       // remove local props + globally add necessary meta props
       const { id, object, ...dirty } = { ...payload, updated: FieldValue.serverTimestamp() }
-      $log.trace('products.update', 'id=%s, dirty=%o', documentId, dirty)
+      $log.tag('products').debug('[update] Updating %s with %o ', documentId, dirty)
 
       // persist anonymous/object to firestore
       await $fire.firestore
@@ -146,10 +146,10 @@ const actions = {
 
       // fetch immediately
       const product = await dispatch('retrieve', { documentId })
-      $log.success('products.update', 'success')
+      $log.tag('products').success('[update]')
       return product
     } catch (error) {
-      $log.error('products.update', '%o', error)
+      $log.tag('products').error('[update]', error)
       throw error
     }
   },
@@ -157,11 +157,13 @@ const actions = {
   async delete({ commit }, { documentId }) {
     const { $fire, $log } = this.app.context
     try {
+      $log.tag('products').debug('[delete] Deleting %s', documentId)
       await $fire.firestore.collection(COLLECTION).doc(documentId).delete()
       commit('DELETE', documentId)
+
       $log.success('products.delete', 'success')
     } catch (error) {
-      $log.error('products.delete', '%o', error)
+      $log.tag('products').error('[delete]', error)
       throw error
     }
   },
@@ -174,34 +176,42 @@ const actions = {
       // hit cache first
       const _fromCache = await _ref.get({ source: 'cache' })
       const { id, exists, metadata } = _fromCache
-      $log.trace('products.retrieve', 'id=%s, exists=%s, metadata=%o', id, exists, metadata)
+      $log.tag('products').debug('[retrieve] Retrieving %s from cache %o', documentId, {
+        id,
+        exists,
+        source: metadata.fromCache ? 'cache' : 'server',
+      })
 
       // fallback to server when found nothing on cache
       let _fromServer
       if (!exists) {
         _fromServer = await _ref.get({ source: 'server' })
         const { id, exists, metadata } = _fromServer
-        $log.trace('products.retrieve', 'id=%s, exists=%s, metadata=%o', id, exists, metadata)
+        $log.tag('products').debug('[retrieve] Retrieving %s from server %o', documentId, {
+          id,
+          exists,
+          source: metadata.fromCache ? 'cache' : 'server',
+        })
       }
 
       // put all the information together into an object before goes to state
       const results = _fromServer || _fromCache
       const product = { ...results.data(), id, object: 'product' }
-      $log.trace('products.retrieve', 'product=%o', product)
       commit('UPSERT', product)
+      $log.tag('products').debug('[retrieve] Setting object to store %o', product)
 
-      $log.success('products.retrieve', 'success')
+      $log.tag('products').success('[retrieve]')
       return product
     } catch (error) {
-      $log.error('products.retrieve', '%o', error)
+      $log.tag('products').error('[retrieve]', error)
       throw error
     }
   },
 
   /**
    * Used to fetch latest and delta changes. Cache applies here.
-   * @param {*} equalQ {field, operator, value, hash}
-   * @param {*} rangeQ {field, operator, value, hash} NOT in use currently
+   * @param {Object} equalQ {field, operator, value, hash}
+   * @param {Object} rangeQ {field, operator, value, hash} NOT in use currently
    */
   async list({ commit }, { account, equalQ, rangeQ, fetchSize }) {
     const { $fire, $fireModule, $log } = this.app.context
@@ -219,34 +229,30 @@ const actions = {
       // expecting work on repeated call from 'Next' pagination
       const _fromCache = await _query.get({ source: 'cache' })
       const { empty, size, metadata, query } = _fromCache
-      $log.trace(
-        'products.list',
-        'empty=%s, size=%d, source=%s, query=%s',
+      $log.tag('products').debug('[list] Retrieving list of owner %s from cache %o', account, {
         empty,
         size,
-        metadata.fromCache ? 'cache' : 'server',
-        query._delegate?._query?.T?.h
-      )
+        source: metadata.fromCache ? 'cache' : 'server',
+        query: query._delegate?._query?.T?.h,
+      })
 
       // fallback to server when found nothing on cache
       let _fromServer
       if (empty) {
         _fromServer = await _query.get({ source: 'server' })
         const { empty, size, metadata, query } = _fromServer
-        $log.trace(
-          'products.list',
-          'empty=%s, size=%d, source=%s, query=%s',
+        $log.tag('products').debug('[list] Retrieving list of owner %s from server %o', account, {
           empty,
           size,
-          metadata.fromCache ? 'cache' : 'server',
-          query._delegate?._query?.T?.h
-        )
+          source: metadata.fromCache ? 'cache' : 'server',
+          query: query._delegate?._query?.T?.h,
+        })
       }
 
       // cache regardless of result
       const cache = { owner: account, timestamp: Timestamp.fromDate(new Date()), hash: equalQ.hash }
-      $log.trace('products.list', 'cache=%o', cache)
       commit('SET_CACHE', cache)
+      $log.tag('products').debug('[list] Setting object to cache %o', cache)
 
       const results = _fromServer || _fromCache
       results.docs.forEach((doc) => {
@@ -255,18 +261,18 @@ const actions = {
         commit('UPSERT', product)
       })
 
-      $log.success('products.list', 'success')
+      $log.tag('products').success('[list]')
       return results.docs
     } catch (error) {
-      $log.error('products.list', '%o', error)
+      $log.tag('products').error('[list]', error)
       throw error
     }
   },
 
   /**
    * For pagination only. Setting cache does not apply here
-   * @param {*} equalQ {field, operator, value, hash}
-   * @param {*} rangeQ {field, operator, value, hash} NOT in use currently
+   * @param {Object} equalQ {field, operator, value, hash}
+   * @param {Object} rangeQ {field, operator, value, hash} NOT in use currently
    */
   async paginate({ commit }, { account, equalQ, rangeQ, fetchSize }) {
     const { $fire, $log } = this.app.context
@@ -283,28 +289,24 @@ const actions = {
       // expecting work on repeated call from 'Next' pagination
       const _fromCache = await _query.get({ source: 'cache' })
       const { empty, size, metadata, query } = _fromCache
-      $log.trace(
-        'products.paginate',
-        'empty=%s, size=%d, source=%s, query=%s',
+      $log.tag('products').debug('[paginate] Retrieving list of owner %s from cache %o', account, {
         empty,
         size,
-        metadata.fromCache ? 'cache' : 'server',
-        query._delegate?._query?.T?.h
-      )
+        source: metadata.fromCache ? 'cache' : 'server',
+        query: query._delegate?._query?.T?.h,
+      })
 
       // fallback to server when found nothing on cache
       let _fromServer
       if (empty) {
         _fromServer = await _query.get({ source: 'server' })
         const { empty, size, metadata, query } = _fromServer
-        $log.trace(
-          'products.paginate',
-          'empty=%s, size=%d, source=%s, query=%s',
+        $log.tag('products').debug('[paginate] Retrieving list of owner %s from server %o', account, {
           empty,
           size,
-          metadata.fromCache ? 'cache' : 'server',
-          query._delegate?._query?.T?.h
-        )
+          source: metadata.fromCache ? 'cache' : 'server',
+          query: query._delegate?._query?.T?.h,
+        })
       }
 
       const results = _fromServer || _fromCache
@@ -314,10 +316,10 @@ const actions = {
         commit('UPSERT', product)
       })
 
-      $log.success('products.paginate', 'success')
+      $log.tag('products').success('[paginate]')
       return results.docs
     } catch (error) {
-      $log.error('products.paginate', '%o', error)
+      $log.tag('products').error('[paginate]', error)
       throw error
     }
   },

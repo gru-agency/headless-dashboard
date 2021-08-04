@@ -1,6 +1,6 @@
 {
   "name": "headless-dashboard",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "scripts": {
     "dev": "nuxt",
@@ -48,7 +48,7 @@
     "eslint": "^7.29.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-nuxt": "^2.0.0",
-    "eslint-plugin-vue": "^7.12.1",
+    "eslint-plugin-vue": "^7.15.1",
     "firebase": "^8.7.0",
     "husky": "^7.0.0",
     "lint-staged": "^11.0.0",

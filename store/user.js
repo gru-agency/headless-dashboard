@@ -23,7 +23,7 @@ const actions = {
         created: FieldValue.serverTimestamp(),
         account: { id: $util.nanoid() },
       }
-      $log.trace('user.create', 'id=%s, dirty=%o', documentId, dirty)
+      $log.tag('user').debug('[create] Creating %s with %o', documentId, dirty)
 
       // persist anonymous/object to firestore
       await $fire.firestore
@@ -33,10 +33,10 @@ const actions = {
 
       // fetch immediately
       const user = await dispatch('retrieve', { firebaseId: payload.firebaseId })
-      $log.success('user.create', 'success')
+      $log.tag('user').success('[create]')
       return user
     } catch (error) {
-      $log.error('user.create', '%o', error)
+      $log.tag('user').error('[create]', error)
       throw error
     }
   },
@@ -47,7 +47,7 @@ const actions = {
     try {
       // remove local props + globally add necessary meta props
       const { id, object, ...dirty } = { ...payload, updated: FieldValue.serverTimestamp() }
-      $log.trace('user.create', 'id=%s, dirty=%o', documentId, dirty)
+      $log.tag('user').debug('[update] Updating %s with %o', documentId, dirty)
 
       // persist anonymous/object to firestore
       await $fire.firestore
@@ -57,10 +57,10 @@ const actions = {
 
       // fetch immediately
       const user = await dispatch('retrieve', { firebaseId: payload.firebaseId })
-      $log.success('user.update', 'success')
+      $log.tag('user').success('[update]')
       return user
     } catch (error) {
-      $log.error('user.update', '%o', error)
+      $log.tag('user').error('[update]', error)
       throw error
     }
   },
@@ -73,44 +73,48 @@ const actions = {
       // hit cache first
       const _fromCache = await _ref.get({ source: 'cache' })
       const { empty, size, metadata, query } = _fromCache
-      $log.trace(
-        'user.retrieve',
-        'empty=%s, size=%d, source=%s, query=%s',
+      $log.tag('user').debug('[retrieve] Retrieving %s from cache %o', firebaseId, {
         empty,
         size,
-        metadata.fromCache ? 'cache' : 'server',
-        query._delegate?._query?.T?.h
-      )
+        source: metadata.fromCache ? 'cache' : 'server',
+        query: query._delegate?._query?.T?.h,
+      })
 
       // fallback to server when found nothing on cache
       let _fromServer
       if (empty) {
         _fromServer = await _ref.get({ source: 'server' })
         const { empty, size, metadata, query } = _fromServer
-        $log.trace(
-          'user.retrieve',
-          'empty=%s, size=%d, source=%s, query=%s',
+        $log.tag('user').debug('[retrieve] Retrieving %s from server %o', firebaseId, {
           empty,
           size,
-          metadata.fromCache ? 'cache' : 'server',
-          query._delegate?._query?.T?.h
-        )
+          source: metadata.fromCache ? 'cache' : 'server',
+          query: query._delegate?._query?.T?.h,
+        })
+      }
+
+      const results = _fromServer || _fromCache
+      if (results.empty) {
+        $log.tag('user').warn('[retrieve] User not found with firebase ID %s', firebaseId)
+        return
+      }
+
+      if (results.size > 1) {
+        $log.tag('user').error('[retrieve] Found more than ONE user with firebase ID %s', firebaseId)
+        return
       }
 
       // put all the information together into an object before goes to state
-      const results = _fromServer || _fromCache
-      if (!results.empty) {
-        const doc = results.docs[0]
-        const account = { ...doc.data().account, object: 'account' }
-        const user = { ...doc.data(), id: doc.id, account, object: 'user' }
-        $log.trace('user.retrieve', 'user=%o', user)
-        commit('SET', user)
+      const doc = results.docs[0]
+      const account = { ...doc.data().account, object: 'account' }
+      const user = { ...doc.data(), id: doc.id, account, object: 'user' }
+      commit('SET', user)
+      $log.tag('user').debug('[retrieve] Setting object to store %o', user)
 
-        $log.success('user.retrieve', 'success')
-        return user
-      }
+      $log.tag('user').success('[retrieve]')
+      return user
     } catch (error) {
-      $log.error('user.retrieve', '%o', error)
+      $log.tag('user').error('[retrieve]', error)
       throw error
     }
   },
