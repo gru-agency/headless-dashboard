@@ -4,6 +4,7 @@
     ref="inputRef"
     :value="formattedValue"
     :plaintext="plaintext"
+    :size="size"
     @focus="$event.target.select()"
   ></b-form-input>
 </template>
@@ -19,6 +20,7 @@ export default {
     id: { type: String, default: undefined },
     value: { type: [Number, String], default: 0 },
     plaintext: { type: Boolean, default: false },
+    size: { type: String, default: 'md' },
 
     options: {
       type: Object,
