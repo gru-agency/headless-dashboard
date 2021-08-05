@@ -1,5 +1,6 @@
 <template>
   <b-button
+    v-b-modal="modal"
     :to="link"
     :size="size"
     :block="block"
@@ -28,6 +29,7 @@ export default {
     disabled: { type: Boolean, default: false },
     linkAppend: { type: Boolean, default: false },
     icon: { type: Array, default: () => null },
+    modal: { type: String, default: undefined },
   },
 
   data() {

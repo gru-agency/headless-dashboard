@@ -14,6 +14,7 @@
     <slot>
       <b-dd-item
         v-if="!editHide"
+        v-b-modal="editModal"
         :to="editLink"
         :variant="editVariant"
         :disabled="editDisabled"
@@ -72,6 +73,7 @@ export default {
     editHide: { type: Boolean, default: false },
     editDisabled: { type: Boolean, default: false },
     editLinkAppend: { type: Boolean, default: false },
+    editModal: { type: String, default: undefined },
     deleteText: { type: String, default: undefined },
     deleteLink: { type: String, default: undefined },
     deleteVariant: { type: String, default: 'danger' },

@@ -36,6 +36,7 @@
           :disabled="btnDisabled"
           :link-append="btnLinkAppend"
           :prefetch="btnLink ? true : false"
+          :modal="modal"
           @click="sendEvents"
         ></action-button>
       </slot>
@@ -65,6 +66,7 @@ export default {
     iconHolder: { type: Boolean, default: false },
     fixedHeight: { type: Boolean, default: false },
     iconPreset: { type: String, default: undefined },
+    modal: { type: String, default: undefined },
   },
 
   data() {
@@ -111,11 +113,11 @@ export default {
     },
 
     isEmpty() {
-      return this.state === 'empty' 
+      return this.state === 'empty'
     },
 
     isError() {
-      return this.state === 'error' 
+      return this.state === 'error'
     },
 
     isSuccess() {
@@ -131,7 +133,7 @@ export default {
     },
 
     getBody() {
-      return this.state === 'search' ? this.searchSubtitle : this.subtitle
+      return this.state === 'search' ? this.searchSubtitle : this.body
     },
   },
 
