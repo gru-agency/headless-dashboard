@@ -16,6 +16,7 @@ export default {
     money: { type: [Number, String], default: undefined },
     currency: { type: String, default: undefined },
     locale: { type: String, default: undefined },
+    dateFormat: { type: String, default: undefined },
   },
 
   data() {
@@ -24,7 +25,9 @@ export default {
 
   methods: {
     formatDate() {
-      return this.$d(this.date, 'short', this.locale)
+      return this.dateFormat === 'relative'
+        ? this.$dayjs.fromNow(this.date)
+        : this.$d(this.date, 'short', this.locale)
     },
 
     formatCurrency() {
