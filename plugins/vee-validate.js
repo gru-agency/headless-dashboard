@@ -1,6 +1,7 @@
+/* eslint-disable camelcase */
 import Vue from 'vue'
 import { localize, extend, setInteractionMode, ValidationProvider, ValidationObserver } from 'vee-validate'
-import { required, email, min, max } from 'vee-validate/dist/rules'
+import { required, email, min, max, min_value, integer } from 'vee-validate/dist/rules'
 
 export default ({ store }, inject) => {
   async function loadLocale(code) {
@@ -44,7 +45,9 @@ export default ({ store }, inject) => {
 extend('required', required)
 extend('email', email)
 extend('min', min)
+extend('min_value', min_value)
 extend('max', max)
+extend('integer', integer)
 
 // custom rules for password
 extend('hint_pw', {
