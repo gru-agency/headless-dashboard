@@ -4,7 +4,9 @@ const state = () => ({
   user: null,
 })
 
-const getters = {}
+const getters = {
+  account: (state) => state.user?.account.id,
+}
 
 const mutations = {
   SET: (state, payload) => (state.user = payload),
