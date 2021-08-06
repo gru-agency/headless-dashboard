@@ -4,21 +4,21 @@
 
     <b-tabs v-model="tabIndex" class="mb-4" @input="fetchData">
       <b-tab :title="ui.active" title-link-class="px-5">
-        <products-content-table
+        <products-table
           :account="account"
           :datasource="findActiveByOwner(account)"
           :filter-on="filterOn"
           :filter="filter"
-        ></products-content-table>
+        ></products-table>
       </b-tab>
 
       <b-tab :title="ui.archive" title-link-class="px-5" lazy>
-        <products-content-table
+        <products-table
           :account="account"
           :datasource="findArchiveByOwner(account)"
           :filter-on="filterOn"
           :filter="filter"
-        ></products-content-table>
+        ></products-table>
       </b-tab>
     </b-tabs>
   </div>
