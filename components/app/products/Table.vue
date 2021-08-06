@@ -62,7 +62,7 @@
 import { mapActions } from 'vuex'
 
 export default {
-  name: 'ContentTable',
+  name: 'Table',
 
   props: {
     account: { type: String, default: undefined },
