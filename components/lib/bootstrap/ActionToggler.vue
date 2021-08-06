@@ -1,8 +1,8 @@
 <template>
-  <b-link v-b-toggle :href="getTarget" :class="getVariant" class="stretched-link" @click.prevent>
+  <b-link v-b-toggle :href="getTarget" :class="getVariant" @click.prevent>
     <span class="d-flex align-items-center" :class="{ 'justify-content-between': iconRight }">
       <slot>
-        <span class="mr-2"> {{ text }} </span>
+        <span class="mr-2"> {{ text || options }} </span>
       </slot>
 
       <icon :icon="icon"></icon>
@@ -22,13 +22,17 @@ export default {
     iconRight: { type: Boolean, default: false },
   },
 
+  data() {
+    return { options: this.$t('general.additionalOptions') }
+  },
+
   computed: {
     getTarget() {
       return this.target ? `#${this.target}` : '#'
     },
 
     getVariant() {
-      return `text-${this.variant}`
+      return this.variant ? `text-${this.variant}` : undefined
     },
   },
 }
