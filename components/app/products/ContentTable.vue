@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'ContentTable',
@@ -73,11 +73,6 @@ export default {
 
   data() {
     return {
-      ui: {
-        title: this.$t('modules.products.title'),
-        prev: this.$t('general.previous'),
-        next: this.$t('general.next'),
-      },
       fields: [
         { key: 'images', label: '', tdClass: 'w-5p position-relative' },
         { key: 'name', label: this.$t('general.name'), tdClass: 'position-relative' },
@@ -85,7 +80,6 @@ export default {
           key: 'updated',
           label: this.$t('general.updated'),
           formatter: (value) => value.toDate().getTime(),
-          sortByFormatted: true,
           tdClass: 'w-20p position-relative',
         },
         { key: 'more', label: '', tdClass: 'w-5p' },
@@ -99,9 +93,6 @@ export default {
   },
 
   computed: {
-    ...mapState('products', ['caches']),
-    ...mapGetters('products', ['findActiveByOwner', 'findArchiveByOwner']),
-
     totalRows() {
       return this.datasource.length
     },

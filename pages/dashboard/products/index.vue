@@ -88,7 +88,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('products', ['create', 'list']),
+    ...mapActions('products', ['list']),
 
     /**
      * Fetch data based on tab criteria. Allow to fetch once per tab.
