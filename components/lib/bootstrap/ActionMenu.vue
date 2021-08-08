@@ -9,7 +9,7 @@
     no-caret
     right
   >
-    <template #button-content> <icon preset="bv-more-v"></icon> </template>
+    <template #button-content> <icon preset="bv-more"></icon> </template>
 
     <slot>
       <b-dd-item
@@ -26,13 +26,9 @@
         {{ editText || defaultText.edit }}
       </b-dd-item>
 
-      <b-dd-item v-if="!noArchive" :id="getId('archive')" @click.prevent="sendEvents('archive')">
+      <b-dd-item v-if="showArchive" :id="getId('archive')" @click.prevent="sendEvents('archive')">
         <icon preset="bv-archive" class="mr-2"></icon>
         {{ archiveText || defaultText.archive }}
-
-        <b-popover :target="getId('archive')" triggers="hover" placement="left">
-          <slot name="archive">{{ defaultText.archiveTips }}</slot>
-        </b-popover>
       </b-dd-item>
 
       <b-dd-item v-if="!noUnarchive" @click.prevent="sendEvents('unarchive')">
@@ -97,6 +93,12 @@ export default {
         unarchive: this.$t('general.unarchive'),
       },
     }
+  },
+
+  computed: {
+    showArchive() {
+      return !this.noArchive
+    },
   },
 
   methods: {
