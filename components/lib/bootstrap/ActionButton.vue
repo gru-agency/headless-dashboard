@@ -3,6 +3,7 @@
     v-b-modal="modal"
     :to="link"
     :size="size"
+    :exact="exact"
     :block="block"
     :variant="variant"
     :disabled="disabled"
@@ -30,6 +31,7 @@ export default {
     linkAppend: { type: Boolean, default: false },
     icon: { type: Array, default: () => null },
     modal: { type: String, default: undefined },
+    exact: { type: [Boolean, String], default: true },
   },
 
   data() {
