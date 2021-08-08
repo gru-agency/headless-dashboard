@@ -1,6 +1,6 @@
 <template>
   <validation-observer ref="productForm" tag="form">
-    <validation-provider v-slot="vp" :name="ui.name" rules="required|max:256">
+    <validation-provider v-slot="vp" :name="ui.name" rules="required|max:128">
       <b-form-group label-for="prod-name">
         <template #label>
           {{ ui.name }}
@@ -15,7 +15,7 @@
           trim
         ></b-form-input>
         <b-form-invalid-feedback>
-          <span><icon preset="bv-error"></icon>{{ $vee.error(vp) }}</span>
+          <span><icon preset="bv-error" class="mr-2"></icon>{{ $vee.error(vp) }}</span>
         </b-form-invalid-feedback>
       </b-form-group>
     </validation-provider>
@@ -26,7 +26,7 @@
         <tips-field preset="bv-info" class="px-1"> {{ ui.descriptionTips }} </tips-field>
         <tag-field preset="bv-optional"></tag-field>
       </template>
-      <b-form-input id="prod-desc" v-model="form.description" size="lg" trim></b-form-input>
+      <b-form-textarea id="prod-desc" v-model="form.description" size="lg" rows="5" trim></b-form-textarea>
     </b-form-group>
 
     <b-alert :show="showError" variant="danger">
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Form',
 
@@ -72,15 +72,11 @@ export default {
   },
 
   computed: {
-    ...mapState('user', ['user']),
-    ...mapGetters('products', ['findByProduct']),
-
-    account() {
-      return this.user?.account.id
-    },
+    ...mapGetters('user', ['account']),
+    ...mapGetters('products', ['find']),
 
     product() {
-      return this.findByProduct(this.id, this.account)
+      return this.find(this.id, this.account)
     },
 
     showError() {
@@ -138,7 +134,7 @@ export default {
 
       this.resetFormState()
       if (this.editMode) {
-        this.update({ documentId: this.id, payload: this.form }).then(
+        this.update({ document: this.id, account: this.account, payload: this.form }).then(
           (response) => this.successHandler(response),
           (error) => this.errorHandler(error)
         )

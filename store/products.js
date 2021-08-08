@@ -1,205 +1,246 @@
 const COLLECTION = 'products'
 
 const state = () => ({
-  // keep unique document only
+  /**
+   * Keep unique document for client-side browsing.
+   */
   all: [],
 
-  // - use to fetch recent delta changes only
-  // - support multiple accounts
-  caches: [],
+  /**
+   * Keep track last fetched updated timestamp to avoid
+   * fetching unchanged documents.
+   * Format: { timestamp, owner }
+   */
+  fetchMetadata: [],
 })
 
 const getters = {
-  findByOwner: (state) => (owner) => {
-    return state.all.filter((el) => el.owner === owner)
+  /**
+   * Filter list by account ID. Used to retrieve list.
+   * @param {String} account ID of whose the data belongs to
+   * @returns a related object, or undefined
+   */
+  filter: (state) => (account) => {
+    return state.all.filter((el) => el.owner === account)
   },
 
-  findActiveByOwner: (state) => (owner) => {
-    return state.all.filter((el) => el.owner === owner && el.active === true)
+  /**
+   * Find object by ID and account ID. Used to retrieve
+   * specific object.
+   * @param {String} product ID of the object
+   * @param {String} account ID of whose the data belongs to
+   * @returns a related object, or undefined
+   */
+  find: (state) => (product, account) => {
+    return state.all.find((el) => el.id === product && el.owner === account)
   },
 
-  findArchiveByOwner: (state) => (owner) => {
-    return state.all.filter((el) => el.owner === owner && el.active === false)
+  /**
+   * Find next object after given timestamp by account. Used
+   * for pagination to fetch delta changes up to returned object
+   * to avoid over-fetched.
+   * @param {Timestamp} timestamp current last visible timestamp
+   * @param {String} account ID of whose the data belongs to
+   * @returns a related object, or undefined
+   */
+  findNext: (state) => (timestamp, account) => {
+    return state.all.find((el) => {
+      return el.updated < timestamp && el.owner === account
+    })
   },
 
-  findByProduct: (state) => (product, owner) => {
-    return state.all.find((el) => el.id === product && el.owner === owner)
-  },
-
-  findCache: (state) => (owner, hash) => {
-    return state.caches.find((el) => el.owner === owner && el.hash === hash)
+  /**
+   * Find fetch metadata object by account ID. Used to retrieve
+   * specific fetch metadata.
+   * @param {String} account ID of whose the data belongs to
+   * @returns a fetch metadata object, or undefined
+   */
+  findFetchMetadata: (state) => (account) => {
+    return state.fetchMetadata.find((el) => el.owner === account)
   },
 }
 
 const mutations = {
-  // not in used currently
-  INSERT(state, payload) {
-    if (state.all.some((el) => el.id === payload.id)) return
-    state.all.unshift(payload)
-  },
-
-  // not in used currently
-  UPDATE(state, payload) {
-    const index = state.all.findIndex((el) => el.id === payload.id)
-    const current = state.all.find((el) => el.id === payload.id)
-    // since update only on subset, override current with subset changes
-    if (index >= 0) {
-      state.all.splice(index, 1)
-      state.all.unshift({ ...current, ...payload })
-    }
-  },
-
   /**
-   * smartly insert into the array based on time factor
+   * Insert or update data into collection depending
+   * on object existence. Mutation will happen at the right
+   * position based on updated timestamp in descending order.
+   * @param {Object} payload full object to be mutated
    */
   UPSERT(state, payload) {
     const index = state.all.findIndex((el) => el.id === payload.id)
     if (index >= 0) {
       state.all.splice(index, 1)
       state.all.unshift(payload)
-    } else {
-      const { $dayjs } = this.app.context
-      const _index = state.all.findIndex((el) => {
-        return $dayjs.factory(payload.updated.toDate()).isAfter($dayjs.factory(el.updated.toDate()))
-      })
-      if (_index === -1) state.all.push(payload)
-      else if (_index === 0) state.all.unshift(payload)
-      else state.all.splice(_index, 0, payload)
+      return
     }
+
+    const _index = state.all.findIndex((el) => {
+      return payload.updated > el.updated
+    })
+    if (_index === -1) state.all.push(payload)
+    else if (_index === 0) state.all.unshift(payload)
+    else state.all.splice(_index, 0, payload)
   },
 
-  // not in used currently
+  /**
+   * Remove fetch metadata of the given account. Best use when
+   * terminate account.
+   * @param {String} product ID of the object
+   */
   DELETE(state, product) {
     const index = state.all.findIndex((el) => el.id === product)
     if (index >= 0) state.all.splice(index, 1)
   },
 
   /**
-   * only update if value greater than cached one
+   * Set fetch metadata of the given account. Value will only
+   * be added when not found in cache, or updated when given
+   * timestamp value is greater than in the cache. Best use
+   * when fetching list.
+   * @param {Timestamp} timestamp last fetched timestamp
+   * @param {String} account ID of whose the data belongs to
    */
-  SET_CACHE(state, { owner, timestamp, hash }) {
-    const index = state.caches.findIndex((el) => el.owner === owner && el.hash === hash)
-    if (index >= 0) {
-      const cached = state.caches.find((el) => el.owner === owner && el.hash === hash)
-      const { $dayjs } = this.app.context
-      if ($dayjs.factory(cached.timestamp.toDate()).isBefore($dayjs.factory(timestamp.toDate()))) {
-        state.caches.splice(index, 1, { owner, timestamp, hash })
+  SET_FETCH_METADATA(state, { timestamp, account }) {
+    const cache = state.fetchMetadata.find((el) => el.owner === account)
+    if (cache) {
+      if (timestamp > cache.timestamp) {
+        const index = state.fetchMetadata.findIndex((el) => el.owner === account)
+        state.fetchMetadata.splice(index, 1)
+        state.fetchMetadata.unshift({ owner: account, timestamp })
       }
-    } else state.caches.unshift({ owner, timestamp, hash })
+    } else state.fetchMetadata.unshift({ owner: account, timestamp })
   },
 
   /**
-   * wipe off all cache belongs to the account
+   * Remove fetch metadata of the given account. Best use when
+   * terminate account.
+   * @param {String} account ID of whose the data belongs to
    */
-  CLEAR_CACHE(state, owner) {
-    const result = state.caches.filter((el) => el.owner !== owner)
-    state.caches = result
+  CLEAR_FETCH_METADATA(state, account) {
+    const result = state.fetchMetadata.filter((el) => el.owner !== account)
+    state.fetchMetadata = result
   },
 }
 
 const actions = {
-  async create({ dispatch }, { documentId, payload, account }) {
+  /**
+   * Create new object in the collection.
+   * @param {String} document ID of a document
+   * @param {Object} payload full object to be inserted
+   * @param {String} account ID of whose the data belongs to
+   * @returns a related object, or an error.
+   */
+  async create({ dispatch }, { document, payload, account }) {
     const { $fire, $fireModule, $log, $util } = this.app.context
     const { FieldValue } = $fireModule.firestore
     try {
-      documentId = documentId || $util.nanoid()
+      document = document || $util.nanoid()
 
-      // add necessary props
       const { ...dirty } = {
         ...payload,
-        owner: account,
         active: true,
+        owner: account,
         created: FieldValue.serverTimestamp(),
         updated: FieldValue.serverTimestamp(),
       }
-      $log.tag('products').debug('[create] Creating %s with %o', documentId, dirty)
+      $log.tag('products').debug('[create] prod_%s by acct_%s %o', document, account, dirty)
 
-      // persist anonymous/object to firestore
       await $fire.firestore
         .collection(COLLECTION)
-        .doc(documentId)
+        .doc(document)
         .set({ ...dirty })
 
-      // fetch immediately
-      const product = await dispatch('retrieve', { documentId })
+      const saved = await dispatch('retrieve', { options: { source: 'cache' }, document, account })
       $log.tag('products').success('[create]')
-      return product
+      return saved
     } catch (error) {
       $log.tag('products').error('[create]', error)
       throw error
     }
   },
 
-  async update({ dispatch }, { documentId, payload }) {
+  /**
+   * Updates the specified object with the given payload.
+   * @param {String} document ID of the document
+   * @param {Object} payload full object to be updated
+   * @param {String} account ID of whose the data belongs to
+   * @returns a related object, or an error.
+   */
+  async update({ dispatch }, { document, payload, account }) {
     const { $fire, $fireModule, $log } = this.app.context
     const { FieldValue } = $fireModule.firestore
     try {
-      // remove local props + globally add necessary meta props
       const { id, object, ...dirty } = { ...payload, updated: FieldValue.serverTimestamp() }
-      $log.tag('products').debug('[update] Updating %s with %o ', documentId, dirty)
+      $log.tag('products').debug('[update] prod_%s by acct_%s %o', document, account, dirty)
 
-      // persist anonymous/object to firestore
       await $fire.firestore
         .collection(COLLECTION)
-        .doc(documentId)
+        .doc(document)
         .update({ ...dirty })
 
-      // fetch immediately
-      const product = await dispatch('retrieve', { documentId })
+      const saved = await dispatch('retrieve', { options: { source: 'cache' }, document, account })
       $log.tag('products').success('[update]')
-      return product
+      return saved
     } catch (error) {
       $log.tag('products').error('[update]', error)
       throw error
     }
   },
 
-  async delete({ commit }, { documentId }) {
+  /**
+   * Delete an object.
+   * @param {String} document ID of the document
+   * @param {String} account ID of whose the data belongs to
+   */
+  async delete({ commit }, { document, account }) {
     const { $fire, $log } = this.app.context
     try {
-      $log.tag('products').debug('[delete] Deleting %s', documentId)
-      await $fire.firestore.collection(COLLECTION).doc(documentId).delete()
-      commit('DELETE', documentId)
-
-      $log.success('products.delete', 'success')
+      $log.tag('products').debug('[delete] prod_%s by acct_%s', document, account)
+      await $fire.firestore.collection(COLLECTION).doc(document).delete()
+      commit('DELETE', document)
+      $log.tag('products').success('[delete]')
     } catch (error) {
       $log.tag('products').error('[delete]', error)
       throw error
     }
   },
 
-  async retrieve({ commit }, { documentId }) {
+  /**
+   * Retrieve the specified object with the given ID.
+   * @param {String} options source of where the data to be fetched
+   * @param {String} document ID of the document
+   * @param {String} account ID of whose the data belongs to
+   * @returns a related object, or an error.
+   */
+  async retrieve({ commit }, { options = { source: 'default' }, document, account }) {
     const { $fire, $log } = this.app.context
     try {
-      const _ref = $fire.firestore.collection(COLLECTION).doc(documentId)
+      const _ref = $fire.firestore.collection(COLLECTION).doc(document)
 
-      // hit cache first
-      const _fromCache = await _ref.get({ source: 'cache' })
-      const { id, exists, metadata } = _fromCache
-      $log.tag('products').debug('[retrieve] Retrieving %s from cache %o', documentId, {
-        id,
-        exists,
-        source: metadata.fromCache ? 'cache' : 'server',
-      })
+      const snapshot = await _ref.get(options)
+      $log.tag('products').debug('[retrieve] prod_%s by acct_%s %o', document, account, snapshot)
 
-      // fallback to server when found nothing on cache
-      let _fromServer
-      if (!exists) {
-        _fromServer = await _ref.get({ source: 'server' })
-        const { id, exists, metadata } = _fromServer
-        $log.tag('products').debug('[retrieve] Retrieving %s from server %o', documentId, {
-          id,
-          exists,
-          source: metadata.fromCache ? 'cache' : 'server',
-        })
+      if (!snapshot.exists) {
+        commit('DELETE', document)
+        $log.tag('products').success('[retrieve] Found none. Removing from local database.')
+        return
       }
 
-      // put all the information together into an object before goes to state
-      const results = _fromServer || _fromCache
-      const product = { ...results.data(), id, object: 'product' }
-      commit('UPSERT', product)
-      $log.tag('products').debug('[retrieve] Setting object to store %o', product)
+      const data = snapshot.data()
+      const product = {
+        ...data,
+        id: snapshot.id,
+        object: 'product',
+        created: data.created.toDate(),
+        updated: data.updated.toDate(),
+      }
+      if (product.owner !== account) {
+        $log.tag('products').warn('[retrieve] Unauthorize. prod_%s by acct_%s', document, account)
+        return
+      }
 
+      commit('UPSERT', product)
       $log.tag('products').success('[retrieve]')
       return product
     } catch (error) {
@@ -209,39 +250,35 @@ const actions = {
   },
 
   /**
-   * Used to fetch latest and delta changes. Cache applies here.
-   * @param {Object} equalQ {field, operator, value, hash}
-   * @param {Object} rangeQ {field, operator, value, hash} NOT in use currently
+   * Retrieve list of related object. Search from last fetched timestamp
+   * if found.
+   * @param {Number} limit maximum documents to be returned
+   * @param {String} account ID of whose the data belongs to
+   * @returns a list if a valid identifier was provided. Returns an error otherwise.
    */
-  async list({ commit }, { account, equalQ, rangeQ, fetchSize }) {
-    const { $fire, $fireModule, $log } = this.app.context
-    const { Timestamp } = $fireModule.firestore
+  async list({ commit, getters }, { limit = 10, account }) {
+    const { $fire, $log } = this.app.context
     try {
-      // construct ref + query
       const _ref = $fire.firestore.collection(COLLECTION)
-      let _query = _ref.where('owner', '==', account).orderBy('updated', 'desc')
+      let _query = _ref.where('owner', '==', account).orderBy('updated', 'desc').limit(limit)
 
-      if (fetchSize) _query = _query.limit(fetchSize)
-      if (equalQ) _query = _query.where(equalQ.field, equalQ.operator, equalQ.value)
-      if (rangeQ) _query = _query.where(rangeQ.field, rangeQ.operator, rangeQ.value)
+      const _fetchMetadata = getters.findFetchMetadata(account)
+      if (_fetchMetadata) _query = _query.where('updated', '>', _fetchMetadata.timestamp)
 
-      // hit cache first
-      // expecting work on repeated call from 'Next' pagination
       const _fromCache = await _query.get({ source: 'cache' })
       const { empty, size, metadata, query } = _fromCache
-      $log.tag('products').debug('[list] Retrieving list of owner %s from cache %o', account, {
+      $log.tag('products').debug('[list] by acct_%s %o', account, {
         empty,
         size,
         source: metadata.fromCache ? 'cache' : 'server',
         query: query._delegate?._query?.T?.h,
       })
 
-      // fallback to server when found nothing on cache
       let _fromServer
       if (empty) {
         _fromServer = await _query.get({ source: 'server' })
         const { empty, size, metadata, query } = _fromServer
-        $log.tag('products').debug('[list] Retrieving list of owner %s from server %o', account, {
+        $log.tag('products').debug('[list] by acct_%s %o', account, {
           empty,
           size,
           source: metadata.fromCache ? 'cache' : 'server',
@@ -249,20 +286,25 @@ const actions = {
         })
       }
 
-      // cache regardless of result
-      const cache = { owner: account, timestamp: Timestamp.fromDate(new Date()), hash: equalQ.hash }
-      commit('SET_CACHE', cache)
-      $log.tag('products').debug('[list] Setting object to cache %o', cache)
+      const fetchMetadata = { account, timestamp: Date.now() }
+      commit('SET_FETCH_METADATA', fetchMetadata)
+      $log.tag('products').debug('[list] Set last fetched timestamp %o', fetchMetadata)
 
-      const results = _fromServer || _fromCache
-      results.docs.forEach((doc) => {
-        // put all the information together into an object before goes to state
-        const product = { ...doc.data(), id: doc.id, object: 'product' }
+      const snapshot = _fromServer || _fromCache
+      snapshot.docs.forEach((doc) => {
+        const data = doc.data()
+        const product = {
+          ...data,
+          id: doc.id,
+          object: 'product',
+          created: data.created.toDate(),
+          updated: data.updated.toDate(),
+        }
         commit('UPSERT', product)
       })
 
       $log.tag('products').success('[list]')
-      return results.docs
+      return snapshot
     } catch (error) {
       $log.tag('products').error('[list]', error)
       throw error
@@ -270,56 +312,104 @@ const actions = {
   },
 
   /**
-   * For pagination only. Setting cache does not apply here
-   * @param {Object} equalQ {field, operator, value, hash}
-   * @param {Object} rangeQ {field, operator, value, hash} NOT in use currently
+   * Retrieve list of related object based on result of list().
+   * @param {Number} limit maximum documents to be returned
+   * @param {String} account ID of whose the data belongs to
+   * @param {Timestamp} endBefore timestamp of the first/last visible item
+   * @returns a list if a valid identifier was provided. Returns an error otherwise.
    */
-  async paginate({ commit }, { account, equalQ, rangeQ, fetchSize }) {
+  async paginate({ commit, getters }, { limit = 10, account, endBefore }) {
     const { $fire, $log } = this.app.context
     try {
-      // construct ref + query
       const _ref = $fire.firestore.collection(COLLECTION)
-      let _query = _ref.where('owner', '==', account).orderBy('updated', 'desc')
+      let _query = _ref.where('owner', '==', account).orderBy('updated', 'desc').limit(limit)
 
-      if (fetchSize) _query = _query.limit(fetchSize)
-      if (equalQ) _query = _query.where(equalQ.field, equalQ.operator, equalQ.value)
-      if (rangeQ) _query = _query.where(rangeQ.field, rangeQ.operator, rangeQ.value)
+      if (endBefore) _query = _query.where('updated', '<', endBefore)
 
-      // hit cache first
-      // expecting work on repeated call from 'Next' pagination
-      const _fromCache = await _query.get({ source: 'cache' })
-      const { empty, size, metadata, query } = _fromCache
-      $log.tag('products').debug('[paginate] Retrieving list of owner %s from cache %o', account, {
+      const next = getters.findNext(endBefore, account)
+      if (next) _query = _query.endBefore(next.updated)
+
+      const snapshot = await _query.get()
+      const { empty, size, metadata, query } = snapshot
+      $log.tag('products').debug('[paginate] by acct_%s %o', account, {
         empty,
         size,
         source: metadata.fromCache ? 'cache' : 'server',
         query: query._delegate?._query?.T?.h,
       })
 
-      // fallback to server when found nothing on cache
-      let _fromServer
-      if (empty) {
-        _fromServer = await _query.get({ source: 'server' })
-        const { empty, size, metadata, query } = _fromServer
-        $log.tag('products').debug('[paginate] Retrieving list of owner %s from server %o', account, {
-          empty,
-          size,
-          source: metadata.fromCache ? 'cache' : 'server',
-          query: query._delegate?._query?.T?.h,
-        })
-      }
-
-      const results = _fromServer || _fromCache
-      results.docs.forEach((doc) => {
-        // put all the information together into an object before goes to state
-        const product = { ...doc.data(), id: doc.id, object: 'product' }
+      snapshot.docs.forEach((doc) => {
+        const data = doc.data()
+        const product = {
+          ...data,
+          id: doc.id,
+          object: 'product',
+          created: data.created.toDate(),
+          updated: data.updated.toDate(),
+        }
         commit('UPSERT', product)
       })
 
       $log.tag('products').success('[paginate]')
-      return results.docs
+      return snapshot
     } catch (error) {
       $log.tag('products').error('[paginate]', error)
+      throw error
+    }
+  },
+
+  /**
+   * Set price for the given product.
+   * @param {String} document ID of the document
+   * @param {Object} price object to be updated
+   * @param {String} account ID of whose the data belongs to
+   * @returns a related object, or an error.
+   */
+  async setPrice({ dispatch }, { document, price, account }) {
+    const { $fire, $fireModule, $log } = this.app.context
+    const { FieldValue } = $fireModule.firestore
+    try {
+      const payload = {
+        updated: FieldValue.serverTimestamp(),
+        prices: FieldValue.arrayUnion(price),
+      }
+      $log.tag('products').debug('[setPrice] prod_%s by acct_%s %o', document, account, payload)
+
+      await $fire.firestore.collection(COLLECTION).doc(document).update(payload)
+
+      const saved = await dispatch('retrieve', { options: { source: 'cache' }, document, account })
+      $log.tag('products').success('[setPrice]')
+      return saved
+    } catch (error) {
+      $log.tag('products').error('[setPrice]', error)
+      throw error
+    }
+  },
+
+  /**
+   * Remove price from the given product.
+   * @param {String} document ID of the document
+   * @param {Object} price object to be updated
+   * @param {String} account ID of whose the data belongs to
+   * @returns a related object, or an error.
+   */
+  async removePrice({ dispatch }, { document, price, account }) {
+    const { $fire, $fireModule, $log } = this.app.context
+    const { FieldValue } = $fireModule.firestore
+    try {
+      const payload = {
+        updated: FieldValue.serverTimestamp(),
+        prices: FieldValue.arrayRemove(price),
+      }
+      $log.tag('products').debug('[removePrice] prod_%s by acct_%s %o', document, account, payload)
+
+      await $fire.firestore.collection(COLLECTION).doc(document).update(payload)
+
+      const saved = await dispatch('retrieve', { options: { source: 'cache' }, document, account })
+      $log.tag('products').success('[removePrice]')
+      return saved
+    } catch (error) {
+      $log.tag('products').error('[removePrice]', error)
       throw error
     }
   },

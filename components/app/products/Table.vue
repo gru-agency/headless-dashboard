@@ -18,12 +18,20 @@
 
       <template #cell(name)="{ item, value }">
         <b-link :to="getLink(item)" class="stretched-link"> </b-link>
-        {{ value }}
+        <text-field :text="value"></text-field>
+      </template>
+
+      <template #cell(active)="{ item, value }">
+        <b-link :to="getLink(item)" class="stretched-link"> </b-link>
+        <tag-field
+          :preset="value ? 'bv-active' : 'bv-archive'"
+          :variant="value ? 'success' : 'secondary'"
+        ></tag-field>
       </template>
 
       <template #cell(updated)="{ item, value }">
         <b-link :to="getLink(item)" class="stretched-link"> </b-link>
-        {{ $dayjs.factory(value).fromNow() }}
+        <text-field :date="value" date-format="relative"></text-field>
       </template>
 
       <template #cell(more)="{ item }">
@@ -32,14 +40,23 @@
           :edit-link="editLink(item)"
           :no-archive="!item.active"
           :no-unarchive="item.active"
-          delete-hide
+          @delete="remove(item)"
           @archive="archive(item)"
           @unarchive="unarchive(item)"
         ></action-menu>
       </template>
 
       <template #empty>
-        <box-state state="search" class="h-half-screen" icon-holder></box-state>
+        <box-state
+          state="empty"
+          :title="ui.emptyTitle"
+          :body="ui.emptySubtitle"
+          :btn-link="createLink"
+          btn-size="sm"
+          btn-variant="primary"
+          icon-preset="bv-product"
+          class="h-half-screen"
+        ></box-state>
       </template>
 
       <template #emptyfiltered>
@@ -51,7 +68,6 @@
       :current-page="currentPage"
       :total-rows="totalRows"
       :per-page="perPage"
-      :force-next="lazyMode"
       @prev="previous"
       @next="next"
     ></table-caption>
@@ -59,40 +75,41 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Table',
 
-  props: {
-    account: { type: String, default: undefined },
-    datasource: { type: Array, default: () => [] },
-    filterOn: { type: Array, default: () => [] },
-    filter: { type: String, default: undefined },
-  },
+  props: { datasource: { type: Array, default: () => [] } },
 
   data() {
     return {
+      ui: {
+        emptyTitle: this.$t('modules.products.emptyTitle'),
+        emptySubtitle: this.$t('modules.products.emptySubtitle'),
+      },
       fields: [
         { key: 'images', label: '', tdClass: 'w-5p position-relative' },
         { key: 'name', label: this.$t('general.name'), tdClass: 'position-relative' },
-        {
-          key: 'updated',
-          label: this.$t('general.updated'),
-          formatter: (value) => value.toDate().getTime(),
-          tdClass: 'w-20p position-relative',
-        },
+        { key: 'active', label: this.$t('general.status'), tdClass: 'w-10p position-relative' },
+        { key: 'updated', label: this.$t('general.updated'), tdClass: 'w-20p position-relative' },
         { key: 'more', label: '', tdClass: 'w-5p' },
       ],
       currentPage: 1,
-      perPage: 10,
+      perPage: 2,
 
-      // enable lazy fetch by default, disable until fully fetched
-      lazyMode: true,
+      // keep track of last fetched page to reduce unnecessary pagination
+      lastNextPage: 1,
     }
   },
 
   computed: {
+    ...mapGetters('user', ['account']),
+
+    createLink() {
+      return this.localePath({ name: 'dashboard-products-create' })
+    },
+
     totalRows() {
       return this.datasource.length
     },
@@ -108,57 +125,93 @@ export default {
         this.currentPage === lastPage ? this.totalRows - 1 : this.currentPage * this.perPage - 1
       return this.datasource[lastItemIndex]
     },
+
+    shouldMoveBack() {
+      const lastPage = Math.ceil(this.totalRows / this.perPage)
+      return this.currentPage > lastPage
+    },
+  },
+
+  watch: {
+    /**
+     * Prefetch when datasource changes from empty to loaded.
+     */
+    datasource: {
+      immediate: true,
+      handler(value, oldValue) {
+        const canFetch = (!oldValue || oldValue.length === 0) && value.length > 0
+        if (canFetch) this.fetchNext()
+      },
+    },
+
+    /**
+     * Prefetch on next page.
+     */
+    currentPage(value) {
+      const canFetch = value === this.lastNextPage
+      if (canFetch) this.fetchNext()
+    },
   },
 
   methods: {
-    ...mapActions('products', ['update', 'paginate']),
+    ...mapActions('products', ['update', 'delete', 'paginate']),
 
     previous() {
       this.currentPage -= 1
     },
 
-    async next() {
-      if (this.account) {
-        const result = await this.paginate({
-          account: this.account,
-          equalQ: {
-            field: this.filterOn[0],
-            operator: '==',
-            value: this.filter === 'true', // convert string to boolean
-            hash: `${this.filterOn[0]}==${this.filter}`,
-          },
-          rangeQ: {
-            field: 'updated',
-            operator: '<',
-            value: this.lastItem.updated,
-            hash: `updated<${this.lastItem.updated}`,
-          },
-          fetchSize: this.perPage,
-        })
+    next() {
+      this.currentPage += 1
+    },
 
-        if (result.length > 0) this.currentPage += 1
-        else this.lazyMode = false
-      }
+    async fetchNext() {
+      if (!this.account) return
+
+      this.$log.tag('products').info('[next] Fetching next page.')
+      await this.paginate({
+        limit: this.perPage,
+        account: this.account,
+        endBefore: this.lastItem.updated,
+      })
+
+      this.lastNextPage++
     },
 
     async archive(item) {
-      if (this.account) {
-        await this.update({ documentId: item.id, payload: { account: this.account, active: false } })
-      }
+      if (!this.account) return
+
+      await this.update({
+        document: item.id,
+        account: this.account,
+        payload: { account: this.account, active: false },
+      })
     },
 
     async unarchive(item) {
-      if (this.account) {
-        await this.update({ documentId: item.id, payload: { account: this.account, active: true } })
-      }
+      if (!this.account) return
+
+      await this.update({
+        document: item.id,
+        account: this.account,
+        payload: { account: this.account, active: true },
+      })
+    },
+
+    /**
+     * Removing the last item of the page should move page back by 1.
+     */
+    async remove(item) {
+      if (!this.account) return
+      await this.delete({ document: item.id, account: this.account })
+      if (this.shouldMoveBack) this.currentPage--
     },
 
     getLink(item) {
-      return this.localePath({ name: 'dashboard-products-id', params: { id: item.id } })
+      return this.localePath({ name: 'dashboard-products-id', params: { id: 'prod_' + item.id } })
     },
 
     editLink(item) {
-      return this.localePath({ name: 'dashboard-products-id-edit', params: { id: item.id } })
+      return this.localePath({ name: 'dashboard-products-id-edit', params: { id: 'prod_' + item.id } })
     },
   },
 }
