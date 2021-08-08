@@ -1,29 +1,17 @@
 <template>
   <div>
-    <b-navbar type="light" fixed="top" class="bg-light border-bottom px-0">
-      <b-container fluid="2xl">
-        <b-row no-gutters class="w-100 justify-content-between px-4">
-          <b-navbar-nav>
-            <b-nav-text class="px-0 px-lg-2">
-              <action-link icon-preset="bv-close" variant="secondary" link-to-parent></action-link>
-            </b-nav-text>
-            <b-nav-text class="px-2 pr-3 pr-lg-5">|</b-nav-text>
-            <b-nav-text class="">{{ ui.pageTitle }}</b-nav-text>
-          </b-navbar-nav>
-
-          <b-navbar-nav class="flex-row">
-            <b-nav-item link-classes="py-1 px-0 px-lg-2">
-              <action-button
-                size="sm"
-                preset="bv-save"
-                variant="primary"
-                @click="onFormSubmit(true)"
-              ></action-button>
-            </b-nav-item>
-          </b-navbar-nav>
-        </b-row>
-      </b-container>
-    </b-navbar>
+    <form-nav-bar :title="ui.pageTitle">
+      <template #nav-end>
+        <b-nav-item link-classes="py-1 px-0 px-lg-2">
+          <action-button
+            size="sm"
+            preset="bv-save"
+            variant="primary"
+            @click="onFormSubmit(true)"
+          ></action-button>
+        </b-nav-item>
+      </template>
+    </form-nav-bar>
 
     <b-container fluid="2xl" class="main-content">
       <b-row tag="main" align-h="center" class="px-lg-4 py-8">
@@ -32,7 +20,7 @@
             <box-header :title-text="ui.productTitle"> </box-header>
 
             <b-card-body>
-              <products-form :id="productId" edit-mode @product-submitted="onFormSubmitted"></products-form>
+              <products-form :id="objectId" edit-mode @product-submitted="onFormSubmitted"></products-form>
             </b-card-body>
           </b-card>
         </b-col>
@@ -43,7 +31,7 @@
 
 <script>
 export default {
-  name: 'Create',
+  name: 'Edit',
   layout: 'default',
 
   data() {
@@ -73,8 +61,9 @@ export default {
   },
 
   computed: {
-    productId() {
-      return this.$route.params.id
+    objectId() {
+      const parts = this.$route.params.id.split('_')
+      return parts.length === 2 ? parts[1] : parts[0]
     },
   },
 
@@ -83,7 +72,9 @@ export default {
 
     successHandler(response) {
       if (this.exitImmediately) {
-        this.$router.push(this.localePath({ name: 'dashboard-products-id', params: { id: response.id } }))
+        this.$router.push(
+          this.localePath({ name: 'dashboard-products-id', params: { id: 'prod_' + response.id } })
+        )
       }
     },
 
