@@ -3,7 +3,6 @@
     v-if="hasIcon"
     :id="id"
     :icon="getIcon"
-    :size="size"
     :fixed-width="fixedWidth"
     :rotation="rotation"
     :flip="flip"
@@ -25,7 +24,6 @@ export default {
     preset: { type: String, default: undefined },
     id: { type: String, default: undefined },
     icon: { type: Array, default: () => null },
-    size: { type: String, default: undefined },
     fixedWidth: { type: Boolean, default: true },
     rotation: { type: String, default: undefined },
     flip: { type: String, default: undefined },
@@ -61,7 +59,7 @@ export default {
         'bv-delete': { icon: ['fad', 'trash'] },
 
         // regular
-        'bv-more-v': { icon: ['far', 'ellipsis-v'] },
+        'bv-more': { icon: ['far', 'ellipsis-h'] },
         'bv-close': { icon: ['far', 'times'] },
       },
     }
