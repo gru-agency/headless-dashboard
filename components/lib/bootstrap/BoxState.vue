@@ -3,12 +3,12 @@
     <div class="align-self-center">
       <slot name="icon">
         <b-card-text class="mb-8">
-          <icon v-if="isLoading" :preset="getPresetIcon" size="2x" pulse></icon>
+          <icon v-if="isLoading" :preset="getPresetIcon" class="fa-lg" pulse></icon>
           <span v-else>
             <b-avatar v-if="iconHolder" size="3rem" variant="light" class="shadow-sm" rounded>
-              <icon :icon="icon" :preset="getPresetIcon" :class="getIconClass" size="2x"></icon>
+              <icon :icon="icon" :preset="getPresetIcon" :class="getIconClass" class="fa-lg"></icon>
             </b-avatar>
-            <icon v-else :icon="icon" :preset="getPresetIcon" :class="getIconClass" size="2x"></icon>
+            <icon v-else :icon="icon" :preset="getPresetIcon" :class="getIconClass" class="fa-lg"></icon>
           </span>
         </b-card-text>
       </slot>
