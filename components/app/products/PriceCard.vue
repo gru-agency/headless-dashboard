@@ -2,7 +2,9 @@
   <div>
     <box-header :title-text="ui.title" new-btn :modal="priceModal"></box-header>
     <prices-table :datasource="prices" :product="product"></prices-table>
-    <prices-modal :id="priceModal"></prices-modal>
+
+    <!-- specifically used to create price -->
+    <prices-modal :id="priceModal" :product="product"></prices-modal>
   </div>
 </template>
 
