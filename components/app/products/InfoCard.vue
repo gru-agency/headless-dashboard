@@ -28,9 +28,13 @@
               <tag-field v-if="!product.active" preset="bv-archive" variant="secondary"></tag-field>
             </b-col>
             <b-col xl="3" tag="dt"> {{ ui.created }} </b-col>
-            <b-col xl="9" tag="dd"> <text-field :date="product.created"></text-field> </b-col>
+            <b-col xl="9" tag="dd">
+              <text-field :date="product.created" date-format="long"></text-field>
+            </b-col>
             <b-col xl="3" tag="dt"> {{ ui.updated }} </b-col>
-            <b-col xl="9" tag="dd"> <text-field :date="product.updated"></text-field> </b-col>
+            <b-col xl="9" tag="dd">
+              <text-field :date="product.updated" date-format="long"></text-field>
+            </b-col>
           </b-row>
         </b-col>
         <b-col lg="6">
@@ -124,6 +128,11 @@ export default {
     async remove() {
       if (!this.account) return
       await this.delete({ document: this.objectId, account: this.account })
+      this.routeBack()
+    },
+
+    routeBack() {
+      this.$router.replace(this.localePath({ name: 'dashboard-products' }))
     },
   },
 }
