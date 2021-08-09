@@ -228,19 +228,28 @@ const actions = {
       }
 
       const data = snapshot.data()
+      const prices = []
+      for (const key in data.prices) {
+        const priceData = data.prices[key]
+        const price = { ...priceData, id: key, updated: priceData.updated.toDate() }
+        prices.push(price)
+      }
       const product = {
         ...data,
+        prices, // override original prices (object) with array
         id: snapshot.id,
         object: 'product',
         created: data.created.toDate(),
         updated: data.updated.toDate(),
       }
+
       if (product.owner !== account) {
         $log.tag('products').warn('[retrieve] Unauthorize. prod_%s by acct_%s', document, account)
         return
       }
 
       commit('UPSERT', product)
+      $log.tag('products').debug('[retrieve] prod_%s by acct_%s %o', document, account, product)
       $log.tag('products').success('[retrieve]')
       return product
     } catch (error) {
@@ -293,8 +302,15 @@ const actions = {
       const snapshot = _fromServer || _fromCache
       snapshot.docs.forEach((doc) => {
         const data = doc.data()
+        const prices = []
+        for (const key in data.prices) {
+          const priceData = data.prices[key]
+          const price = { ...priceData, id: key, updated: priceData.updated.toDate() }
+          prices.push(price)
+        }
         const product = {
           ...data,
+          prices, // override original prices (object) with array
           id: doc.id,
           object: 'product',
           created: data.created.toDate(),
@@ -340,8 +356,15 @@ const actions = {
 
       snapshot.docs.forEach((doc) => {
         const data = doc.data()
+        const prices = []
+        for (const key in data.prices) {
+          const priceData = data.prices[key]
+          const price = { ...priceData, id: key, updated: priceData.updated.toDate() }
+          prices.push(price)
+        }
         const product = {
           ...data,
+          prices, // override original prices (object) with array
           id: doc.id,
           object: 'product',
           created: data.created.toDate(),
@@ -369,9 +392,10 @@ const actions = {
     const { $fire, $fireModule, $log } = this.app.context
     const { FieldValue } = $fireModule.firestore
     try {
+      const { id, ...data } = price
       const payload = {
+        [`prices.${id}`]: { ...data, updated: FieldValue.serverTimestamp() },
         updated: FieldValue.serverTimestamp(),
-        prices: FieldValue.arrayUnion(price),
       }
       $log.tag('products').debug('[setPrice] prod_%s by acct_%s %o', document, account, payload)
 
@@ -397,10 +421,8 @@ const actions = {
     const { $fire, $fireModule, $log } = this.app.context
     const { FieldValue } = $fireModule.firestore
     try {
-      const payload = {
-        updated: FieldValue.serverTimestamp(),
-        prices: FieldValue.arrayRemove(price),
-      }
+      const { id } = price
+      const payload = { [`prices.${id}`]: FieldValue.delete(), updated: FieldValue.serverTimestamp() }
       $log.tag('products').debug('[removePrice] prod_%s by acct_%s %o', document, account, payload)
 
       await $fire.firestore.collection(COLLECTION).doc(document).update(payload)
