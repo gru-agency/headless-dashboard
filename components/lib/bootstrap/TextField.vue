@@ -25,9 +25,16 @@ export default {
 
   methods: {
     formatDate() {
-      return this.dateFormat === 'relative'
-        ? this.$dayjs.fromNow(this.date)
-        : this.$d(this.date, 'short', this.locale)
+      switch (this.dateFormat) {
+        case 'relative':
+          return this.$dayjs.fromNow(this.date)
+
+        case 'long':
+          return this.$d(this.date, 'long', this.locale)
+
+        default:
+          return this.$d(this.date, 'short', this.locale)
+      }
     },
 
     formatCurrency() {
