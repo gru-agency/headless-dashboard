@@ -53,11 +53,11 @@ export default {
     return {
       events: {
         validate: 'product-validate',
-        validated: 'product-validated',
         submit: 'product-submit',
-        submitted: 'product-submitted',
         reset: 'product-reset',
-        resetted: 'product-resetted',
+        validated: 'validated',
+        submitted: 'submitted',
+        resetted: 'resetted',
       },
       ui: {
         title: this.$t('modules.products.title'),

@@ -23,7 +23,7 @@
             <box-header :title-text="ui.productTitle"> </box-header>
 
             <b-card-body>
-              <products-form @product-submitted="onFormSubmitted"></products-form>
+              <products-form @submitted="onFormSubmitted"></products-form>
             </b-card-body>
           </b-card>
         </b-col>
@@ -42,11 +42,11 @@ export default {
       events: {
         products: {
           validate: 'product-validate',
-          validated: 'product-validated',
           submit: 'product-submit',
-          submitted: 'product-submitted',
           reset: 'product-reset',
-          resetted: 'product-resetted',
+          validated: 'validated',
+          submitted: 'submitted',
+          resetted: 'resetted',
         },
       },
       ui: {
