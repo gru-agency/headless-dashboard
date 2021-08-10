@@ -7,13 +7,7 @@
           <tips-field preset="bv-info" class="px-1"> {{ ui.nameTips }} </tips-field>
           <tag-field preset="bv-required"></tag-field>
         </template>
-        <b-form-input
-          id="prod-name"
-          v-model="form.name"
-          :state="$vee.state(vp)"
-          size="lg"
-          trim
-        ></b-form-input>
+        <b-input id="prod-name" v-model="form.name" :state="$vee.state(vp)" size="lg" lazy trim></b-input>
         <b-form-invalid-feedback>
           <span><icon preset="bv-error" class="mr-2"></icon>{{ $vee.error(vp) }}</span>
         </b-form-invalid-feedback>
@@ -26,27 +20,19 @@
         <tips-field preset="bv-info" class="px-1"> {{ ui.descriptionTips }} </tips-field>
         <tag-field preset="bv-optional"></tag-field>
       </template>
-      <b-form-textarea id="prod-desc" v-model="form.description" size="lg" rows="5" trim></b-form-textarea>
+      <b-textarea id="prod-desc" v-model="form.description" size="lg" rows="5" lazy trim></b-textarea>
     </b-form-group>
-
-    <b-alert :show="showError" variant="danger">
-      <icon preset="bv-error" class="mr-2"></icon> {{ server.message }}
-    </b-alert>
   </validation-observer>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'Form',
 
   props: {
-    // in edit mode, to locate full product object in store
-    // in create mode, ID will be auto-generated automatically by default
-    id: { type: String, default: undefined },
-
-    // determine whether to populate the form with existing data
-    editMode: { type: Boolean, default: false },
+    product: { type: Object, default: () => undefined },
   },
 
   data() {
@@ -58,6 +44,7 @@ export default {
         validated: 'validated',
         submitted: 'submitted',
         resetted: 'resetted',
+        changed: 'changed',
       },
       ui: {
         title: this.$t('modules.products.title'),
@@ -73,11 +60,6 @@ export default {
 
   computed: {
     ...mapGetters('user', ['account']),
-    ...mapGetters('products', ['find']),
-
-    product() {
-      return this.find(this.id, this.account)
-    },
 
     showError() {
       const { validated, valid, field } = this.server
@@ -85,12 +67,15 @@ export default {
     },
   },
 
+  watch: {
+    product: { immediate: true, handler: 'populateForm' },
+    form: { deep: true, handler: 'onFormChanged' },
+  },
+
   mounted() {
     this.$nuxt.$on(this.events.validate, this.validateForm)
     this.$nuxt.$on(this.events.submit, this.submitForm)
     this.$nuxt.$on(this.events.reset, this.resetForm)
-
-    if (this.editMode) this.populateForm()
   },
 
   beforeDestroy() {
@@ -102,12 +87,12 @@ export default {
   methods: {
     ...mapActions('products', ['create', 'update']),
 
-    populateForm() {
-      const product = this.product
-      if (product) {
-        const { name, description } = product
-        this.form = { name, description }
-      }
+    populateForm(value) {
+      if (value) this.form = this._.cloneDeep(value)
+    },
+
+    onFormChanged(value) {
+      this.$emit(this.events.changed, value)
     },
 
     errorHandler(error) {
@@ -146,22 +131,17 @@ export default {
       }
     },
 
-    validateForm() {
-      const valid = this.$refs.productForm.validate()
+    async validateForm() {
+      const valid = await this.$refs.productForm.validate()
       this.$emit(this.events.validated, valid)
       return valid
     },
 
-    async resetForm() {
-      this.resetFormState()
-      this.$refs.productForm?.reset()
-      this.form = { name: null, description: null }
-      await this.$nextTick()
-      this.$emit(this.events.resetted)
-    },
-
-    resetFormState() {
+    resetForm() {
       this.server = { validated: false, valid: false, field: null, code: null, message: null }
+      this.form = { name: null, description: null }
+      this.$refs.productForm?.reset()
+      this.$emit(this.events.resetted)
     },
   },
 }

@@ -58,7 +58,7 @@ $spacers: map-merge($spacers, $custom-spacers);
 // @import '~bootstrap/scss/progress';
 // @import '~bootstrap/scss/media';
 @import '~bootstrap/scss/list-group';
-// @import '~bootstrap/scss/close';
+@import '~bootstrap/scss/close';
 @import '~bootstrap/scss/toasts';
 @import '~bootstrap/scss/modal';
 @import '~bootstrap/scss/tooltip';
@@ -108,7 +108,7 @@ $sidenav-width: 16rem;
 
 // link
 a {
-  &.nuxt-link-active, 
+  &.nuxt-link-active,
   &.nuxt-link-exact-active {
     color: $primary;
     font-weight: 500;
@@ -148,11 +148,6 @@ a {
     border-top: 0;
     border-bottom: 1px solid #dee2e6 !important;
     white-space: nowrap;
-
-  //   &.fit-content {
-  //     width: 1%;
-  //     white-space: nowrap;
-  //   }
   }
 
   th {
@@ -177,7 +172,8 @@ a {
 }
 
 // form
-label, legend {
+label,
+legend {
   cursor: pointer;
   font-weight: $headings-font-weight;
 }
@@ -212,6 +208,11 @@ label, legend {
     -moz-outline: none;
     outline: none;
   }
+}
+
+// toast
+.toast-top {
+  margin-top: $navbar-height;
 }
 
 // custom utilities
