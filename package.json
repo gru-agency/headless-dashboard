@@ -52,6 +52,7 @@
     "firebase": "^8.7.0",
     "husky": "^7.0.0",
     "lint-staged": "^11.0.0",
+    "lodash": "^4.17.21",
     "nanoid": "^3.1.23",
     "nanoid-dictionary": "^4.3.0",
     "nuxt-build-optimisations": "^1.0.5",
@@ -71,6 +72,7 @@
     "vee-validate": "^3.4.10",
     "vue": "^2.6.14",
     "vue-currency-input": "^2.0.0",
+    "vue-lodash": "^2.1.2",
     "vue-template-babel-compiler": "^1.0.1",
     "webpack": "^4.46.0"
   }
