@@ -4,7 +4,6 @@
     :title="price ? ui.editTitle : ui.createTitle"
     :ok-title="ui.save"
     :cancel-title="ui.cancel"
-    :ok-disabled="okDisabled"
     body-bg-variant="light"
     cancel-variant="light"
     button-size="sm"
@@ -17,12 +16,7 @@
     @hide="onModalHide"
   >
     <b-card-body>
-      <prices-form
-        :price="price"
-        :product="product"
-        @validated="onFormValidated"
-        @submitted="onFormSubmitted"
-      ></prices-form>
+      <prices-form :price="price" :product="product" @submitted="onFormSubmitted"></prices-form>
     </b-card-body>
   </b-modal>
 </template>
@@ -50,7 +44,6 @@ export default {
         cancel: this.$t('general.cancel'),
         save: this.$t('general.save'),
       },
-      okDisabled: true,
     }
   },
 
@@ -68,10 +61,6 @@ export default {
 
     onFormSubmitted(success, error, response) {
       if (success) this.$bvModal.hide(this.id)
-    },
-
-    onFormValidated(valid) {
-      this.okDisabled = !valid
     },
   },
 }

@@ -1,7 +1,5 @@
 <template>
-  <validation-observer ref="priceForm" v-slot="vo">
-    <vee-broadcaster :states="vo" @states="onFormStateChanged"></vee-broadcaster>
-
+  <validation-observer ref="priceForm">
     <b-row>
       <b-col cols="12" lg="6">
         <b-form-group label-for="price-model">
@@ -32,7 +30,6 @@
           v-if="packagePricing"
           v-slot="vp"
           :name="ui.priceUnit"
-          immediate
           rules="integer|min_value:2"
         >
           <b-form-group :label="ui.priceUnit" label-for="price-unit">
@@ -63,7 +60,7 @@
     <b-collapse id="more-prices">
       <b-row>
         <b-col cols="12" lg="6">
-          <validation-provider v-slot="vp" :name="ui.description" immediate rules="max:128">
+          <validation-provider v-slot="vp" :name="ui.description" rules="max:128">
             <b-form-group label-for="price-desc">
               <template #label>
                 {{ ui.description }}
@@ -254,10 +251,6 @@ export default {
 
     resetFormState() {
       this.server = { validated: false, valid: false, field: null, code: null, message: null }
-    },
-
-    onFormStateChanged(states) {
-      if (states.validated) this.$emit(this.events.validated, !states.invalid)
     },
   },
 }
