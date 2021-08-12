@@ -78,6 +78,7 @@
       "title": "Products"
     },
     "prices": {
+      "addNewPrice":"Add new price",
       "createTitle": "Add a new price",
       "descriptionTips": "Price descriptions can help you stay organised. They're not customer-facing.",
       "editTitle": "Edit price",
@@ -92,6 +93,7 @@
       "packagePricingTips": "Select package pricing if you charge by the package, or group of units. For example, say you charge MYR 25.00 for every 5 units. Purchases are rounded up by default, so a customer buying 8 units would pay MYR 50.00.",
       "priceUnit": "Price unit",
       "pricing": "Pricing",
+      "pricingDetails": "Pricing details",
       "pricingModel": "Pricing model",
       "roundDown": "Partial groups will be rounded down and billed as a complete group.",
       "rounding": "Rounding",

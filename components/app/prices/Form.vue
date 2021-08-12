@@ -18,11 +18,14 @@
 
     <b-row>
       <b-col cols="12" lg="6">
-        <b-form-group :label="ui.price" label-for="price-amount">
-          <b-input-group :prepend="currencyOptions[0].text">
-            <money-field id="price-amount" v-model="form.unitAmount" size="lg"></money-field>
-          </b-input-group>
-        </b-form-group>
+        <validation-provider v-slot="vp" :name="ui.price" rules="required">
+          <b-form-group :label="ui.price" label-for="price-amount">
+            <b-input-group :prepend="currencyOptions[0].text">
+              <money-field id="price-amount" v-model="form.unitAmount" size="lg"></money-field>
+            </b-input-group>
+            <form-feedback v-if="$vee.error(vp)" :msg="$vee.error(vp)" compat></form-feedback>
+          </b-form-group>
+        </validation-provider>
       </b-col>
 
       <b-col cols="12" lg="6">
@@ -39,49 +42,43 @@
                 v-model="form.transformQuantity.divideBy"
                 :state="$vee.state(vp)"
                 size="lg"
+                lazy
                 trim
                 @focus="$event.target.select()"
               ></b-form-input>
             </b-input-group>
-            <b-form-text v-if="$vee.error(vp)">
-              <span class="text-danger">
-                <icon preset="bv-error" class="mr-2"></icon>{{ $vee.error(vp) }}
-              </span>
-            </b-form-text>
+            <form-feedback v-if="$vee.error(vp)" :msg="$vee.error(vp)" compat></form-feedback>
           </b-form-group>
         </validation-provider>
       </b-col>
     </b-row>
 
-    <div class="position-relative my-6">
-      <action-toggler target="more-prices" variant="primary"></action-toggler>
-    </div>
-
-    <b-collapse id="more-prices">
-      <b-row>
-        <b-col cols="12" lg="6">
-          <validation-provider v-slot="vp" :name="ui.description" rules="max:128">
-            <b-form-group label-for="price-desc">
-              <template #label>
-                {{ ui.description }}
-                <tips-field preset="bv-info" class="px-1"> {{ ui.descriptionTips }} </tips-field>
-                <tag-field preset="bv-optional"></tag-field>
-              </template>
-              <b-form-input
-                id="price-desc"
-                v-model="form.description"
-                :state="$vee.state(vp)"
-                size="lg"
-                trim
-              ></b-form-input>
-              <b-form-invalid-feedback>
-                <span><icon preset="bv-error" class="mr-2"></icon>{{ $vee.error(vp) }}</span>
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-        </b-col>
-      </b-row>
-    </b-collapse>
+    <action-toggler target="more-prices" variant="primary">
+      <template #collapsible>
+        <b-row>
+          <b-col cols="12" lg="6">
+            <validation-provider v-slot="vp" :name="ui.description" rules="max:128">
+              <b-form-group label-for="price-desc">
+                <template #label>
+                  {{ ui.description }}
+                  <tips-field preset="bv-info" class="px-1"> {{ ui.descriptionTips }} </tips-field>
+                  <tag-field preset="bv-optional"></tag-field>
+                </template>
+                <b-form-input
+                  id="price-desc"
+                  v-model="form.description"
+                  :state="$vee.state(vp)"
+                  size="lg"
+                  lazy
+                  trim
+                ></b-form-input>
+                <form-feedback :msg="$vee.error(vp)"></form-feedback>
+              </b-form-group>
+            </validation-provider>
+          </b-col>
+        </b-row>
+      </template>
+    </action-toggler>
 
     <b-alert :show="showError" variant="danger">
       <icon preset="bv-error" class="mr-2"></icon> {{ server.message }}
@@ -109,6 +106,7 @@ export default {
         validated: 'validated',
         submitted: 'submitted',
         resetted: 'resetted',
+        changed: 'changed',
       },
       ui: {
         pricing: this.$t('modules.prices.pricingModel'),
@@ -168,7 +166,10 @@ export default {
     },
   },
 
-  watch: { price: { handler: 'populateForm', immediate: true } },
+  watch: {
+    price: { immediate: true, handler: 'populateForm' },
+    form: { deep: true, handler: 'onFormChanged' },
+  },
 
   mounted() {
     this.$nuxt.$on(this.events.validate, this.validateForm)
@@ -185,16 +186,14 @@ export default {
   methods: {
     ...mapActions('products', ['setPrice']),
 
-    /**
-     * Fill up the form if use this form in edit mode. Source may not initialise
-     * in time upon render, but expecting non-null value.
-     */
-    populateForm(value) {
-      if (!value) return
+    populateForm(value, oldValue) {
+      if (!value || oldValue) return
+      this.form = this._.cloneDeep(value)
+      this.pricing = this.form.transformQuantity.divideBy > 1 ? 'package' : 'standard'
+    },
 
-      const { updated, transformQuantity, ...form } = value
-      this.form = { ...form, transformQuantity: { ...transformQuantity } }
-      this.pricing = transformQuantity.divideBy > 1 ? 'package' : 'standard'
+    onFormChanged(value) {
+      this.$emit(this.events.changed, value)
     },
 
     errorHandler(error) {
@@ -216,7 +215,7 @@ export default {
     },
 
     async submitForm() {
-      const valid = this.validateForm()
+      const valid = await this.validateForm()
       if (!valid) return
 
       this.resetFormState()
@@ -227,15 +226,14 @@ export default {
       )
     },
 
-    validateForm() {
-      const valid = this.$refs.priceForm.validate()
-      this.$emit(this.events.validated, valid)
+    async validateForm() {
+      const valid = await this.$refs.priceForm.validate()
+      this.$emit(this.events.validated, valid, this.form.id)
       return valid
     },
 
-    async resetForm() {
+    resetForm() {
       this.resetFormState()
-      this.$refs.priceForm?.reset()
       this.form = {
         id: this.$util.nanoid(),
         currency: 'myr',
@@ -245,7 +243,7 @@ export default {
         billingScheme: 'perunit',
         type: 'onetime',
       }
-      await this.$nextTick()
+      this.$refs.priceForm?.reset()
       this.$emit(this.events.resetted)
     },
 

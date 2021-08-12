@@ -36,6 +36,43 @@
                 @validated="onProductFormValidated"
               ></products-form>
             </b-card-body>
+
+            <box-header :title-text="ui.priceTitle">
+              <template #right>
+                <action-button preset="bv-new" size="sm" @click="addPrice">
+                  {{ ui.addNewPrice }}
+                </action-button>
+              </template>
+            </box-header>
+
+            <div v-for="(price, index) in prices" :key="price.id">
+              <b-card-body class="py-0 border-bottom">
+                <action-toggler
+                  :target="`price-${price.id}`"
+                  :text="ui.pricingDetails"
+                  :text-on-hide="getPricingText(price)"
+                  :visible="index === prices.length - 1"
+                  no-icon
+                  stretch
+                >
+                  <action-menu
+                    no-archive
+                    no-unarchive
+                    edit-hide
+                    toggle-class="btn-float"
+                    @delete="removePrice(index)"
+                  ></action-menu>
+
+                  <template #collapsible>
+                    <prices-form
+                      :price="price"
+                      @changed="onPriceFormChanged"
+                      @validated="onPriceFormValidated"
+                    ></prices-form>
+                  </template>
+                </action-toggler>
+              </b-card-body>
+            </div>
           </b-card>
         </b-col>
       </b-row>
@@ -44,7 +81,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'Create',
@@ -58,16 +95,28 @@ export default {
           submit: 'product-submit',
           reset: 'product-reset',
         },
+        prices: {
+          validate: 'price-validate',
+          submit: 'price-submit',
+          reset: 'price-reset',
+        },
       },
       ui: {
         pageTitle: this.$t('modules.products.createFormTitle'),
         productTitle: this.$t('modules.products.title'),
+        priceTitle: this.$t('modules.prices.title'),
         success: this.$t('general.saveSuccessfully'),
+        addNewPrice: this.$t('modules.prices.addNewPrice'),
+        pricingDetails: this.$t('modules.prices.pricingDetails'),
       },
 
-      // product form
+      // product
       product: { name: null, description: null },
       productComplete: false,
+
+      // prices
+      prices: [],
+      pricesComplete: new Map(),
 
       // states
       exitImmediately: true,
@@ -83,9 +132,12 @@ export default {
 
   computed: {
     ...mapGetters('user', ['account']),
+    ...mapState('prices', ['price']),
 
     formComplete() {
-      return !!this.productComplete
+      const array = Array.from(this.pricesComplete.values())
+      const hasInvalid = array.find((valid) => !valid)
+      return this.productComplete && !hasInvalid
     },
 
     showError() {
@@ -94,12 +146,33 @@ export default {
     },
   },
 
+  created() {
+    this.addPrice()
+  },
+
   methods: {
     ...mapActions('products', ['create']),
+
+    addPrice() {
+      const price = { ...this._.cloneDeep(this.price), id: this.$util.nanoid() }
+      this.prices.push(price)
+    },
+
+    removePrice(index) {
+      this.prices.splice(index, 1)
+    },
 
     routeToProductPage(id) {
       const location = { name: 'dashboard-products-id', params: { id: `prod_${id}` } }
       this.$router.push(this.localePath(location))
+    },
+
+    getPricingText(price) {
+      const { divideBy } = price.transformQuantity
+      const quantity = divideBy === 0 ? 1 : divideBy
+      return this.$tc('pluralization.pricePerUnit', quantity, {
+        _price: this.$n(price.unitAmount / 100, { style: 'currency', currency: price.currency }),
+      })
     },
 
     errorHandler(error) {
@@ -122,6 +195,7 @@ export default {
     },
 
     submitForm() {
+      this.product.prices = this.prices
       this.create({ account: this.account, payload: this.product }).then(
         (response) => this.successHandler(response),
         (error) => this.errorHandler(error)
@@ -130,7 +204,7 @@ export default {
 
     resetForm() {
       this.$nuxt.$emit(this.events.products.reset)
-      // this.$nuxt.$emit(this.events.prices.reset)
+      this.$nuxt.$emit(this.events.prices.reset)
 
       this.exitImmediately = true
       this.productComplete = false
@@ -141,11 +215,13 @@ export default {
     saveAndMore() {
       this.exitImmediately = false
       this.$nuxt.$emit(this.events.products.validate)
+      this.$nuxt.$emit(this.events.prices.validate)
     },
 
     save() {
       this.exitImmediately = true
       this.$nuxt.$emit(this.events.products.validate)
+      this.$nuxt.$emit(this.events.prices.validate)
     },
 
     onProductFormChanged(value) {
@@ -154,6 +230,16 @@ export default {
 
     onProductFormValidated(valid) {
       this.productComplete = valid
+      if (this.formComplete) this.submitForm()
+    },
+
+    onPriceFormChanged(value) {
+      const index = this.prices.findIndex((el) => el.id === value.id)
+      if (index >= 0) this.prices.splice(index, 1, value)
+    },
+
+    onPriceFormValidated(valid, id) {
+      this.pricesComplete.set(id, valid)
       if (this.formComplete) this.submitForm()
     },
   },

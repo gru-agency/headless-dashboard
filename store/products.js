@@ -137,13 +137,18 @@ const actions = {
     try {
       document = document || $util.nanoid()
 
-      const { ...dirty } = {
+      const { prices, ...dirty } = {
         ...payload,
         active: true,
         owner: account,
         created: FieldValue.serverTimestamp(),
         updated: FieldValue.serverTimestamp(),
       }
+      dirty.prices = prices.reduce((map, price) => {
+        const { id, ...data } = price
+        map[id] = { ...data, updated: FieldValue.serverTimestamp() }
+        return map
+      }, {})
       $log.tag('products').debug('[create] prod_%s by acct_%s %o', document, account, dirty)
 
       await $fire.firestore
@@ -171,7 +176,14 @@ const actions = {
     const { $fire, $fireModule, $log } = this.app.context
     const { FieldValue } = $fireModule.firestore
     try {
-      const { id, object, ...dirty } = { ...payload, updated: FieldValue.serverTimestamp() }
+      const { id, object, prices, ...dirty } = { ...payload, updated: FieldValue.serverTimestamp() }
+      if (prices) {
+        dirty.prices = prices.reduce((map, price) => {
+          const { id, ...data } = price
+          map[id] = { ...data, updated: FieldValue.serverTimestamp() }
+          return map
+        }, {})
+      }
       $log.tag('products').debug('[update] prod_%s by acct_%s %o', document, account, dirty)
 
       await $fire.firestore

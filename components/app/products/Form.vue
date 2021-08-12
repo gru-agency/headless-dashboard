@@ -8,9 +8,7 @@
           <tag-field preset="bv-required"></tag-field>
         </template>
         <b-input id="prod-name" v-model="form.name" :state="$vee.state(vp)" size="lg" lazy trim></b-input>
-        <b-form-invalid-feedback>
-          <span><icon preset="bv-error" class="mr-2"></icon>{{ $vee.error(vp) }}</span>
-        </b-form-invalid-feedback>
+        <form-feedback :msg="$vee.error(vp)"></form-feedback>
       </b-form-group>
     </validation-provider>
 
@@ -26,7 +24,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Form',
@@ -74,61 +72,21 @@ export default {
 
   mounted() {
     this.$nuxt.$on(this.events.validate, this.validateForm)
-    this.$nuxt.$on(this.events.submit, this.submitForm)
     this.$nuxt.$on(this.events.reset, this.resetForm)
   },
 
   beforeDestroy() {
     this.$nuxt.$off(this.events.validate)
-    this.$nuxt.$off(this.events.submit)
     this.$nuxt.$off(this.events.reset)
   },
 
   methods: {
-    ...mapActions('products', ['create', 'update']),
-
-    populateForm(value) {
-      if (value) this.form = this._.cloneDeep(value)
+    populateForm(value, oldValue) {
+      if (value && !oldValue) this.form = this._.cloneDeep(value)
     },
 
     onFormChanged(value) {
       this.$emit(this.events.changed, value)
-    },
-
-    errorHandler(error) {
-      this.server = {
-        ...this.server,
-        validated: true,
-        valid: false,
-        code: error.code,
-        message: this.$t('general.error5xx'),
-      }
-
-      this.$emit(this.events.submitted, false, this.server)
-    },
-
-    successHandler(response) {
-      this.server = { ...this.server, validated: true, valid: true }
-      this.$emit(this.events.submitted, true, null, response)
-      this.resetForm()
-    },
-
-    submitForm() {
-      const valid = this.validateForm()
-      if (!valid) return
-
-      this.resetFormState()
-      if (this.editMode) {
-        this.update({ document: this.id, account: this.account, payload: this.form }).then(
-          (response) => this.successHandler(response),
-          (error) => this.errorHandler(error)
-        )
-      } else {
-        this.create({ account: this.account, payload: this.form }).then(
-          (response) => this.successHandler(response),
-          (error) => this.errorHandler(error)
-        )
-      }
     },
 
     async validateForm() {
