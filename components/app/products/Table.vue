@@ -40,6 +40,7 @@
           :edit-link="editLink(item)"
           :no-archive="!item.active"
           :no-unarchive="item.active"
+          toggle-class="btn-float"
           @delete="remove(item)"
           @archive="archive(item)"
           @unarchive="unarchive(item)"

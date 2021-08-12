@@ -31,6 +31,7 @@
           :primary-key="item.id"
           no-archive
           no-unarchive
+          toggle-class="btn-float"
           @edit="promptModal(item)"
           @delete="remove(item)"
         ></action-menu>
