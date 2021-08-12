@@ -97,7 +97,7 @@ export default {
         { key: 'more', label: '', tdClass: 'w-5p' },
       ],
       currentPage: 1,
-      perPage: 2,
+      perPage: 10,
 
       // keep track of last fetched page to reduce unnecessary pagination
       lastNextPage: 1,
