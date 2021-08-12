@@ -147,11 +147,11 @@ export default {
     populateForm() {
       this.product = { ...this.productCache }
       const prices = this.productCache.prices || []
-      prices.forEach((el) => this.prices.push(this._.cloneDeep(el)))
+      prices.forEach((el) => this.prices.push(this.$_.cloneDeep(el)))
     },
 
     addPrice() {
-      const price = { ...this._.cloneDeep(this.price), id: this.$util.nanoid() }
+      const price = { ...this.$_.cloneDeep(this.price), id: this.$util.nanoid() }
       this.prices.push(price)
     },
 

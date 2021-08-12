@@ -181,7 +181,7 @@ export default {
 
     populateForm(value, oldValue) {
       if (value && !oldValue) {
-        this.form = this._.cloneDeep(value)
+        this.form = this.$_.cloneDeep(value)
         this.pricing = this.form.transformQuantity.divideBy > 1 ? 'package' : 'standard'
       } else if (!value && !oldValue) this.form = this.$_.cloneDeep(this.initialPrice)
     },
