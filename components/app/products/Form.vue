@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'Form',
@@ -51,13 +51,14 @@ export default {
         nameTips: this.$t('modules.products.nameTips'),
         descriptionTips: this.$t('modules.products.descriptionTips'),
       },
-      form: { name: null, description: null },
+      form: {},
       server: { validated: false, valid: false, field: null, code: null, message: null },
     }
   },
 
   computed: {
     ...mapGetters('user', ['account']),
+    ...mapState('products', { initialProduct: 'product' }),
 
     showError() {
       const { validated, valid, field } = this.server
@@ -82,7 +83,8 @@ export default {
 
   methods: {
     populateForm(value, oldValue) {
-      if (value && !oldValue) this.form = this._.cloneDeep(value)
+      if (value && !oldValue) this.form = this.$_.cloneDeep(value)
+      else if (!value && !oldValue) this.form = this.$_.cloneDeep(this.initialProduct)
     },
 
     onFormChanged(value) {
@@ -97,7 +99,7 @@ export default {
 
     resetForm() {
       this.server = { validated: false, valid: false, field: null, code: null, message: null }
-      this.form = { name: null, description: null }
+      this.form = this.$_.cloneDeep(this.initialProduct)
       this.$refs.productForm?.reset()
       this.$emit(this.events.resetted)
     },

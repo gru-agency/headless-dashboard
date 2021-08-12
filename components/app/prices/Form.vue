@@ -80,6 +80,8 @@
       </template>
     </action-toggler>
 
+    {{ form }}
+
     <b-alert :show="showError" variant="danger">
       <icon preset="bv-error" class="mr-2"></icon> {{ server.message }}
     </b-alert>
@@ -87,7 +89,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'Form',
@@ -136,21 +138,14 @@ export default {
       // currency
       currencyOptions: [{ value: 'myr', text: 'MYR' }],
 
-      form: {
-        id: this.$util.nanoid(),
-        currency: 'myr',
-        unitAmount: 0,
-        description: null,
-        transformQuantity: { divideBy: 0, round: 'up' },
-        billingScheme: 'perunit',
-        type: 'onetime',
-      },
+      form: {},
       server: { validated: false, valid: false, field: null, code: null, message: null },
     }
   },
 
   computed: {
     ...mapGetters('user', ['account']),
+    ...mapState('prices', { initialPrice: 'price' }),
 
     editMode() {
       return !!this.price
@@ -187,9 +182,10 @@ export default {
     ...mapActions('products', ['setPrice']),
 
     populateForm(value, oldValue) {
-      if (!value || oldValue) return
-      this.form = this._.cloneDeep(value)
-      this.pricing = this.form.transformQuantity.divideBy > 1 ? 'package' : 'standard'
+      if (value && !oldValue) {
+        this.form = this._.cloneDeep(value)
+        this.pricing = this.form.transformQuantity.divideBy > 1 ? 'package' : 'standard'
+      } else if (!value && !oldValue) this.form = this.$_.cloneDeep(this.initialPrice)
     },
 
     onFormChanged(value) {
@@ -234,15 +230,7 @@ export default {
 
     resetForm() {
       this.resetFormState()
-      this.form = {
-        id: this.$util.nanoid(),
-        currency: 'myr',
-        unitAmount: 0,
-        description: null,
-        transformQuantity: { divideBy: 0, round: 'up' },
-        billingScheme: 'perunit',
-        type: 'onetime',
-      }
+      this.form = this.$_.cloneDeep(this.initialPrice)
       this.$refs.priceForm?.reset()
       this.$emit(this.events.resetted)
     },
