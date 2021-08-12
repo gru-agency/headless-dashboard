@@ -11554,10 +11554,10 @@ vue-client-only@^2.0.0:
   resolved "https://registry.yarnpkg.com/vue-client-only/-/vue-client-only-2.1.0.tgz#1a67a47b8ecacfa86d75830173fffee3bf8a4ee3"
   integrity sha512-vKl1skEKn8EK9f8P2ZzhRnuaRHLHrlt1sbRmazlvsx6EiC3A8oWF8YCBrMJzoN+W3OnElwIGbVjsx6/xelY1AA==
 
-vue-currency-input@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/vue-currency-input/-/vue-currency-input-2.0.0.tgz#c54e0df357f64f9318253e4d23a3c24676194d9f"
-  integrity sha512-y6KnBmz5Y/CIB3El94ax0UzSicaRMMjjknnSHlivMaEhOJwyw19sxXoPeUhsoG0fKYsvRpGiOqFmiqpmi1+zAA==
+vue-currency-input@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/vue-currency-input/-/vue-currency-input-2.0.1.tgz#03e1d53f9188bc19bf26c8351e148ed60092ec6c"
+  integrity sha512-ZWLZSC9QevTedChh3TfwlwNmF5KKV3+1ICT7AbF+7/0jIzh8jf0pTWD6/0JYnohV8X3i7myNcuzEPqrUNhDcbg==
   dependencies:
     vue-demi "^0.9.0"
 
