@@ -80,8 +80,6 @@
       </template>
     </action-toggler>
 
-    {{ form }}
-
     <b-alert :show="showError" variant="danger">
       <icon preset="bv-error" class="mr-2"></icon> {{ server.message }}
     </b-alert>
