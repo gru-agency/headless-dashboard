@@ -126,6 +126,39 @@ a {
   }
 }
 
+// button
+.btn-unstyled {
+  color: $body-color;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: 0;
+
+  &:focus,
+  &.focus {
+    outline: 0 !important;
+    box-shadow: none !important;
+  }
+}
+
+.btn-float {
+  color: $body-color;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: 0;
+
+  &:hover,
+  &.hover {
+    background-color: $light !important;
+    box-shadow: $btn-box-shadow !important;
+  }
+
+  &:focus,
+  &.focus {
+    outline: 0 !important;
+    box-shadow: none !important;
+  }
+}
+
 // tabs
 .nav-tabs {
   .nav-link {
