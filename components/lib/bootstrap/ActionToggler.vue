@@ -1,13 +1,26 @@
 <template>
-  <b-link v-b-toggle :href="getTarget" :class="getVariant" @click.prevent>
-    <span class="d-flex align-items-center" :class="{ 'justify-content-between': iconRight }">
-      <slot>
-        <span class="mr-2"> {{ text || options }} </span>
-      </slot>
-
-      <icon :icon="icon"></icon>
-    </span>
-  </b-link>
+  <div class="my-4">
+    <div v-if="stretch" class="d-flex">
+      <div class="flex-grow-1">
+        <action-button v-b-toggle="target" size="sm" block class="text-left btn-unstyled px-0">
+          {{ getTextOnCollapse }} <icon v-if="!noIcon" :icon="icon" class="ml-2"></icon>
+        </action-button>
+      </div>
+      <!-- default slot is needed to accommodate delete function, else will raise error -->
+      <div><slot></slot></div>
+      <div>
+        <action-button v-b-toggle="target" size="sm" class="btn-unstyled">
+          <icon :icon="icon"></icon>
+        </action-button>
+      </div>
+    </div>
+    <b-link v-else v-b-toggle="target" @click.prevent>
+      {{ getTextOnCollapse }} <icon v-if="!noIcon" :icon="icon" class="ml-2"></icon>
+    </b-link>
+    <b-collapse :id="target" :visible="visible" @show="onShow" @hide="onHide">
+      <div class="my-4"><slot name="collapsible"></slot></div>
+    </b-collapse>
+  </div>
 </template>
 
 <script>
@@ -20,20 +33,40 @@ export default {
     variant: { type: String, default: undefined },
     icon: { type: Array, default: () => ['far', 'chevron-down'] },
     iconRight: { type: Boolean, default: false },
+    textOnHide: { type: String, default: undefined },
+    visible: { type: Boolean, default: false },
+    stretch: { type: Boolean, default: false },
+    noIcon: { type: Boolean, default: false },
   },
 
   data() {
-    return { options: this.$t('general.additionalOptions') }
+    return { options: this.$t('general.additionalOptions'), collapse: !this.visible }
   },
 
   computed: {
-    getTarget() {
-      return this.target ? `#${this.target}` : '#'
-    },
-
     getVariant() {
       return this.variant ? `text-${this.variant}` : undefined
     },
+
+    getText() {
+      return this.text || this.options
+    },
+
+    getTextOnCollapse() {
+      return this.collapse ? this.textOnHide || this.getText : this.getText
+    },
+  },
+
+  methods: {
+    onShow() {
+      this.collapse = false
+    },
+
+    onHide() {
+      this.collapse = true
+    },
+
+    toggle() {},
   },
 }
 </script>
