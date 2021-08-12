@@ -61,6 +61,8 @@ export default {
         // regular
         'bv-more': { icon: ['far', 'ellipsis-h'] },
         'bv-close': { icon: ['far', 'times'] },
+        'bv-down': { icon: ['far', 'chevron-down'] },
+        'bv-plus': { icon: ['far', 'plus'] },
       },
     }
   },
