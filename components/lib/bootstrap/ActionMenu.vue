@@ -5,7 +5,7 @@
     :variant="variant"
     :disabled="disabled"
     :boundary="boundary"
-    :toggle-classs="toggleClass"
+    :toggle-class="toggleClass"
     no-caret
     right
   >
@@ -26,7 +26,7 @@
         {{ editText || defaultText.edit }}
       </b-dd-item>
 
-      <b-dd-item v-if="showArchive" :id="getId('archive')" @click.prevent="sendEvents('archive')">
+      <b-dd-item v-if="!noArchive" :id="getId('archive')" @click.prevent="sendEvents('archive')">
         <icon preset="bv-archive" class="mr-2"></icon>
         {{ archiveText || defaultText.archive }}
       </b-dd-item>
@@ -36,7 +36,7 @@
         {{ unarchiveText || defaultText.unarchive }}
       </b-dd-item>
 
-      <b-dd-divider v-if="!deleteHide"></b-dd-divider>
+      <b-dd-divider v-if="!deleteHide && hasUpperGroup"></b-dd-divider>
 
       <b-dd-item
         v-if="!deleteHide"
@@ -96,9 +96,9 @@ export default {
   },
 
   computed: {
-    showArchive() {
-      return !this.noArchive
-    },
+hasUpperGroup(){
+  return !this.editHide || !this.noArchive || !this.noUnarchive
+}
   },
 
   methods: {
