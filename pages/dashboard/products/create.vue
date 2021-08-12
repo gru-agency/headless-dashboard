@@ -111,7 +111,7 @@ export default {
       },
 
       // product
-      product: { name: null, description: null },
+      product: {},
       productComplete: false,
 
       // prices
@@ -133,12 +133,7 @@ export default {
   computed: {
     ...mapGetters('user', ['account']),
     ...mapState('prices', ['price']),
-
-    formComplete() {
-      const array = Array.from(this.pricesComplete.values())
-      const hasInvalid = array.find((valid) => !valid)
-      return this.productComplete && !hasInvalid
-    },
+    ...mapState('products', { initialProduct: 'product' }),
 
     showError() {
       const { validated, valid, field } = this.server
@@ -147,14 +142,19 @@ export default {
   },
 
   created() {
+    this.initProduct()
     this.addPrice()
   },
 
   methods: {
     ...mapActions('products', ['create']),
 
+    initProduct() {
+      this.product = this.$_.cloneDeep(this.initialProduct)
+    },
+
     addPrice() {
-      const price = { ...this._.cloneDeep(this.price), id: this.$util.nanoid() }
+      const price = { ...this.$_.cloneDeep(this.price), id: this.$util.nanoid() }
       this.prices.push(price)
     },
 
@@ -173,6 +173,17 @@ export default {
       return this.$tc('pluralization.pricePerUnit', quantity, {
         _price: this.$n(price.unitAmount / 100, { style: 'currency', currency: price.currency }),
       })
+    },
+
+    hasFormCompleted() {
+      let incomplete = false
+      for (let i = 0; i < this.prices.length; i++) {
+        if (this.pricesComplete.get(this.prices[i].id) !== true) {
+          incomplete = true
+          break
+        }
+      }
+      return this.productComplete && !incomplete
     },
 
     errorHandler(error) {
@@ -207,9 +218,13 @@ export default {
       this.$nuxt.$emit(this.events.prices.reset)
 
       this.exitImmediately = true
+      this.prices = []
+      this.pricesComplete = new Map()
       this.productComplete = false
-      this.product = { name: null, description: null }
+      this.product = this.$_.cloneDeep(this.initialProduct)
       this.server = { validated: false, valid: false, field: null, code: null, message: null }
+
+      this.addPrice()
     },
 
     saveAndMore() {
@@ -230,7 +245,7 @@ export default {
 
     onProductFormValidated(valid) {
       this.productComplete = valid
-      if (this.formComplete) this.submitForm()
+      if (this.hasFormCompleted()) this.submitForm()
     },
 
     onPriceFormChanged(value) {
@@ -240,7 +255,7 @@ export default {
 
     onPriceFormValidated(valid, id) {
       this.pricesComplete.set(id, valid)
-      if (this.formComplete) this.submitForm()
+      if (this.hasFormCompleted()) this.submitForm()
     },
   },
 }

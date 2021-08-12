@@ -99,7 +99,7 @@ export default {
       },
 
       // product form
-      product: { name: null, description: null },
+      product: {},
       productComplete: false,
 
       // prices
@@ -121,12 +121,6 @@ export default {
     ...mapGetters('user', ['account']),
     ...mapGetters('products', ['find']),
     ...mapState('prices', ['price']),
-
-    formComplete() {
-      const array = Array.from(this.pricesComplete.values())
-      const hasInvalid = array.find((valid) => !valid)
-      return this.productComplete && !hasInvalid
-    },
 
     showError() {
       const { validated, valid, field } = this.server
@@ -178,6 +172,17 @@ export default {
       })
     },
 
+    hasFormCompleted() {
+      let incomplete = false
+      for (let i = 0; i < this.prices.length; i++) {
+        if (this.pricesComplete.get(this.prices[i].id) !== true) {
+          incomplete = true
+          break
+        }
+      }
+      return this.productComplete && !incomplete
+    },
+
     errorHandler(error) {
       this.server = {
         ...this.server,
@@ -211,7 +216,7 @@ export default {
 
     onProductFormValidated(valid) {
       this.productComplete = valid
-      if (this.formComplete) this.submitForm()
+      if (this.hasFormCompleted()) this.submitForm()
     },
 
     onPriceFormChanged(value) {
@@ -221,7 +226,7 @@ export default {
 
     onPriceFormValidated(valid, id) {
       this.pricesComplete.set(id, valid)
-      if (this.formComplete) this.submitForm()
+      if (this.hasFormCompleted()) this.submitForm()
     },
   },
 }

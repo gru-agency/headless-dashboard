@@ -12,6 +12,11 @@ const state = () => ({
    * Format: { timestamp, owner }
    */
   fetchMetadata: [],
+
+  /**
+   * Iniatial state of the object
+   */
+  product: { name: null, description: null },
 })
 
 const getters = {
