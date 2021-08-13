@@ -58,6 +58,7 @@
           btn-variant="primary"
           icon-preset="bv-product"
           class="h-half-screen"
+          icon-holder
         ></box-state>
       </template>
 

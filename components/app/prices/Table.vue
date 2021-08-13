@@ -47,6 +47,7 @@
           icon-preset="bv-price"
           modal="price-modal"
           class="h-half-screen"
+          icon-holder
         ></box-state>
       </template>
 
