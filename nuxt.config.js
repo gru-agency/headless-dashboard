@@ -57,7 +57,7 @@ export default {
     // https://go.nuxtjs.dev/stylelint
     '@nuxtjs/stylelint-module',
     // https://i18n.nuxtjs.org
-    'nuxt-i18n',
+    '@nuxtjs/i18n',
     // https://bootstrap-vue.org/
     'bootstrap-vue/nuxt',
     // https://firebase.nuxtjs.org/
@@ -178,8 +178,7 @@ export default {
     langDir: '~/locales/',
     strategy: 'prefix',
     defaultLocale: 'en',
-    detectBrowserLanguage: { alwaysRedirect: false, fallbackLocale: 'en', onlyOnRoot: true, useCookie: true },
-    seo: false, // performance concern, enable lazily
+    detectBrowserLanguage: { fallbackLocale: 'en', useCookie: true },
     vuex: false,
     vueI18n: { fallbackLocale: 'en', dateTimeFormats, numberFormats },
   },

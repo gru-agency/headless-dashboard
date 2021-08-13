@@ -53,7 +53,7 @@ export default {
   },
 
   head() {
-    const i18nHead = this.$nuxtI18nHead({ addSeoAttributes: true })
+    const i18nHead = this.$nuxtI18nHead({ addDirAttribute: true, addSeoAttributes: true })
     return {
       title: this.$config.brandName,
       htmlAttrs: { ...i18nHead.htmlAttrs },
