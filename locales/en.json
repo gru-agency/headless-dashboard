@@ -139,6 +139,7 @@
   },
 
   "pluralization": {
+    "prices":"No prices | {n} prices",
     "pricePerUnit": "{_price} | {_price} group of {n}",
     "tableResults": "No result | {n} result | {n} results"
   },

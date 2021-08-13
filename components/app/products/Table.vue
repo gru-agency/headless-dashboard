@@ -16,9 +16,10 @@
         <image-field :image="value[0]" icon-preset="bv-product"></image-field>
       </template>
 
-      <template #cell(name)="{ item, value }">
+      <template #cell(product)="{ item }">
         <b-link :to="getLink(item)" class="stretched-link"> </b-link>
-        <text-field :text="value"></text-field>
+        <text-field :text="item.name"></text-field>
+        <text-field :text="getPricingText(item)" class="text-secondary"></text-field>
       </template>
 
       <template #cell(active)="{ item, value }">
@@ -91,7 +92,7 @@ export default {
       },
       fields: [
         { key: 'images', label: '', tdClass: 'w-5p position-relative' },
-        { key: 'name', label: this.$t('general.name'), tdClass: 'position-relative' },
+        { key: 'product', label: this.$t('general.product'), tdClass: 'position-relative' },
         { key: 'active', label: this.$t('general.status'), tdClass: 'w-10p position-relative' },
         { key: 'updated', label: this.$t('general.updated'), tdClass: 'w-20p position-relative' },
         { key: 'more', label: '', tdClass: 'w-5p' },
@@ -213,6 +214,22 @@ export default {
 
     editLink(item) {
       return this.localePath({ name: 'dashboard-products-id-edit', params: { id: 'prod_' + item.id } })
+    },
+
+    getPricingText(item) {
+      const { prices } = item
+      if (prices.length === 0) {
+        return this.$tc('pluralization.prices')
+      } else if (prices.length > 1) {
+        return this.$tc('pluralization.prices', prices.length)
+      } else {
+        const price = item.prices[0]
+        const { divideBy } = price.transformQuantity
+        const quantity = divideBy === 0 ? 1 : divideBy
+        return this.$tc('pluralization.pricePerUnit', quantity, {
+          _price: this.$n(price.unitAmount / 100, { style: 'currency', currency: price.currency }),
+        })
+      }
     },
   },
 }
