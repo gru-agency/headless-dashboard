@@ -14,6 +14,6 @@ export default ({ isDev }, inject) => {
    * no log output if production
    */
   ;(() => {
-    consola.level = isDev ? 4 : -1
+    consola.level = isDev ? 4 : 1
   })()
 }

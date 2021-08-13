@@ -1,44 +1,47 @@
 <template>
   <b-card-body class="row justify-content-center p-sm-4" :class="{ 'h-half-screen': fixedHeight }">
     <div class="align-self-center">
-      <slot name="icon">
-        <b-card-text class="mb-8">
-          <icon v-if="isLoading" :preset="getPresetIcon" size="2x" pulse></icon>
-          <span v-else>
-            <b-avatar v-if="iconHolder" size="3rem" variant="light" class="shadow-sm" rounded>
-              <icon :icon="icon" :preset="getPresetIcon" :class="getIconClass" size="2x"></icon>
-            </b-avatar>
-            <icon v-else :icon="icon" :preset="getPresetIcon" :class="getIconClass" size="2x"></icon>
-          </span>
-        </b-card-text>
-      </slot>
+      <div class="text-wrap" :class="[centerAlign ? 'text-center' : 'text-left']" style="max-width: 500px">
+        <slot name="icon">
+          <b-card-text class="mb-8">
+            <icon v-if="isLoading" :preset="getPresetIcon" class="fa-lg" pulse></icon>
+            <span v-else>
+              <b-avatar v-if="iconHolder" size="3rem" variant="light" class="shadow-sm" rounded>
+                <icon :icon="icon" :preset="getPresetIcon" :class="getIconClass" class="fa-lg"></icon>
+              </b-avatar>
+              <icon v-else :icon="icon" :preset="getPresetIcon" :class="getIconClass" class="fa-lg"></icon>
+            </span>
+          </b-card-text>
+        </slot>
 
-      <slot name="title">
-        <b-card-title v-if="getTitle">{{ getTitle }}</b-card-title>
-      </slot>
+        <slot name="title">
+          <b-card-title v-if="getTitle">{{ getTitle }}</b-card-title>
+        </slot>
 
-      <slot name="subtitle">
-        <b-card-text v-if="subtitle">{{ subtitle }}</b-card-text>
-      </slot>
+        <slot name="subtitle">
+          <b-card-text v-if="subtitle">{{ subtitle }}</b-card-text>
+        </slot>
 
-      <slot name="body">
-        <b-card-text class="text-secondary">{{ getBody }}</b-card-text>
-      </slot>
+        <slot name="body">
+          <b-card-text class="text-secondary">{{ getBody }}</b-card-text>
+        </slot>
 
-      <slot name="action">
-        <action-button
-          v-if="shouldShowButton"
-          :preset="getPresetAction"
-          :variant="btnVariant"
-          :text="btnText"
-          :link="btnLink"
-          :size="btnSize"
-          :disabled="btnDisabled"
-          :link-append="btnLinkAppend"
-          :prefetch="btnLink ? true : false"
-          @click="sendEvents"
-        ></action-button>
-      </slot>
+        <slot name="action">
+          <action-button
+            v-if="shouldShowButton"
+            :preset="getPresetAction"
+            :variant="btnVariant"
+            :text="btnText"
+            :link="btnLink"
+            :size="btnSize"
+            :disabled="btnDisabled"
+            :link-append="btnLinkAppend"
+            :prefetch="btnLink ? true : false"
+            :modal="modal"
+            @click="sendEvents"
+          ></action-button>
+        </slot>
+      </div>
     </div>
   </b-card-body>
 </template>
@@ -65,6 +68,7 @@ export default {
     iconHolder: { type: Boolean, default: false },
     fixedHeight: { type: Boolean, default: false },
     iconPreset: { type: String, default: undefined },
+    modal: { type: String, default: undefined },
   },
 
   data() {
@@ -111,11 +115,11 @@ export default {
     },
 
     isEmpty() {
-      return this.state === 'empty' 
+      return this.state === 'empty'
     },
 
     isError() {
-      return this.state === 'error' 
+      return this.state === 'error'
     },
 
     isSuccess() {
@@ -131,7 +135,15 @@ export default {
     },
 
     getBody() {
-      return this.state === 'search' ? this.searchSubtitle : this.subtitle
+      return this.state === 'search' ? this.searchSubtitle : this.body
+    },
+
+    bodyLetterCount() {
+      return this.body?.length || 0
+    },
+
+    centerAlign() {
+      return this.bodyLetterCount <= 120
     },
   },
 

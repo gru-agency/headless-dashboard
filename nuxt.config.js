@@ -40,6 +40,7 @@ export default {
     { mode: 'client', src: '~/plugins/i18n.js' },
     { mode: 'client', src: '~/plugins/dayjs.js' },
     { mode: 'client', src: '~/plugins/utils.js' },
+    { mode: 'client', src: '~/plugins/lodash.js' },
     { mode: 'client', src: '~/plugins/consola.js' },
     { mode: 'client', src: '~/plugins/vee-validate.js' },
   ],
@@ -56,7 +57,7 @@ export default {
     // https://go.nuxtjs.dev/stylelint
     '@nuxtjs/stylelint-module',
     // https://i18n.nuxtjs.org
-    'nuxt-i18n',
+    '@nuxtjs/i18n',
     // https://bootstrap-vue.org/
     'bootstrap-vue/nuxt',
     // https://firebase.nuxtjs.org/
@@ -85,6 +86,8 @@ export default {
       compact: true,
       presets: [['@nuxt/babel-preset-app', { corejs: { version: '3.16.0' }, useBuiltIns: 'entry' }]],
     },
+
+    loaders: { vue: { compiler: require('vue-template-babel-compiler') } },
   },
 
   alias: {
@@ -175,8 +178,7 @@ export default {
     langDir: '~/locales/',
     strategy: 'prefix',
     defaultLocale: 'en',
-    detectBrowserLanguage: { alwaysRedirect: false, fallbackLocale: 'en', onlyOnRoot: true, useCookie: true },
-    seo: false, // performance concern, enable lazily
+    detectBrowserLanguage: { fallbackLocale: 'en', useCookie: true },
     vuex: false,
     vueI18n: { fallbackLocale: 'en', dateTimeFormats, numberFormats },
   },

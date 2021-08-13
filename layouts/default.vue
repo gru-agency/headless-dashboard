@@ -7,7 +7,7 @@ export default {
   name: 'Default',
 
   head() {
-    return this.$nuxtI18nHead({ addSeoAttributes: true })
+    return this.$nuxtI18nHead({ addDirAttribute: true, addSeoAttributes: true })
   },
 
   mounted() {

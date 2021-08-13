@@ -4,16 +4,16 @@
     :size="size"
     :variant="variant"
     :disabled="disabled"
-    :boundary="boundary"
-    :toggle-classs="toggleClass"
+    :toggle-class="toggleClass"
     no-caret
     right
   >
-    <template #button-content> <icon preset="bv-more-v"></icon> </template>
+    <template #button-content> <icon preset="bv-more"></icon> </template>
 
     <slot>
       <b-dd-item
         v-if="!editHide"
+        v-b-modal="editModal"
         :to="editLink"
         :variant="editVariant"
         :disabled="editDisabled"
@@ -28,10 +28,6 @@
       <b-dd-item v-if="!noArchive" :id="getId('archive')" @click.prevent="sendEvents('archive')">
         <icon preset="bv-archive" class="mr-2"></icon>
         {{ archiveText || defaultText.archive }}
-
-        <b-popover :target="getId('archive')" triggers="hover" placement="left">
-          <slot name="archive">{{ defaultText.archiveTips }}</slot>
-        </b-popover>
       </b-dd-item>
 
       <b-dd-item v-if="!noUnarchive" @click.prevent="sendEvents('unarchive')">
@@ -39,7 +35,7 @@
         {{ unarchiveText || defaultText.unarchive }}
       </b-dd-item>
 
-      <b-dd-divider v-if="!deleteHide"></b-dd-divider>
+      <b-dd-divider v-if="!deleteHide && hasUpperGroup"></b-dd-divider>
 
       <b-dd-item
         v-if="!deleteHide"
@@ -64,7 +60,6 @@ export default {
     lazy: { type: Boolean, default: false },
     variant: { type: String, default: 'light' },
     disabled: { type: Boolean, default: false },
-    boundary: { type: String, default: 'window' },
     toggleClass: { type: String, default: undefined },
     editText: { type: String, default: undefined },
     editLink: { type: String, default: undefined },
@@ -72,6 +67,7 @@ export default {
     editHide: { type: Boolean, default: false },
     editDisabled: { type: Boolean, default: false },
     editLinkAppend: { type: Boolean, default: false },
+    editModal: { type: String, default: undefined },
     deleteText: { type: String, default: undefined },
     deleteLink: { type: String, default: undefined },
     deleteVariant: { type: String, default: 'danger' },
@@ -95,6 +91,12 @@ export default {
         unarchive: this.$t('general.unarchive'),
       },
     }
+  },
+
+  computed: {
+    hasUpperGroup() {
+      return !this.editHide || !this.noArchive || !this.noUnarchive
+    },
   },
 
   methods: {

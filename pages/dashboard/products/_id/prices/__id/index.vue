@@ -1,13 +1,12 @@
 <template>
   <div v-if="product">
-    <products-info-card :product="product"></products-info-card>
-    <products-price-card :prices="prices" :product="objectId"></products-price-card>
+    <prices-info-card :product="product" :price="price"></prices-info-card>
   </div>
 
   <box-state
     v-else
     state="empty"
-    icon-preset="bv-product"
+    icon-preset="bv-price"
     :title="notFoundTitle"
     :body="notFoundSubtitle"
     :btn-text="notFoundButton"
@@ -26,15 +25,15 @@ export default {
 
   data() {
     return {
-      notFoundTitle: this.$t('modules.products.notFoundTitle'),
-      notFoundSubtitle: this.$t('modules.products.notFoundSubtitle'),
+      notFoundTitle: this.$t('modules.prices.notFoundTitle'),
+      notFoundSubtitle: this.$t('modules.prices.notFoundSubtitle'),
       notFoundButton: this.$t('modules.products.notFoundButton'),
     }
   },
 
   head() {
     return {
-      title: this.$t('seo.products', { _brand: this.$config.brandName }),
+      title: this.$t('seo.prices', { _brand: this.$config.brandName }),
     }
   },
 
@@ -42,17 +41,22 @@ export default {
     ...mapGetters('user', ['account']),
     ...mapGetters('products', ['find']),
 
-    objectId() {
+    productId() {
       const parts = this.$route.params.id.split('_')
       return parts.length === 2 ? parts[1] : parts[0]
     },
 
     product() {
-      return this.find(this.objectId, this.account)
+      return this.find(this.productId, this.account)
     },
 
-    prices() {
-      return this.product?.prices
+    priceId() {
+      const parts = this.$route.params._id.split('_')
+      return parts.length === 2 ? parts[1] : parts[0]
+    },
+
+    price() {
+      return this.product?.prices?.find((el) => el.id === this.priceId)
     },
 
     listLink() {

@@ -1,7 +1,9 @@
 <template>
   <b-button
+    v-b-modal="modal"
     :to="link"
     :size="size"
+    :exact="exact"
     :block="block"
     :variant="variant"
     :disabled="disabled"
@@ -9,7 +11,7 @@
     :prefetch="link ? true : false"
     @click.prevent="$emit('click')"
   >
-    <icon :icon="getIcon" size="sm"></icon>
+    <icon :icon="getIcon" size="sm" :preset="iconPreset" class="fa-sm"></icon>
     <slot> {{ getText }} </slot>
   </b-button>
 </template>
@@ -28,12 +30,15 @@ export default {
     disabled: { type: Boolean, default: false },
     linkAppend: { type: Boolean, default: false },
     icon: { type: Array, default: () => null },
+    modal: { type: String, default: undefined },
+    exact: { type: [Boolean, String], default: true },
+    iconPreset: { type: String, default: undefined },
   },
 
   data() {
     return {
       presets: {
-        'bv-new': { text: this.$t('general.new'), icon: ['fas', 'plus'] },
+        'bv-new': { text: this.$t('general.new'), icon: ['far', 'plus'] },
         'bv-edit': { text: this.$t('general.edit'), icon: ['fad', 'pencil'] },
         'bv-next': { text: this.$t('general.next'), icon: undefined },
         'bv-prev': { text: this.$t('general.previous'), icon: undefined },

@@ -38,6 +38,7 @@
             :text="btnText"
             :link="btnLink"
             :size="btnSize"
+            :modal="modal"
             :link-append="btnLinkAppend"
             @click="sendEvents(newBtn ? 'new' : editBtn ? 'edit' : 'click')"
           ></action-button>
@@ -68,6 +69,7 @@ export default {
     parentLink: { type: Boolean, default: false },
     parentLinkText: { type: String, default: undefined },
     parentLinkVariant: { type: String, default: undefined },
+    modal: { type: String, default: undefined },
   },
 
   computed: {

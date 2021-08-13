@@ -3,11 +3,11 @@
     <box-header :title-text="product.name" parent-link :parent-link-text="ui.title">
       <template #right>
         <action-menu
-          :primary-key="productId"
+          :primary-key="objectId"
           :edit-link="editLink"
-          delete-hide
           :no-archive="!product.active"
           :no-unarchive="product.active"
+          @delete="remove"
           @archive="archive"
           @unarchive="unarchive"
         ></action-menu>
@@ -19,7 +19,7 @@
         <b-col lg="6">
           <b-row tag="dl" class="mb-0">
             <b-col xl="3" tag="dt"> ID </b-col>
-            <b-col xl="9" tag="dd"> <text-field :text="productId"></text-field> </b-col>
+            <b-col xl="9" tag="dd"> <text-field :text="`prod_${objectId}`"></text-field> </b-col>
             <b-col xl="3" tag="dt"> {{ ui.name }} </b-col>
             <b-col xl="9" tag="dd"> <text-field :text="product.name"></text-field> </b-col>
             <b-col xl="3" tag="dt"> {{ ui.status }} </b-col>
@@ -28,9 +28,13 @@
               <tag-field v-if="!product.active" preset="bv-archive" variant="secondary"></tag-field>
             </b-col>
             <b-col xl="3" tag="dt"> {{ ui.created }} </b-col>
-            <b-col xl="9" tag="dd"> <text-field :date="product.created.toDate()"></text-field></b-col>
+            <b-col xl="9" tag="dd">
+              <text-field :date="product.created" date-format="long"></text-field>
+            </b-col>
             <b-col xl="3" tag="dt"> {{ ui.updated }} </b-col>
-            <b-col xl="9" tag="dd"> <text-field :date="product.updated.toDate()"></text-field></b-col>
+            <b-col xl="9" tag="dd">
+              <text-field :date="product.updated" date-format="long"></text-field>
+            </b-col>
           </b-row>
         </b-col>
         <b-col lg="6">
@@ -49,10 +53,27 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'InfoCard',
+
+  props: {
+    product: {
+      type: Object,
+      default: () => {
+        return {
+          id: null,
+          created: null,
+          updated: null,
+          name: null,
+          active: false,
+          description: null,
+          images: [],
+        }
+      },
+    },
+  },
 
   data() {
     return {
@@ -65,57 +86,53 @@ export default {
         status: this.$t('general.status'),
         description: this.$t('general.description'),
       },
-      product: {
-        id: null,
-        created: null,
-        updated: null,
-        name: null,
-        active: false,
-        description: null,
-        images: [],
-      },
     }
   },
 
   computed: {
-    ...mapState('user', ['user']),
-    ...mapGetters('products', ['findByProduct']),
+    ...mapGetters('user', ['account']),
 
-    account() {
-      return this.user?.account.id
-    },
-
-    productId() {
-      return this.$route.params.id
+    objectId() {
+      const parts = this.$route.params.id.split('_')
+      return parts.length === 2 ? parts[1] : parts[0]
     },
 
     editLink() {
-      return this.localePath({ name: 'dashboard-products-id-edit', params: { id: this.productId } })
+      return this.localePath({ name: 'dashboard-products-id-edit', params: { id: 'prod_' + this.objectId } })
     },
-  },
-
-  mounted() {
-    this.fetchData()
   },
 
   methods: {
-    ...mapActions('products', ['update']),
-
-    fetchData() {
-      const _product = this.findByProduct(this.productId, this.account)
-      if (_product) this.product = _product
-    },
+    ...mapActions('products', ['update', 'delete']),
 
     async archive() {
-      if (this.account) {
-        await this.update({ documentId: this.productId, payload: { account: this.account, active: false } })
-      }
+      if (!this.account) return
+
+      await this.update({
+        document: this.objectId,
+        account: this.account,
+        payload: { account: this.account, active: false },
+      })
     },
 
     async unarchive() {
-      if (this.account) {
-        await this.update({ documentId: this.productId, payload: { account: this.account, active: true } })
-      }
+      if (!this.account) return
+
+      await this.update({
+        document: this.objectId,
+        account: this.account,
+        payload: { account: this.account, active: true },
+      })
+    },
+
+    async remove() {
+      if (!this.account) return
+      await this.delete({ document: this.objectId, account: this.account })
+      this.routeBack()
+    },
+
+    routeBack() {
+      this.$router.replace(this.localePath({ name: 'dashboard-products' }))
     },
   },
 }

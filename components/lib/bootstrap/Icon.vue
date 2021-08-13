@@ -3,7 +3,6 @@
     v-if="hasIcon"
     :id="id"
     :icon="getIcon"
-    :size="size"
     :fixed-width="fixedWidth"
     :rotation="rotation"
     :flip="flip"
@@ -25,7 +24,6 @@ export default {
     preset: { type: String, default: undefined },
     id: { type: String, default: undefined },
     icon: { type: Array, default: () => null },
-    size: { type: String, default: undefined },
     fixedWidth: { type: Boolean, default: true },
     rotation: { type: String, default: undefined },
     flip: { type: String, default: undefined },
@@ -50,18 +48,21 @@ export default {
         'bv-home': { icon: ['fad', 'home-alt'] },
         'bv-order': { icon: ['fad', 'ballot'] },
         'bv-product': { icon: ['fad', 'box'] },
-        'bv-price': { icon: ['fad', 'dollar-sign'] },
+        'bv-price': { icon: ['fad', 'calculator'] },
         'bv-setting': { icon: ['fad', 'cog'] },
         'bv-search': { icon: ['fad', 'search'] },
         'bv-archive': { icon: ['fad', 'inbox-in'] },
         'bv-unarchive': { icon: ['fad', 'inbox-out'] },
         'bv-back': { icon: ['fad', 'long-arrow-left'] },
+        'bv-forward': { icon: ['fad', 'long-arrow-right'] },
         'bv-edit': { icon: ['fad', 'pencil'] },
         'bv-delete': { icon: ['fad', 'trash'] },
 
         // regular
-        'bv-more-v': { icon: ['far', 'ellipsis-v'] },
+        'bv-more': { icon: ['far', 'ellipsis-h'] },
         'bv-close': { icon: ['far', 'times'] },
+        'bv-down': { icon: ['far', 'chevron-down'] },
+        'bv-plus': { icon: ['far', 'plus'] },
       },
     }
   },

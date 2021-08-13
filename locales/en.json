@@ -1,6 +1,7 @@
 {
   "general": {
     "active": "Active",
+    "additionalOptions": "Additional options",
     "administrator": "Administrator",
     "archive": "Archive",
     "archiveTips": "Set as archived. Archived item cannot be exported to Portal, but will still work for Portal that already have it set.",
@@ -10,6 +11,7 @@
     "continue": "Continue",
     "continueDashboard": "Continue to Dashboard",
     "created": "Created",
+    "currency": "Currency",
     "delete": "Delete",
     "description": "Description",
     "device": "Device",
@@ -34,9 +36,12 @@
     "noResultSubtitle": "There aren't any results for that query",
     "optional": "Optional",
     "password": "Password",
+    "per": "per",
     "previous": "Prev",
+    "price": "Price",
     "privacy": "Privacy",
     "privacyPolicy": "Privacy Policy",
+    "product": "Product",
     "profile": "Profile",
     "refresh": "Refresh",
     "required": "Required",
@@ -44,6 +49,7 @@
     "returnLogin": "Return to sign in",
     "save": "Save",
     "saveAndMore": "Save and more",
+    "saveSuccessfully": "Saved successfully",
     "showPassword": "Show password",
     "signout": "Sign out",
     "signup": "Sign up",
@@ -53,6 +59,7 @@
     "terms": "Terms",
     "time": "Time",
     "unarchive": "Unarchive",
+    "units": "units",
     "updated": "Updated"
   },
 
@@ -60,12 +67,41 @@
     "orders": { "title": "Orders" },
     "products": {
       "createFormTitle": "Add a new product",
-      "editFormTitle": "Edit product",
-      "title": "Products",
       "descriptionTips": "Product descriptions appear at checkout.",
-      "nameTips": "Products are the goods or services you sell. If you sell subscriptions, you might call them 'plans'. Product names are visible to customers at checkout, in receipts, and invoices."
+      "editFormTitle": "Edit product",
+      "emptyTitle": "Add your first product",
+      "emptySubtitle": "Products are what you sell to customers. They can be anything from physical goods to digital services.",
+      "nameTips": "Products are the goods or services you sell. If you sell subscriptions, you might call them 'plans'. Product names are visible to customers at checkout, in receipts, and invoices.",
+      "notFoundTitle": "Product not found",
+      "notFoundSubtitle": "The specified product does not exist.",
+      "notFoundButton": "View all products",
+      "title": "Products"
     },
-    "prices": { "title": "Prices" },
+    "prices": {
+      "addNewPrice":"Add new price",
+      "createTitle": "Add a new price",
+      "descriptionTips": "Price descriptions can help you stay organised. They're not customer-facing.",
+      "editTitle": "Edit price",
+      "emptyTitle": "Add a price",
+      "emptySubtitle": "Adding a price lets you sell this product to customers.",
+      "infoTitle": "Price for {_product}",
+      "interval": "Interval",
+      "notFoundTitle": "Price not found",
+      "notFoundSubtitle": "The specified price does not exist.",
+      "oneTime": "One-time",
+      "packagePricing": "Package pricing",
+      "packagePricingTips": "Select package pricing if you charge by the package, or group of units. For example, say you charge MYR 25.00 for every 5 units. Purchases are rounded up by default, so a customer buying 8 units would pay MYR 50.00.",
+      "priceUnit": "Price unit",
+      "pricing": "Pricing",
+      "pricingDetails": "Pricing details",
+      "pricingModel": "Pricing model",
+      "roundDown": "Partial groups will be rounded down and billed as a complete group.",
+      "rounding": "Rounding",
+      "roundUp": "Partial groups will be rounded up and billed as a complete group.",
+      "standardPricing": "Standard pricing",
+      "standardPricingTips": "Select standard pricing if you charge the same price for each unit.",
+      "title": "Prices"
+    },
     "settings": { "title": "Settings" },
     "users": {
       "changePasswordTitle": "Change password",
@@ -103,10 +139,13 @@
   },
 
   "pluralization": {
+    "prices":"No prices | {n} prices",
+    "pricePerUnit": "{_price} | {_price} group of {n}",
     "tableResults": "No result | {n} result | {n} results"
   },
 
   "seo": {
+    "prices": "Prices - {_brand}",
     "products": "Products - {_brand}"
   },
 

@@ -1,39 +1,67 @@
 <template>
   <div>
-    <b-navbar type="light" fixed="top" class="bg-light border-bottom px-0">
-      <b-container fluid="2xl">
-        <b-row no-gutters class="w-100 justify-content-between px-4">
-          <b-navbar-nav>
-            <b-nav-text class="px-0 px-lg-2">
-              <action-link icon-preset="bv-close" variant="secondary" link-to-parent></action-link>
-            </b-nav-text>
-            <b-nav-text class="px-2 pr-3 pr-lg-5">|</b-nav-text>
-            <b-nav-text class="">{{ ui.pageTitle }}</b-nav-text>
-          </b-navbar-nav>
-
-          <b-navbar-nav class="flex-row">
-            <b-nav-item link-classes="py-1 px-0 px-lg-2">
-              <action-button
-                size="sm"
-                preset="bv-save"
-                variant="primary"
-                @click="onFormSubmit(true)"
-              ></action-button>
-            </b-nav-item>
-          </b-navbar-nav>
-        </b-row>
-      </b-container>
-    </b-navbar>
+    <form-nav-bar :title="ui.pageTitle">
+      <template #nav-end>
+        <b-nav-item link-classes="py-1 px-0 px-lg-2">
+          <action-button size="sm" preset="bv-save" variant="primary" @click="save()"></action-button>
+        </b-nav-item>
+      </template>
+    </form-nav-bar>
 
     <b-container fluid="2xl" class="main-content">
       <b-row tag="main" align-h="center" class="px-lg-4 py-8">
         <b-col cols="12" lg="6">
           <b-card class="border-0" no-body>
+            <b-alert :show="showError" variant="danger">
+              <icon preset="bv-error" class="mr-2"></icon> {{ server.message }}
+            </b-alert>
+
             <box-header :title-text="ui.productTitle"> </box-header>
 
             <b-card-body>
-              <products-form :id="productId" edit-mode @product-submitted="onFormSubmitted"></products-form>
+              <products-form
+                :product="product"
+                @changed="onProductFormChanged"
+                @validated="onProductFormValidated"
+              ></products-form>
             </b-card-body>
+
+            <box-header :title-text="ui.priceTitle">
+              <template #right>
+                <action-button preset="bv-new" size="sm" @click="addPrice">
+                  {{ ui.addNewPrice }}
+                </action-button>
+              </template>
+            </box-header>
+
+            <div v-for="(price, index) in prices" :key="price.id">
+              <b-card-body class="py-0 border-bottom">
+                <action-toggler
+                  :target="`price-${price.id}`"
+                  :text="ui.pricingDetails"
+                  :text-on-hide="getPricingText(price)"
+                  :visible="index === prices.length - 1"
+                  no-icon
+                  stretch
+                >
+                  <action-menu
+                    no-archive
+                    no-unarchive
+                    edit-hide
+                    toggle-class="btn-float"
+                    @delete="removePrice(index)"
+                  ></action-menu>
+
+                  <template #collapsible>
+                    <prices-form
+                      :price="price"
+                      @changed="onPriceFormChanged"
+                      @validated="onPriceFormValidated"
+                    ></prices-form>
+                  </template>
+                </action-toggler>
+              </b-card-body>
+            </div>
           </b-card>
         </b-col>
       </b-row>
@@ -42,8 +70,10 @@
 </template>
 
 <script>
+import { mapActions, mapGetters, mapState } from 'vuex'
+
 export default {
-  name: 'Create',
+  name: 'Edit',
   layout: 'default',
 
   data() {
@@ -51,18 +81,33 @@ export default {
       events: {
         products: {
           validate: 'product-validate',
-          validated: 'product-validated',
           submit: 'product-submit',
-          submitted: 'product-submitted',
           reset: 'product-reset',
-          resetted: 'product-resetted',
+        },
+        prices: {
+          validate: 'price-validate',
+          submit: 'price-submit',
+          reset: 'price-reset',
         },
       },
       ui: {
         pageTitle: this.$t('modules.products.editFormTitle'),
         productTitle: this.$t('modules.products.title'),
+        priceTitle: this.$t('modules.prices.title'),
+        addNewPrice: this.$t('modules.prices.addNewPrice'),
+        pricingDetails: this.$t('modules.prices.pricingDetails'),
       },
-      exitImmediately: false,
+
+      // product form
+      product: {},
+      productComplete: false,
+
+      // prices
+      prices: [],
+      pricesComplete: new Map(),
+
+      // states
+      server: { validated: false, valid: false, field: null, code: null, message: null },
     }
   },
 
@@ -73,27 +118,115 @@ export default {
   },
 
   computed: {
-    productId() {
-      return this.$route.params.id
+    ...mapGetters('user', ['account']),
+    ...mapGetters('products', ['find']),
+    ...mapState('prices', ['price']),
+
+    showError() {
+      const { validated, valid, field } = this.server
+      return validated && !valid && !field
+    },
+
+    objectId() {
+      const parts = this.$route.params.id.split('_')
+      return parts.length === 2 ? parts[1] : parts[0]
+    },
+
+    productCache() {
+      return this.find(this.objectId, this.account)
     },
   },
 
-  methods: {
-    errorHandler(_error) {},
+  created() {
+    this.populateForm()
+  },
 
-    successHandler(response) {
-      if (this.exitImmediately) {
-        this.$router.push(this.localePath({ name: 'dashboard-products-id', params: { id: response.id } }))
+  methods: {
+    ...mapActions('products', ['update']),
+
+    populateForm() {
+      this.product = { ...this.productCache }
+      const prices = this.productCache.prices || []
+      prices.forEach((el) => this.prices.push(this.$_.cloneDeep(el)))
+    },
+
+    addPrice() {
+      const price = { ...this.$_.cloneDeep(this.price), id: this.$util.nanoid() }
+      this.prices.push(price)
+    },
+
+    removePrice(index) {
+      this.prices.splice(index, 1)
+    },
+
+    routeToProductPage(id) {
+      const location = { name: 'dashboard-products-id', params: { id: `prod_${id}` } }
+      this.$router.push(this.localePath(location))
+    },
+
+    getPricingText(price) {
+      const { divideBy } = price.transformQuantity
+      const quantity = divideBy === 0 ? 1 : divideBy
+      return this.$tc('pluralization.pricePerUnit', quantity, {
+        _price: this.$n(price.unitAmount / 100, { style: 'currency', currency: price.currency }),
+      })
+    },
+
+    hasFormCompleted() {
+      let incomplete = false
+      for (let i = 0; i < this.prices.length; i++) {
+        if (this.pricesComplete.get(this.prices[i].id) !== true) {
+          incomplete = true
+          break
+        }
+      }
+      return this.productComplete && !incomplete
+    },
+
+    errorHandler(error) {
+      this.server = {
+        ...this.server,
+        validated: true,
+        valid: false,
+        code: error.code,
+        message: this.$t('general.error5xx'),
       }
     },
 
-    onFormSubmitted(success, error, response) {
-      success ? this.successHandler(response) : this.errorHandler(error)
+    successHandler(response) {
+      this.routeToProductPage(response.id)
     },
 
-    onFormSubmit(exit) {
-      this.exitImmediately = exit
-      this.$nuxt.$emit(this.events.products.submit)
+    submitForm() {
+      this.product.prices = this.prices
+      this.update({ document: this.objectId, account: this.account, payload: this.product }).then(
+        (response) => this.successHandler(response),
+        (error) => this.errorHandler(error)
+      )
+    },
+
+    save() {
+      this.$nuxt.$emit(this.events.products.validate)
+      this.$nuxt.$emit(this.events.prices.validate)
+    },
+
+    onProductFormChanged(value) {
+      this.product = value
+    },
+
+    onProductFormValidated(valid) {
+      this.productComplete = valid
+      if (this.hasFormCompleted()) this.submitForm()
+    },
+
+    onPriceFormChanged(value) {
+      const index = this.prices.findIndex((el) => el.id === value.id)
+      if (index >= 0) this.prices.splice(index, 1, value)
+    },
+
+    onPriceFormValidated(valid, id) {
+      this.pricesComplete.set(id, valid)
+      if (this.hasFormCompleted()) this.submitForm()
     },
   },
 }

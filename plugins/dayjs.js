@@ -22,7 +22,14 @@ export default ({ store }, inject) => {
         loadLocale('en')
       }
     },
+
+    isAfter: (date1, date2) => {
+      return _dayjs(date1).isAfter(_dayjs(date2))
+    },
+
+    fromNow: (date) => _dayjs(date).fromNow(),
   }
+
   // iife: self-init locale setting
   // note: place this after all handy utils loaded
   ;(() => {

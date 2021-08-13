@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-navbar toggleable="lg" type="light" fixed="top" class="bg-light border-bottom px-0">
+    <b-navbar toggleable="lg" type="light" variant="light" fixed="top" class="border-bottom px-0">
       <b-container fluid="2xl">
         <b-row no-gutters class="w-100 justify-content-between px-4">
           <b-navbar-brand class="font-weight-bold d-none d-lg-inline-block">
@@ -53,7 +53,7 @@ export default {
   },
 
   head() {
-    const i18nHead = this.$nuxtI18nHead({ addSeoAttributes: true })
+    const i18nHead = this.$nuxtI18nHead({ addDirAttribute: true, addSeoAttributes: true })
     return {
       title: this.$config.brandName,
       htmlAttrs: { ...i18nHead.htmlAttrs },
