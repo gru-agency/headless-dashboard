@@ -4,7 +4,6 @@
     :size="size"
     :variant="variant"
     :disabled="disabled"
-    :boundary="boundary"
     :toggle-class="toggleClass"
     no-caret
     right
@@ -61,7 +60,6 @@ export default {
     lazy: { type: Boolean, default: false },
     variant: { type: String, default: 'light' },
     disabled: { type: Boolean, default: false },
-    boundary: { type: String, default: 'window' },
     toggleClass: { type: String, default: undefined },
     editText: { type: String, default: undefined },
     editLink: { type: String, default: undefined },
@@ -96,9 +94,9 @@ export default {
   },
 
   computed: {
-hasUpperGroup(){
-  return !this.editHide || !this.noArchive || !this.noUnarchive
-}
+    hasUpperGroup() {
+      return !this.editHide || !this.noArchive || !this.noUnarchive
+    },
   },
 
   methods: {
