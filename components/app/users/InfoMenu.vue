@@ -36,12 +36,6 @@ export default {
     }
   },
 
-  fetchOnServer: false,
-
-  fetch() {
-    this.fetchUser()
-  },
-
   computed: {
     ...mapState('auth', ['authUser']),
     ...mapState('user', ['user']),
@@ -61,12 +55,6 @@ export default {
 
   methods: {
     ...mapActions('auth', ['signOut']),
-    ...mapActions('user', ['retrieve']),
-
-    fetchUser() {
-      if (!this.authUser) return
-      this.retrieve(this.authUser)
-    },
 
     async onSignOut() {
       await this.signOut()
