@@ -81,7 +81,7 @@ const actions = {
       commit('SET', { authUser: user })
 
       // immediately fetch user from store
-      await dispatch('user/retrieve', { firebaseId: user.uid }, { root: true })
+      await dispatch('user/retrieveByFirebaseId', { firebaseId: user.uid }, { root: true })
 
       $log.tag('auth').success('[loginWithEmailAndPassword]')
     } catch (error) {

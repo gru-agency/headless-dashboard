@@ -48,7 +48,7 @@ export default {
   data() {
     return {
       ui: { settings: this.$t('modules.settings.title') },
-      links: { settings: { name: 'dashboard-settings-user' } },
+      links: { settings: { name: 'dashboard-settings-account' } },
     }
   },
 

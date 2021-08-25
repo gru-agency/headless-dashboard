@@ -7,16 +7,19 @@
     "archiveTips": "Set as archived. Archived item cannot be exported to Portal, but will still work for Portal that already have it set.",
     "autoDetect": "Auto-detect",
     "cancel": "Cancel",
+    "city": "City",
     "contact": "Contact",
     "continue": "Continue",
     "continueDashboard": "Continue to Dashboard",
     "created": "Created",
+    "country": "Country",
     "currency": "Currency",
     "delete": "Delete",
     "description": "Description",
     "device": "Device",
     "edit": "Edit",
     "email": "Email",
+    "end": "End",
     "error": "Error",
     "error404Title": "Page not found!",
     "error404Subtitle": "Sorry, but the page you were looking for could not be found.",
@@ -37,6 +40,7 @@
     "optional": "Optional",
     "password": "Password",
     "per": "per",
+    "postcode": "Postal code",
     "previous": "Prev",
     "price": "Price",
     "privacy": "Privacy",
@@ -53,8 +57,10 @@
     "showPassword": "Show password",
     "signout": "Sign out",
     "signup": "Sign up",
-    "success": "Success",
+    "start": "Start",
+    "state": "State",
     "status": "Status",
+    "success": "Success",
     "supportText": "Write and describe your issue to us at ",
     "terms": "Terms",
     "time": "Time",
@@ -64,6 +70,24 @@
   },
 
   "modules": {
+    "accounts": {
+      "brandName": "Brand name",
+      "brandNameHint": "Your brand name may be used on Portal, invoices and receipts. Please make sure it's correct.",
+      "businessOperationTitle": "Business operation information",
+      "businessOperationSubtitle": "This information helps customers understand your business opening hours.",
+      "openingHours": "Opening hours",
+      "openingHoursHint": "e.g. Open 9AM-5PM. Close on Sunday.",
+      "publicProfileTitle": "Public business information",
+      "publicProfileSubtitle": "This information helps customers recognise your business. Your support information may be visible in Portal, payment statements, and receipts.",
+      "supportAddress": "Support address",
+      "supportAddressHint": "Unit/Apartment/Suite/Street name",
+      "supportEmail": "Support email",
+      "supportPhone": "Support phone",
+      "vacation": "Vacation",
+      "vacationNotice": "Vacation notice",
+      "vacationNoticeHint": "You may leave a message to your customers during your vacation.",
+      "vacationPeriod": "Vacation period"
+    },
     "orders": { "title": "Orders" },
     "products": {
       "createFormTitle": "Add a new product",
@@ -78,7 +102,7 @@
       "title": "Products"
     },
     "prices": {
-      "addNewPrice":"Add new price",
+      "addNewPrice": "Add new price",
       "createTitle": "Add a new price",
       "descriptionTips": "Price descriptions can help you stay organised. They're not customer-facing.",
       "editTitle": "Edit price",
@@ -139,7 +163,7 @@
   },
 
   "pluralization": {
-    "prices":"No prices | {n} prices",
+    "prices": "No prices | {n} prices",
     "pricePerUnit": "{_price} | {_price} group of {n}",
     "tableResults": "No result | {n} result | {n} results"
   },

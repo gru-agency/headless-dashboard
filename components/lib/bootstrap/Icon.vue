@@ -33,7 +33,7 @@ export default {
     inverse: { type: Boolean, default: false },
     swapOpacity: { type: Boolean, default: false },
     transform: { type: String, default: undefined },
-    symbol: { type: String, default: undefined },
+    symbol: { type: String, default: undefined }
   },
 
   data() {
@@ -57,13 +57,14 @@ export default {
         'bv-forward': { icon: ['fad', 'long-arrow-right'] },
         'bv-edit': { icon: ['fad', 'pencil'] },
         'bv-delete': { icon: ['fad', 'trash'] },
+        'bv-calendar': { icon: ['fad', 'calendar'] },
 
         // regular
         'bv-more': { icon: ['far', 'ellipsis-h'] },
         'bv-close': { icon: ['far', 'times'] },
         'bv-down': { icon: ['far', 'chevron-down'] },
-        'bv-plus': { icon: ['far', 'plus'] },
-      },
+        'bv-plus': { icon: ['far', 'plus'] }
+      }
     }
   },
 
@@ -78,7 +79,7 @@ export default {
 
     hasIcon() {
       return this.icon || this.getPreset?.icon
-    },
-  },
+    }
+  }
 }
 </script>
