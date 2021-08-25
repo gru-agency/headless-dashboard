@@ -161,7 +161,7 @@ export default {
 
     onFormSubmit() {
       this.resetFormState()
-      this.update({ docId: this.user.id, payload: { displayName: this.form.name } }).then(
+      this.update({ documentId: this.user.id, payload: { displayName: this.form.name } }).then(
         (response) => this.successHandler(response),
         (error) => this.errorHandler(error)
       )
