@@ -8421,7 +8421,7 @@ fsevents@~2.3.2:
     vue-currency-input: ^2.0.2
     vue-lodash: ^2.1.2
     vue-template-babel-compiler: ^1.0.2
-    webpack: webpack-4
+    webpack: ^4.46.0
   languageName: unknown
   linkType: soft
 
@@ -13553,13 +13553,13 @@ fsevents@~2.3.2:
   linkType: hard
 
 "sass@npm:^1.32.13":
-  version: 1.38.0
-  resolution: "sass@npm:1.38.0"
+  version: 1.38.1
+  resolution: "sass@npm:1.38.1"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
   bin:
     sass: sass.js
-  checksum: 2a7140084785ab86a7577b8b1568a2fe9091716e02eacb071e37b32d3b5947d4b433ffc0361494ddeefcd0d8b2d44a87ee43b23630995250a7160261b1307e43
+  checksum: e260889fd9163f68b3916fa69f2b7c99d2980e54e8938ac3a74f6d5a4fe4d0c15450871273286f5abdaecd6e218ff70b70e8f32188203ac6a9f08582fd721b3a
   languageName: node
   linkType: hard
 
@@ -15872,7 +15872,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"webpack@npm:^4.46.0, webpack@npm:webpack-4":
+"webpack@npm:^4.46.0":
   version: 4.46.0
   resolution: "webpack@npm:4.46.0"
   dependencies:
