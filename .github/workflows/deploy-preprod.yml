@@ -2,20 +2,16 @@
 # https://github.com/firebase/firebase-tools
 
 name: Deploy to pre-prod
+
 on:
   pull_request:
     branches:
       - main
 
 jobs:
-  ci:
+  build_and_preview:
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        node: [14]
+    runs-on: ubuntu-latest
 
     env:
       BASE_URL: 'https://ecommerce-30-pr${{ github.event.number }}.web.app'
@@ -32,10 +28,7 @@ jobs:
         uses: c-hive/gha-yarn-cache@v2
 
       - name: Install dependencies 👨🏻‍💻
-        run: yarn install --json --immutable --inline-builds --check-cache
-
-      - name: Generate static files 👀
-        run: yarn generate
+        run: yarn install --frozen-lockfile --ignore-optional && yarn generate
 
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
