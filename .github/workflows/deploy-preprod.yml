@@ -15,6 +15,7 @@ jobs:
       GEO_DB: ${{ secrets.GEO_DB }}
     steps:
       - uses: actions/checkout@v2
+      - run: yarn -v
       - uses: c-hive/gha-yarn-cache@v2
       - run: yarn install --frozen-lockfile --ignore-optional && yarn generate
       - uses: FirebaseExtended/action-hosting-deploy@v0
