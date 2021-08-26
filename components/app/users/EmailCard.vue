@@ -77,7 +77,7 @@ export default {
     },
 
     save() {
-      this.update({ docId: this.user.id, payload: { emailConsent: this.form.emailConsent } })
+      this.update({ documentId: this.user.id, payload: { emailConsent: this.form.emailConsent } })
     },
 
     toggleCheckBox(stateId) {

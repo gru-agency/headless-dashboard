@@ -39,7 +39,7 @@ export default {
   },
 
   computed: {
-    ...mapState('user_session', ['all']),
+    ...mapState('user_sessions', ['all']),
   },
 }
 </script>

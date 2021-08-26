@@ -2,10 +2,43 @@ const COLLECTION = 'users'
 
 const state = () => ({
   user: null,
+
+  accountPublicProfile: {
+    brandName: null,
+    supportEmail: null,
+    supportPhone: null,
+    supportAddress: {
+      address: null,
+      city: null,
+      state: null,
+      postalCode: null,
+      country: null,
+    },
+  },
+
+  accountBusinessOperation: {
+    openingHour: null,
+    vacation: false,
+    vacationStart: null,
+    vacationEnd: null,
+    vacationNotice: null,
+  },
 })
 
 const getters = {
   account: (state) => state.user?.account.id,
+
+  accountPublicProfile: (state) => {
+    return state.user?.account.publicProfile || state.accountPublicProfile
+  },
+
+  accountBusinessOperation: (state) => {
+    const bizOps = state.user?.account.businessOperation
+    if (!bizOps) return state.accountBusinessOperation
+
+    const { vacationStart, vacationEnd, ...rest } = bizOps
+    return { ...rest, vacationStart: vacationStart?.toDate(), vacationEnd: vacationEnd?.toDate() }
+  },
 }
 
 const mutations = {
@@ -34,7 +67,7 @@ const actions = {
         .set({ ...dirty })
 
       // fetch immediately
-      const user = await dispatch('retrieve', { firebaseId: payload.firebaseId })
+      const user = await dispatch('retrieve', { options: { source: 'cache' }, document: documentId })
       $log.tag('user').success('[create]')
       return user
     } catch (error) {
@@ -58,7 +91,7 @@ const actions = {
         .update({ ...dirty })
 
       // fetch immediately
-      const user = await dispatch('retrieve', { firebaseId: payload.firebaseId })
+      const user = await dispatch('retrieve', { options: { source: 'cache' }, document: documentId })
       $log.tag('user').success('[update]')
       return user
     } catch (error) {
@@ -67,42 +100,55 @@ const actions = {
     }
   },
 
-  async retrieve({ commit }, { firebaseId }) {
+  async retrieve({ commit }, { options = { source: 'default' }, document }) {
+    const { $fire, $log } = this.app.context
+    try {
+      const _ref = $fire.firestore.collection(COLLECTION).doc(document)
+
+      const snapshot = await _ref.get(options)
+      $log.tag('user').debug('[retrieve] user_%s %o', document, snapshot)
+
+      if (!snapshot.exists) {
+        $log.tag('user').error('[retrieve] Found none user_%s', document)
+        return
+      }
+
+      // put all the information together into an object before goes to state
+      const data = snapshot.data()
+      const account = { ...data.account, object: 'account' }
+      const user = { ...data, id: snapshot.id, account, object: 'user' }
+      commit('SET', user)
+      $log.tag('user').debug('[retrieve] Setting object to store %o', user)
+
+      $log.tag('user').success('[retrieve]')
+      return user
+    } catch (error) {
+      $log.tag('user').error('[retrieve]', error)
+      throw error
+    }
+  },
+
+  async retrieveByFirebaseId({ commit }, { firebaseId }) {
     const { $fire, $log } = this.app.context
     try {
       const _ref = $fire.firestore.collection(COLLECTION).where('firebaseId', '==', firebaseId).limit(1)
 
-      // hit cache first
-      const _fromCache = await _ref.get({ source: 'cache' })
-      const { empty, size, metadata, query } = _fromCache
-      $log.tag('user').debug('[retrieve] Retrieving %s from cache %o', firebaseId, {
+      const results = await _ref.get()
+      const { empty, size, metadata, query } = results
+      $log.tag('user').debug('[retrieve] by fbid_%s %o', firebaseId, {
         empty,
         size,
         source: metadata.fromCache ? 'cache' : 'server',
         query: query._delegate?._query?.T?.h,
       })
 
-      // fallback to server when found nothing on cache
-      let _fromServer
-      if (empty) {
-        _fromServer = await _ref.get({ source: 'server' })
-        const { empty, size, metadata, query } = _fromServer
-        $log.tag('user').debug('[retrieve] Retrieving %s from server %o', firebaseId, {
-          empty,
-          size,
-          source: metadata.fromCache ? 'cache' : 'server',
-          query: query._delegate?._query?.T?.h,
-        })
-      }
-
-      const results = _fromServer || _fromCache
       if (results.empty) {
-        $log.tag('user').warn('[retrieve] User not found with firebase ID %s', firebaseId)
+        $log.tag('user').warn('[retrieve] Found none fbid_%s', firebaseId)
         return
       }
 
       if (results.size > 1) {
-        $log.tag('user').error('[retrieve] Found more than ONE user with firebase ID %s', firebaseId)
+        $log.tag('user').error('[retrieve] Found more than ONE with fbid_%s', firebaseId)
         return
       }
 
