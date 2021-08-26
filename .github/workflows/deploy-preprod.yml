@@ -2,8 +2,7 @@
 # https://github.com/firebase/firebase-tools
 
 name: Deploy to pre-prod
-
-'on':
+on:
   pull_request:
     branches:
       - main
@@ -29,22 +28,11 @@ jobs:
       - name: Check yarn version
         run: yarn -v
 
-      - name: Get yarn cache directory path 🛠
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-
-      - name: Cache node_modules 📦
-        uses: actions/cache@v2
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+      - name: Check yarn cache
+        uses: c-hive/gha-yarn-cache@v2
 
       - name: Install dependencies 👨🏻‍💻
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install --json --immutable --inline-builds
+        run: yarn install --json --immutable --inline-builds --check-cache
 
       - name: Generate static files 👀
         run: yarn generate
