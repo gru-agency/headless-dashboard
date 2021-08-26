@@ -3,7 +3,7 @@
 
 name: Deploy to pre-prod
 
-on:
+'on':
   pull_request:
     branches:
       - main
