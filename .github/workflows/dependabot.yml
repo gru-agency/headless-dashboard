@@ -1,4 +1,5 @@
 version: 2
+
 updates:
   # Fetch and update latest `npm` packages
   - package-ecosystem: npm
@@ -15,6 +16,7 @@ updates:
       prefix: fix
       prefix-development: chore
       include: scope
+
   # Fetch and update latest `github-actions` pkgs
   - package-ecosystem: github-actions
     directory: '/'
