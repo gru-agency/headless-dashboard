@@ -8421,7 +8421,7 @@ fsevents@~2.3.2:
     vue-currency-input: ^2.0.2
     vue-lodash: ^2.1.2
     vue-template-babel-compiler: ^1.0.2
-    webpack: ^4.46.0
+    webpack: webpack-4
   languageName: unknown
   linkType: soft
 
@@ -15872,7 +15872,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"webpack@npm:^4.46.0":
+"webpack@npm:^4.46.0, webpack@npm:webpack-4":
   version: 4.46.0
   resolution: "webpack@npm:4.46.0"
   dependencies:
