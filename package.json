@@ -73,7 +73,7 @@
     "vue": "^2.6.14",
     "vue-currency-input": "^2.0.2",
     "vue-lodash": "^2.1.2",
-    "vue-template-babel-compiler": "^1.0.2",
+    "vue-template-babel-compiler": "^1.0.3",
     "webpack": "^4.46.0"
   }
 }
