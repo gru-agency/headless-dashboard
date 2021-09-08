@@ -87,7 +87,10 @@ export default {
       presets: [['@nuxt/babel-preset-app', { corejs: { version: '3.16.0' }, useBuiltIns: 'entry' }]],
     },
 
-    loaders: { vue: { compiler: require('vue-template-babel-compiler') } },
+    loaders: {
+      cssModules: { modules: { localIdentName: '[hash:base64:4]' } },
+      vue: { compiler: require('vue-template-babel-compiler') },
+    },
   },
 
   alias: {
