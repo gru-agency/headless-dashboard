@@ -22,7 +22,7 @@ jobs:
       GEO_DB: ${{ secrets.GEO_DB }}
 
     steps:
-      - name: Checkout 🛎
+      - name: Checkout
         uses: actions/checkout@v2
 
       - name: Check yarn version
@@ -31,10 +31,10 @@ jobs:
       - name: Check yarn cache
         uses: c-hive/gha-yarn-cache@v2
 
-      - name: Install dependencies 👨🏻‍💻
-        run: yarn install --json --immutable --inline-builds --check-cache
+      - name: Install dependencies
+        run: yarn install --json --immutable --check-cache
 
-      - name: Generate static files 👀
+      - name: Generate static files
         run: yarn generate
 
       - name: Deploy to Firebase Hosting
