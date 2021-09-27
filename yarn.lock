@@ -1899,7 +1899,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/free-brands-svg-icons@npm:^5.15.4":
+"@fortawesome/free-brands-svg-icons@npm:5.15.4":
   version: 5.15.4
   resolution: "@fortawesome/free-brands-svg-icons@npm:5.15.4"
   dependencies:
@@ -1908,7 +1908,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/free-regular-svg-icons@npm:^5.15.4":
+"@fortawesome/free-regular-svg-icons@npm:5.15.4":
   version: 5.15.4
   resolution: "@fortawesome/free-regular-svg-icons@npm:5.15.4"
   dependencies:
@@ -1917,7 +1917,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/free-solid-svg-icons@npm:^5.15.4":
+"@fortawesome/free-solid-svg-icons@npm:5.15.4":
   version: 5.15.4
   resolution: "@fortawesome/free-solid-svg-icons@npm:5.15.4"
   dependencies:
@@ -8063,9 +8063,9 @@ fsevents@~2.3.2:
     "@babel/runtime-corejs3": ^7.15.3
     "@commitlint/cli": ^13.1.0
     "@commitlint/config-conventional": ^13.1.0
-    "@fortawesome/free-brands-svg-icons": ^5.15.4
-    "@fortawesome/free-regular-svg-icons": ^5.15.4
-    "@fortawesome/free-solid-svg-icons": ^5.15.4
+    "@fortawesome/free-brands-svg-icons": 5.15.4
+    "@fortawesome/free-regular-svg-icons": 5.15.4
+    "@fortawesome/free-solid-svg-icons": 5.15.4
     "@nuxtjs/axios": ^5.13.6
     "@nuxtjs/eslint-config": ^6.0.1
     "@nuxtjs/eslint-module": ^3.0.2
