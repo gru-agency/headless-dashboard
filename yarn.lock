@@ -8099,7 +8099,7 @@ fsevents@~2.3.2:
     platform: ^1.3.6
     prettier: ^2.3.2
     sass: ~1.32.13
-    sass-loader: ^10.2.0
+    sass-loader: ^12.0.0
     standard-version: ^9.3.1
     stylelint: ^13.13.1
     stylelint-config-prettier: ^8.0.2
@@ -13228,20 +13228,17 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"sass-loader@npm:^10.2.0":
-  version: 10.2.0
-  resolution: "sass-loader@npm:10.2.0"
+"sass-loader@npm:^12.0.0":
+  version: 12.1.0
+  resolution: "sass-loader@npm:12.1.0"
   dependencies:
     klona: ^2.0.4
-    loader-utils: ^2.0.0
     neo-async: ^2.6.2
-    schema-utils: ^3.0.0
-    semver: ^7.3.2
   peerDependencies:
     fibers: ">= 3.1.0"
     node-sass: ^4.0.0 || ^5.0.0 || ^6.0.0
     sass: ^1.3.0
-    webpack: ^4.36.0 || ^5.0.0
+    webpack: ^5.0.0
   peerDependenciesMeta:
     fibers:
       optional: true
@@ -13249,7 +13246,7 @@ fsevents@~2.3.2:
       optional: true
     sass:
       optional: true
-  checksum: d53212e5d199cdd221a67046ab4276c352d56b50ca64347115b36e8ebbb2c68ec396a14d6cf5a08853c830a6b0ec1fd2b016cdc53cbe90a0332a908f50ec2043
+  checksum: 69c66ea3482922064f1e907fc204283e5e9cc02eb20b7ab1761d478922f77b3e2c47c8e3c585f771d75ce57bb088b226ae2eb4c736849b29c8727e921a6e0d41
   languageName: node
   linkType: hard
 
