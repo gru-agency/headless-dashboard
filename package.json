@@ -68,7 +68,7 @@
     "standard-version": "^9.3.1",
     "stylelint": "^13.13.1",
     "stylelint-config-prettier": "^8.0.2",
-    "stylelint-config-standard": "^22.0.0",
+    "stylelint-config-standard": "^23.0.0",
     "vee-validate": "^3.4.11",
     "vue": "^2.6.14",
     "vue-currency-input": "^2.0.2",
